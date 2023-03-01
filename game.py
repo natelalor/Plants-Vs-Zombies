@@ -1,6 +1,7 @@
 import random
 import constants as c
 import arcade
+from grid import Grid
 
 
 class Game(arcade.Window):
@@ -9,7 +10,7 @@ class Game(arcade.Window):
         self.level = level
         self.enemies = []
         self.createEnemies()
-        # self.grid = Grid()
+        self.grid = Grid()
 
     def createEnemies(self):
         for enemyType in c.levelsDict[self.level]:
