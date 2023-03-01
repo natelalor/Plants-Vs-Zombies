@@ -6,6 +6,8 @@ SCREEN_TITLE = "Plants vs. Zombies"
 SIZE_COLUMNS = 9
 SIZE_ROWS = 5
 
+# individual square object size
+SQUARE_SIZE = 1
 
 levelsDict = {
     1: [[2, 10], [3, 2]],

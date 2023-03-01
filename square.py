@@ -1,5 +1,5 @@
 
-
+import constants as c
 
 class Square:
     '''
@@ -8,9 +8,8 @@ class Square:
                   and passes in coordinates x,y to a new list that will be referenced when square position is needed.
         getPosition: returns list of x,y coordinates
     '''
-    def __init__(self, size, x, y):
-        self.size_x = size
-        self.size_y = size
+    def __init__(self, x, y):
+        self.size = c.SQUARE_SIZE
         self.position_list = [x, y]
 
     def getPosition(self):
