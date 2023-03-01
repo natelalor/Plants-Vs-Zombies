@@ -1,10 +1,9 @@
 from game import Game
-from game import levelsDict
-from game import enemiesDict
+import constants as c
 
 
 def testLevelCreation():
-    for level in levelsDict:
+    for level in c.levelsDict:
         print("\nLevel", level)
         numEnemies = {1: 0,
                       2: 0,
@@ -15,6 +14,6 @@ def testLevelCreation():
             numEnemies[i] += 1
         for i in numEnemies.keys():
             if numEnemies[i] > 0:
-                print(enemiesDict[i], "-", numEnemies[i])
+                print(c.enemiesDict[i], "-", numEnemies[i])
 
 
