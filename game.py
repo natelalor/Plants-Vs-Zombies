@@ -9,8 +9,9 @@ class Game(arcade.Window):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
         self.level = level
         self.enemies = []
+        # self.enemies = arcade.SpriteList() TODO: Swap these lines once we start creating sprites
         self.createEnemies()
-        self.grid = Grid()
+        self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
 
     def createEnemies(self):
         for enemyType in c.levelsDict[self.level]:
@@ -23,8 +24,16 @@ class Game(arcade.Window):
     def on_draw(self):
         """Render the screen. """
 
-        self.clear()
+        for enemy in self.enemies:
+            if enemy == 1:
+                pass
+                # arcade.draw_circle_filled(random.randrange(0, 1200), random.randrange(0, 800), 50, arcade.color.GREEN)
 
-        self.enemies.draw()
-        self.bullet_list.draw()
-        self.player_list.draw()
+        # self.clear()
+
+        # self.enemies.draw()
+        # self.bullet_list.draw()
+        # self.player_list.draw()
+    def on_update(self, delta_time: float):
+        pass
+
