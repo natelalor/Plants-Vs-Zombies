@@ -3,16 +3,34 @@ import constants as c
 
 class Square:
     '''
-    Facilitates organizational structure of playing field. A list of lists of square objects.
-        __init__: (constructor) defines size of squares (one parameter, because always will be square.),
-                  and passes in coordinates x,y to a new list that will be referenced when square position is needed.
-        getPosition: returns list of x,y coordinates
+    An object that will make up the grid, and be able to contain a defender.
+    The basic unit of measurement for our game.
+        __init__: (constructor) defines size of square (using constant),
+                  and passes in coordinates x,y to a list that will be referenced when square position is needed.
+        get_position: returns list of x,y coordinates
+        has_plant: returns whether hasPlant is true/false.
+                  Indicates whether the square is already holding a defender.
+        add_plant: changes bool "has_plant" to true
+        remove_plant: changes bool "has_plant" to false
     '''
     def __init__(self, x, y):
         self.size = c.SQUARE_SIZE
         self.position_list = [x, y]
+        self.has_plant = False
 
-    def getPosition(self):
+    def get_position(self):
         return self.position_list
+
+    def has_plant(self):
+        return self.has_plant
+
+    def add_plant(self):
+        self.has_plant = True
+
+    def remove_plant(self):
+        self.has_plant = False
+
+
+
 
 
