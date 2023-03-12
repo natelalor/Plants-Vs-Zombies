@@ -1,6 +1,10 @@
 import random
 import constants as c
 import arcade
+from defender import Defender
+from attacker import Attacker
+from grid import Grid
+
 
 
 class Game(arcade.Window):
@@ -9,7 +13,18 @@ class Game(arcade.Window):
         self.level = level
         self.enemies = []
         self.createEnemies()
-        # self.grid = Grid()
+
+        # Tests placing an attacker and defender on the grid
+        self.attacker = Attacker(0, 0, 0, "test", 900, 50)
+        self.defender = Defender(0, 0, 0, "test", 50, 50)
+
+        self.createEnemies()
+        self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
+
+
+
+
+
 
     def createEnemies(self):
         for enemyType in c.levelsDict[self.level]:
@@ -24,6 +39,11 @@ class Game(arcade.Window):
 
         self.clear()
 
-        self.enemies.draw()
-        self.bullet_list.draw()
-        self.player_list.draw()
+        #self.enemies.draw()
+        self.grid.grid_draw()
+        # PLACEHOLDER
+        # Prints attacker (red) and defender (blue) as an example
+        self.attacker.draw()
+        self.defender.draw()
+        #self.bullet_list.draw()
+        #self.player_list.draw()
