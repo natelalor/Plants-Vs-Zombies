@@ -1,4 +1,4 @@
-
+import arcade
 from square import Square
 
 class Grid:
@@ -11,14 +11,40 @@ class Grid:
         self.size_columns = size_columns
         self.size_rows = size_rows
 
-        # grid_list will be the list of lists that make up the grid
-        grid_list = []
 
-        for x in range(0, size_columns):
+
+        # grid_list will be the list of lists that make up the grid
+        self.grid_list = []
+
+
+        for x in range(0, size_rows):
             temp_list = []
-            for y in range(0, size_rows):
+            for y in range(0, size_columns):
                 # x & y is the position in the grid to keep track of each square object's position
                 temp_list.append(Square(x, y))
-            grid_list.append(temp_list)
+            self.grid_list.append(temp_list)
+
+    def grid_draw(self):
+
+        for row in range(self.size_rows):
+            for column in range(self.size_columns):
+                # Messing with lawn-like color patterns for the grid
+                if row % 2 == 0:
+                    color = arcade.color.ANDROID_GREEN
+                    if column % 2 != 0:
+                        color = arcade.color.CITRON
+
+                elif column % 2 == 0:
+                    color = arcade.color.BITTER_LEMON
+                else:
+                    color = arcade.color.APPLE_GREEN
+
+
+                # The math to make evenly sized/spaced squares
+                x = (5 + 100) * column + 5 + 100 // 2
+                y = (5+ 100) * row + 5 + 100 // 2
+
+                # Draw the box
+                arcade.draw_rectangle_filled(x, y, 100, 100, color)
 
 
