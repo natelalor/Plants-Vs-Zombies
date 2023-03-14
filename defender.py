@@ -33,7 +33,7 @@ class Defender:
         # TODO: figure out why these dont render and appear. (set_position_lane works so its gotta be here?)
         self.ally_list = arcade.SpriteList()
         if self.type == 1:
-            self.ally_sprite = arcade.Sprite("images/lolli_enemy.png", 0.05)
+            self.ally_sprite = arcade.Sprite("images/toothbrush_ally.png", 0.05)
         elif self.type == 2:
             self.ally_sprite = arcade.Sprite("images/chocolate_enemy.png", 0.08)
         else:
