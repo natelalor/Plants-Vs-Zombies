@@ -4,24 +4,29 @@ import arcade
 
 class Attacker:
 
-    def __init__(self, type, speed, damage, durability, name, lane):
-        self.type = type
-
-        if type == 1:
-
-        elif type == 2:
-
-        elif type == 3:
-
-
-        self.speed = speed
-        self.damage = damage
-        self.durability = durability
-        self.dead = False
-        self.name = name
-        self.lane = lane
+    def __init__(self, type, lane):
         self.position = []
+        self.lane = lane
+        self.type = type
+        self.dead = False
         self.enemy_list = arcade.SpriteList()
+
+        # depending on which "type" of attacker you create, they will have differing preset stats to initialize
+        if type == 1:
+            self.speed = 0
+            self.damage = 0
+            self.durability = 0
+            self.name = "lollipop"
+        elif type == 2:
+            self.speed = 0
+            self.damage = 0
+            self.durability = 0
+            self.name = "chocolate"
+        elif type == 3:
+            self.speed = 0
+            self.damage = 0
+            self.durability = 0
+            self.name = "tbd"
 
     def is_dead(self):
         if self.durability <= 0:
