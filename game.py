@@ -58,11 +58,11 @@ class Game(arcade.Window):
         self.attacker4.enemy_list.draw()
         self.attacker5.enemy_list.draw()
 
-        self.defender1.draw()
-        self.defender2.draw()
-        self.defender3.draw()
-        self.defender4.draw()
-        self.defender5.draw()
+        self.defender1.ally_list.draw()
+        self.defender2.ally_list.draw()
+        self.defender3.ally_list.draw()
+        self.defender4.ally_list.draw()
+        self.defender5.ally_list.draw()
 
         #self.bullet_list.draw()
         #self.player_list.draw()
