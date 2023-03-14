@@ -4,7 +4,8 @@ import arcade
 
 class Attacker:
     
-    def __init__(self,speed,damage,durability,name,x,y):
+    def __init__(self, type, speed, damage, durability, name, x, y):
+        self.type = type
         self.speed = speed
         self.damage = damage
         self.durability = durability
@@ -12,6 +13,19 @@ class Attacker:
         self.name = name
         self.x = x
         self.y = y
+        self.enemy_list = arcade.SpriteList()
+        # type is which "kind" of enemy is spawned, i.e. which sprite we should load
+        if type == 1:
+            self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.25)
+        elif type == 2:
+            self.enemy_sprite = arcade.Sprite("images/chocolate_enemy.png", 0.25)
+        else:
+            self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.25)
+
+        # move these later, its enemy sprite placements... these are just tester values
+        self.enemy_sprite.center_x = 64
+        self.enemy_sprite.center_y = 120
+        self.enemy_list.append(self.enemy_sprite)
         
 
     def is_dead(self):
@@ -28,7 +42,6 @@ class Attacker:
     def draw(self):
         #placeholder
         arcade.draw_rectangle_filled(self.x,self.y,50,50,arcade.color.RED,0)
-
     
     def move(self):
         #move leftward

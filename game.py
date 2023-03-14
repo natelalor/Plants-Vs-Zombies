@@ -15,7 +15,9 @@ class Game(arcade.Window):
         self.createEnemies()
 
         # Tests placing an attacker and defender on the grid
-        self.attacker = Attacker(0, 0, 0, "test", 900, 50)
+                                # first param: 1, 2, are different types: lolli, chocoalte
+        self.attacker = Attacker(1, 0, 0, 0, "test", 900, 50)
+        self.attacker2 = Attacker(2, 0, 0, 0, "test2", 900, 50)
         self.defender = Defender(0, 0, 0, "test", 50, 50)
 
         self.createEnemies()
@@ -45,5 +47,7 @@ class Game(arcade.Window):
         # Prints attacker (red) and defender (blue) as an example
         self.attacker.draw()
         self.defender.draw()
+        self.attacker.enemy_list.draw()
+        self.attacker2.enemy_list.draw()
         #self.bullet_list.draw()
         #self.player_list.draw()
