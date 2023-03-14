@@ -18,7 +18,7 @@ class Game(arcade.Window):
         # first param: 1, 2, are different types: lolli, chocoalte, etc
         # second param: integer for lane, 1-5
 
-        self.attacker = Attacker(1, 1)
+        self.attacker1 = Attacker(1, 1)
         self.attacker2 = Attacker(2, 2)
         self.attacker3 = Attacker(1, 3)
         self.attacker4 = Attacker(2, 4)
@@ -28,11 +28,6 @@ class Game(arcade.Window):
 
         self.createEnemies()
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
-
-
-
-
-
 
     def createEnemies(self):
         for enemyType in c.levelsDict[self.level]:
@@ -51,12 +46,17 @@ class Game(arcade.Window):
         self.grid.grid_draw()
         # PLACEHOLDER
         # Prints attacker (red) and defender (blue) as an example
-        self.attacker.draw()
-        self.defender.draw()
-        self.attacker.enemy_list.draw()
+        # self.attacker.draw()
+
+        self.attacker1.enemy_list.draw()
         self.attacker2.enemy_list.draw()
         self.attacker3.enemy_list.draw()
         self.attacker4.enemy_list.draw()
         self.attacker5.enemy_list.draw()
+
+
+        self.defender.draw()
+
+
         #self.bullet_list.draw()
         #self.player_list.draw()
