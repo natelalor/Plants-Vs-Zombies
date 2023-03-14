@@ -10,7 +10,6 @@ class Attacker:
         self.type = type
         self.dead = False
 
-
         # set up the attacker's starting position using their lane
         # self.set_position_lane(self.lane)
 
@@ -75,6 +74,8 @@ class Attacker:
         #
         # self.set_position_lane(self.lane)
         # self.enemy_list.append(self.enemy_sprite)
+
+        # this is here so draw() has atleast something lol.. a placeholder
         if self.type == 99999:
             return
 
@@ -89,9 +90,8 @@ class Attacker:
     # this setter takes in one parameter, the lane, and sets the position of the sprite
     # to that corresponding spot. Used in the beginning of the game to initialize enemy's starting spot
     def set_position_lane(self, lane):
-        # 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
+        # a 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
         # this will set up that enemy to start moving.
-
 
         if lane == 1:
             self.enemy_sprite.center_x = 900

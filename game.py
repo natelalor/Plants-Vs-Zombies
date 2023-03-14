@@ -24,7 +24,11 @@ class Game(arcade.Window):
         self.attacker4 = Attacker(2, 4)
         self.attacker5 = Attacker(1, 5)
 
-        self.defender = Defender(0, 0, 0, "test", 50, 50)
+        self.defender1 = Defender(2, 1)
+        self.defender2 = Defender(1, 2)
+        self.defender3 = Defender(2, 3)
+        self.defender4 = Defender(1, 4)
+        self.defender5 = Defender(2, 5)
 
         self.createEnemies()
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
@@ -42,7 +46,7 @@ class Game(arcade.Window):
 
         self.clear()
 
-        #self.enemies.draw()
+        # self.enemies.draw()
         self.grid.grid_draw()
         # PLACEHOLDER
         # Prints attacker (red) and defender (blue) as an example
@@ -54,9 +58,11 @@ class Game(arcade.Window):
         self.attacker4.enemy_list.draw()
         self.attacker5.enemy_list.draw()
 
-
-        self.defender.draw()
-
+        self.defender1.draw()
+        self.defender2.draw()
+        self.defender3.draw()
+        self.defender4.draw()
+        self.defender5.draw()
 
         #self.bullet_list.draw()
         #self.player_list.draw()
