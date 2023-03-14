@@ -4,7 +4,7 @@ import arcade
 
 class Attacker:
     
-    def __init__(self, type, speed, damage, durability, name, x, y):
+    def __init__(self, type, speed, damage, durability, name, x, y): # TODO: instead of x,y we should just specify lane. Then, each lane possibility would have different predetermined coords
         self.type = type
         self.speed = speed
         self.damage = damage
