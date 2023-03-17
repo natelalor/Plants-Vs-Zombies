@@ -61,7 +61,9 @@ class Game(arcade.Window):
         self.attacker3.enemy_list.draw()
         self.attacker4.enemy_list.draw()
         self.attacker5.enemy_list.draw()
+        # self.attacker.enemy_list.draw()
 
+        # self.defender.ally_list.draw()
         self.defender1.ally_list.draw()
         self.defender2.ally_list.draw()
         self.defender3.ally_list.draw()
@@ -75,9 +77,42 @@ class Game(arcade.Window):
 
         self.attacker1.move()
 
+        # to spawn attackers
+        if random.random() < 0.01:
 
+            # generate random int for "type" of enemy spawned
+            random_type = random.randint(0, 100)
+            print("RANDOMTYPE: ", random_type)
+            if 0 <= random_type <= 85:
+                type = 1
+            elif 81 <= random_type <= 95:
+                type = 2
+            else:
+                type = 3
 
+            # generate random lane it will go on
+            random_lane = random.randint(0, 100)
+            print("RANDOMLANE: ", random_lane)
+            if 0 <= random_lane <= 20:
+                lane = 1
+            elif 21 <= random_lane <= 40:
+                lane = 2
+            elif 41 <= random_lane <= 60:
+                lane = 3
+            elif 61 <= random_lane <= 80:
+                lane = 4
+            else:
+                lane = 5
 
+            # TODO: fix this! attackers do not show up! type/lane works,
+            #          but why doesnt it render the new attacker animations??
+            print("create attacker now: ", type, " ", lane)
+            attacker = Attacker(type, lane)
+        # to move all the new attackers
+        # for enemy in self.attacker.enemy_list:
+        #     enemy.move()
+            attacker.enemy_list.draw()
+            attacker.move()
 
 
 

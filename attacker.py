@@ -30,7 +30,7 @@ class Attacker:
             self.speed = 1
             self.damage = 1
             self.durability = 1
-            self.name = "tbd"
+            self.name = "bug catcher"
 
         # // IMPORTANT NOTE  (lastest work 3/14/23) //
         # for some reason this code segment has to be ALL TOGETHER or else it will not function at all.
@@ -78,11 +78,13 @@ class Attacker:
 
     def move(self):
         # move leftward
-        self.enemy_sprite.center_x -= self.speed
-        print(self.position[0])
-        # stop if zombie reaches house
-        if self.position[0] < 10:
-            self.speed = 0
+        for enemy in self.enemy_list:
+            enemy.center_x -= self.speed
+
+            # stop if zombie reaches house TODO: fix this
+            if enemy.center_x < 10:
+                enemy.speed = 0
+                #LOSE GAME HERE
 
     # a setter for position (which is a list of x & y values).
     # this setter takes in one parameter, the lane, and sets the position of the sprite
