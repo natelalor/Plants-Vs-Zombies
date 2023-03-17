@@ -10,9 +10,6 @@ class Attacker:
         self.type = type
         self.dead = False
 
-        # set up the attacker's starting position using their lane
-        # self.set_position_lane(self.lane)
-
         # depending on which "type" of attacker you create, they will have differing preset stats to initialize
         if self.type == 1:
             self.speed = 1
@@ -81,7 +78,8 @@ class Attacker:
 
     def move(self):
         # move leftward
-        self.position[0] -= self.speed
+        self.enemy_sprite.center_x -= self.speed
+        print(self.position[0])
         # stop if zombie reaches house
         if self.position[0] < 10:
             self.speed = 0

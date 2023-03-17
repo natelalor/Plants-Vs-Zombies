@@ -4,7 +4,7 @@ import arcade
 from defender import Defender
 from attacker import Attacker
 from grid import Grid
-
+import random
 
 
 class Game(arcade.Window):
@@ -13,6 +13,10 @@ class Game(arcade.Window):
         self.level = level
         self.enemies = []
         self.createEnemies()
+
+        # on_update movement testing:
+        self.change_x = 100
+        self.change_y = 100
 
         # Tests placing an attacker and defender on the grid
         # first param: 1, 2, are different types: lolli, chocoalte, etc
@@ -64,5 +68,22 @@ class Game(arcade.Window):
         self.defender4.ally_list.draw()
         self.defender5.ally_list.draw()
 
+
         #self.bullet_list.draw()
         #self.player_list.draw()
+    def on_update(self, delta_time):
+
+        self.attacker1.move()
+
+
+
+
+
+
+
+
+
+
+
+
+
