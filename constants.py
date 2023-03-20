@@ -6,6 +6,14 @@ SCREEN_TITLE = "Plants vs. Zombies"
 SIZE_COLUMNS = 9
 SIZE_ROWS = 5
 
+# This sets the margin between each cell
+# and on the edges of the screen.
+MARGIN = 5
+
+# Do the math to figure out our screen dimensions
+SCREEN_WIDTH = (100 + MARGIN) * SIZE_COLUMNS + MARGIN
+SCREEN_HEIGHT = (100 + MARGIN) * SIZE_ROWS + MARGIN
+
 # individual square object size
 SQUARE_SIZE = 1
 
