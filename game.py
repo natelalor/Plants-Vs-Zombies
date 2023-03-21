@@ -45,6 +45,10 @@ class Game(arcade.Window):
     def runGame(self):
         pass
 
+    # MOUSE INPUT TESTING HERE
+    def on_mouse_press(self, x, y, button, modifiers):
+        print("Mouse button is pressed")
+
     def on_draw(self):
         """Render the screen. """
 
@@ -73,6 +77,7 @@ class Game(arcade.Window):
 
         #self.bullet_list.draw()
         #self.player_list.draw()
+
     def on_update(self, delta_time):
 
         self.attacker1.move()
