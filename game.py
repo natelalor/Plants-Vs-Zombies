@@ -47,7 +47,34 @@ class Game(arcade.Window):
 
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
+        clicked = False
         print("Mouse button is pressed")
+
+        # if x/y is here AND clicked boolean is false, then sunflower is selected
+
+
+            # then call mouse function where its on hover and light up square that its on
+
+
+        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
+
+
+
+        # if x/y is here, then pea shooter is selected AND clicked boolean is false
+
+
+            # then call mouse function where its on hover and light up square that its on
+
+
+        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
+
+
+
+        # if x/y is here, then frozen pea shooter is selected AND clicked boolean is false
+
+
+            # then call mouse function where its on hover and light up square that its on
+
 
     def on_draw(self):
         """Render the screen. """
