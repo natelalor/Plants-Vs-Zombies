@@ -1,5 +1,3 @@
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
 SCREEN_TITLE = "Plants vs. Zombies"
 
 # grid dimensions
@@ -17,6 +15,8 @@ SCREEN_HEIGHT = (100 + MARGIN) * SIZE_ROWS + MARGIN
 # individual square object size
 SQUARE_SIZE = 1
 
+LEVEL_TIME = 120
+
 levelsDict = {
     # level: [[enemyType, number of that type]]
     1: [[2, 10], [3, 2]],
@@ -30,3 +30,21 @@ enemiesDict = {1: "easy",
                2: "normal",
                3: "cone",
                4: "bucket"}
+
+waves = {
+    1: {
+        "intensity": 4,
+        "x": -2,
+        "weight": .9
+    },
+    2: {
+        "intensity": 1,
+        "x": 3,
+        "weight": .4
+        },
+    3: {
+        "intensity": .5,
+        "x": 10,
+        "weight": .1
+        }
+}
