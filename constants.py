@@ -44,7 +44,7 @@ waves = {
         },
     3: {
         "intensity": .5,
-        "x": 10,
+        "x": 9,
         "weight": .1
         }
 }
