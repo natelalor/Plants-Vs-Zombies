@@ -21,8 +21,11 @@ class Square:
     def get_position(self):
         return self.position_list
 
-    def has_plant(self):
-        return self.has_plant
+    def has_plant(self, x, y):
+        # if square at x, y has a plant:
+        return True
+        # else
+        # return False
 
     def add_plant(self):
         self.has_plant = True

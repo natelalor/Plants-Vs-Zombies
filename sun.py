@@ -18,6 +18,7 @@ class Sun:
     # given parameters x, y, it will see if those x and y are within the sprite's borders
     def in_sun(self, x, y):
         if (x <= (self.center[0] + 50) and y <= (self.center[1] + 50)) and (x > (self.center[0] - 50) and y > (self.center[1] - 50)):
+            print("You have clicked the sun!")
             return True
         else:
             return False

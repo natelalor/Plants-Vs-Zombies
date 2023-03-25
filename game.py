@@ -58,6 +58,14 @@ class Game(arcade.Window):
             sunflower = True
             clicked = True
 
+        # TODO: 3/24/23 TESTING!!!! problem: u have to access a square's has_plant(x,y) and im not sure how to get to
+        # a specific square... through a grid method maybe? grid.return_square(x, y) ??? (x,y being coordinates clicked?
+
+        # whichever square you place, if there is no plant there, it creates a new defender for you
+        # if (x == 0 and y == 0) and (self.grid.has_plant(x, y)):
+        #     # new sunflower creation
+        #     sunflower1 = Defender(1, 1)
+
         # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
         elif (x == 0 and y == 0) and (clicked == True):
             # sunflower is DEselected
@@ -91,9 +99,10 @@ class Game(arcade.Window):
             frozen_pea = False
             clicked = False
 
-        # SUN DISAPPEAR ON CLICK TESTING!!!!
+        # SUN CLICK TESTING!!!!
         if self.sun1.in_sun(x, y):
-            # disappear sprite
+            # disappear sprite  # TODO: delete objects (how to make sprites disappear?)
+            # del self.sun1    #this breaks because then it has no sun1 to draw later on. how do we safely remove objects?
             # update currency
             self.currency += c.SUN_ADDITION
 
