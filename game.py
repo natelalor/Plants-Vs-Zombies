@@ -1,6 +1,7 @@
 import random
 import constants as c
 import arcade
+from sun import Sun
 from defender import Defender
 from attacker import Attacker
 from grid import Grid
@@ -13,10 +14,7 @@ class Game(arcade.Window):
         self.level = level
         self.enemies = []
         self.createEnemies()
-
-        # on_update movement testing:
-        self.change_x = 100
-        self.change_y = 100
+        self.currency = 100
 
         # Tests placing an attacker and defender on the grid
         # first param: 1, 2, are different types: lolli, chocoalte, etc
@@ -33,6 +31,9 @@ class Game(arcade.Window):
         self.defender3 = Defender(2, 3)
         self.defender4 = Defender(1, 4)
         self.defender5 = Defender(2, 5)
+
+        # TEMP SUN CREATION
+        self.sun1 = Sun(250, 250)
 
         self.createEnemies()
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
@@ -55,22 +56,26 @@ class Game(arcade.Window):
 
             # then call mouse function where its on hover and light up square that its on
             sunflower = True
+            clicked = True
 
         # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
         elif (x == 0 and y == 0) and (clicked == True):
             # sunflower is DEselected
             sunflower = False
+            clicked = False
 
         # if x/y is here, then pea shooter is selected AND clicked boolean is false
         if (x == 0 and y == 0) and (clicked == False):
 
             # then call mouse function where its on hover and light up square that its on
             pea_shooter = True
+            clicked = True
 
         # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
         if (x == 0 and y == 0) and (clicked == True):
             # pea shooter DEselected
             pea_shooter = False
+            clicked = False
 
 
         # if x/y is here, then frozen pea shooter is selected AND clicked boolean is false
@@ -78,23 +83,35 @@ class Game(arcade.Window):
 
             # then call mouse function where its on hover and light up square that its on
             frozen_pea = True
+            clicked = True
 
         # if x/y is here, then frozen pea shooter is selected AND clicked boolean is TRUE,
         if (x == 0 and y == 0) and (clicked == True):
             #DEselect frozen pea
             frozen_pea = False
+            clicked = False
+
+        # SUN DISAPPEAR ON CLICK TESTING!!!!
+        if self.sun1.in_sun(x, y):
+            # disappear sprite
+            # update currency
+            self.currency += c.SUN_ADDITION
+
 
     def on_draw(self):
         """Render the screen. """
 
         self.clear()
 
-        # self.enemies.draw()
         self.grid.grid_draw()
-        # PLACEHOLDER
-        # Prints attacker (red) and defender (blue) as an example
-        # self.attacker.draw()
 
+        # TEMPORARY SUN DRAWING
+        self.sun1.sun_list.draw()
+
+        # currency text (for positioning: 700 is x, 550 is y)
+        arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
+
+        # THIS IS TEMPORARY SPAWNING UNTIL WE IMPLEMENT SPAWNING SYSTEM
         self.attacker1.enemy_list.draw()
         self.attacker2.enemy_list.draw()
         self.attacker3.enemy_list.draw()
@@ -116,13 +133,14 @@ class Game(arcade.Window):
     def on_update(self, delta_time):
 
         self.attacker1.move()
+        self.attacker2.move()
 
         # to spawn attackers
         if random.random() < 0.01:
 
             # generate random int for "type" of enemy spawned
             random_type = random.randint(0, 100)
-            print("RANDOMTYPE: ", random_type)
+            # print("RANDOMTYPE: ", random_type)
             if 0 <= random_type <= 85:
                 type = 1
             elif 81 <= random_type <= 95:
@@ -132,7 +150,7 @@ class Game(arcade.Window):
 
             # generate random lane it will go on
             random_lane = random.randint(0, 100)
-            print("RANDOMLANE: ", random_lane)
+            # print("RANDOMLANE: ", random_lane)
             if 0 <= random_lane <= 20:
                 lane = 1
             elif 21 <= random_lane <= 40:
@@ -146,7 +164,7 @@ class Game(arcade.Window):
 
             # TODO: fix this! attackers do not show up! type/lane works,
             #          but why doesnt it render the new attacker animations??
-            print("create attacker now: ", type, " ", lane)
+            # print("create attacker now: ", type, " ", lane)
             attacker = Attacker(type, lane)
         # to move all the new attackers
         # for enemy in self.attacker.enemy_list:

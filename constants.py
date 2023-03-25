@@ -8,9 +8,15 @@ SIZE_ROWS = 5
 # and on the edges of the screen.
 MARGIN = 5
 
+# gui height
+GUI_HEIGHT = 100
+
+# for sun clicking, the currency it gives you
+SUN_ADDITION = 20
+
 # Do the math to figure out our screen dimensions
 SCREEN_WIDTH = (100 + MARGIN) * SIZE_COLUMNS + MARGIN
-SCREEN_HEIGHT = (100 + MARGIN) * SIZE_ROWS + MARGIN
+SCREEN_HEIGHT = ((100 + MARGIN) * SIZE_ROWS + MARGIN) + GUI_HEIGHT
 
 # individual square object size
 SQUARE_SIZE = 1
