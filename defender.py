@@ -28,7 +28,7 @@ class Defender:
             self.shoot_speed = 1
             self.damage = 1
             self.durability = 1
-            self.name = "tbd"
+            self.name = "bug catcher"
 
         # TODO: figure out why these dont render and appear. (set_position_lane works so its gotta be here?)
         self.ally_list = arcade.SpriteList()
