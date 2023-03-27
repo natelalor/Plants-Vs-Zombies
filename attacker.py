@@ -3,10 +3,9 @@ import arcade
 
 
 class Attacker(arcade.Sprite):
-    def __init__(self, type, lane):
+    def __init__(self, type):
         super().__init__()
         self.position = [0,0]
-        self.lane = lane
         self.type = type
         self.dead = False
 
@@ -35,7 +34,7 @@ class Attacker(arcade.Sprite):
         # // IMPORTANT NOTE  (lastest work 3/14/23) //
         # for some reason this code segment has to be ALL TOGETHER or else it will not function at all.
         # this means for now draw function has NOTHING which we can change lol but idk how to fix for now.
-        self.enemy_list = arcade.SpriteList()
+        # self.enemy_list = arcade.SpriteList()
         if self.type == 1:
             self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.05)
         elif self.type == 2:
@@ -43,8 +42,7 @@ class Attacker(arcade.Sprite):
         else:
             self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.08)
 
-        self.set_position_lane(self.lane)
-        self.enemy_list.append(self.enemy_sprite)
+        # self.enemy_list.append(self.enemy_sprite)
 
     def is_dead(self):
         if self.durability <= 0:

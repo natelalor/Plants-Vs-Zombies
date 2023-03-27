@@ -16,10 +16,17 @@ from scipy.integrate import quad
 class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+        self.live_attackers = []
+        self.attackers = [Attacker]
         self.game_time = 0
+        self.ally_list = None
         self.level = level
-        self.attackers = []
-        self.live_attackers = arcade.SpriteList()
+        self.live_attackers = [Attacker]
+
+
+
+
+    def setup(self):
         self.total_attacker_weight = 0
         self.scaled_attackers = []
         self.createAttackers()
@@ -41,12 +48,8 @@ class Game(arcade.Window):
         # self.attacker3 = Attacker(1, 3)
         # self.attacker4 = Attacker(2, 4)
         # self.attacker5 = Attacker(1, 5)
+        self.ally_list = [Defender(2, 1),Defender(1, 2), Defender(2, 3)]
 
-        self.defender1 = Defender(2, 1)
-        self.defender2 = Defender(1, 2)
-        self.defender3 = Defender(2, 3)
-        self.defender4 = Defender(1, 4)
-        self.defender5 = Defender(2, 5)
 
         # TEMP SUN CREATION
         self.sun1 = Sun(250, 250)
@@ -83,7 +86,7 @@ class Game(arcade.Window):
         for enemyType in c.levelsDict[self.level]:
             self.total_attacker_weight += enemyType[0] * enemyType[1]  # multiply type by weight
             for i in range(enemyType[1]):
-                self.attackers.append(enemyType[0])
+                self.attackers.append(Attacker(enemyType[0]))
         self.randomize()
 
     def runGame(self):
@@ -162,8 +165,7 @@ class Game(arcade.Window):
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
-        for attacker in self.live_attackers:
-            attacker.draw()
+
         # THIS IS TEMPORARY SPAWNING UNTIL WE IMPLEMENT SPAWNING SYSTEM
         # self.attacker1.enemy_list.draw()
         # self.attacker2.enemy_list.draw()
@@ -173,11 +175,8 @@ class Game(arcade.Window):
         # self.attacker.enemy_list.draw()
 
         # self.defender.ally_list.draw()
-        self.defender1.ally_list.draw()
-        self.defender2.ally_list.draw()
-        self.defender3.ally_list.draw()
-        self.defender4.ally_list.draw()
-        self.defender5.ally_list.draw()
+        self.ally_list.draw()
+
 
 
         #self.bullet_list.draw()
@@ -191,11 +190,12 @@ class Game(arcade.Window):
             area = quad(self.norm, -np.inf, self.game_time / 5, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
             if area > current_total:
                 current_total += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
-                self.live_attackers.append(Attacker(self.attackers.pop(0), random.randint(1, 5)))
+                self.attackers[0].set_position_lane(random.randint(1,5))
+                self.live_attackers.append(self.attackers.pop(0))
                 print("SPAWN", self.live_attackers)
 
         for attacker in self.live_attackers:
-            attacker.draw()
+            # attacker.draw()
             attacker.move()
 
 

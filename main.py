@@ -10,7 +10,7 @@ def main():
     # arcade.start_render()
     # arcade.finish_render()
     game = Game(1)
-    game.on_draw()
+    game.setup()
     arcade.run()
 
 main()
