@@ -2,6 +2,7 @@ import math
 import random
 import constants as c
 import arcade
+from sun import Sun
 from defender import Defender
 from attacker import Attacker
 from grid import Grid
@@ -22,6 +23,7 @@ class Game(arcade.Window):
         self.total_attacker_weight = 0
         self.scaled_attackers = []
         self.createAttackers()
+        self.currency = 100
         self.total_area = quad(self.norm, -np.inf, np.inf, args=c.waves)[0]  # integrate to find area under curve
         for attacker in self.attackers:  # scale the attacker's individual weight in relation to the area
             self.scaled_attackers.append(attacker / self.total_attacker_weight * self.total_area)
@@ -45,6 +47,9 @@ class Game(arcade.Window):
         self.defender3 = Defender(2, 3)
         self.defender4 = Defender(1, 4)
         self.defender5 = Defender(2, 5)
+
+        # TEMP SUN CREATION
+        self.sun1 = Sun(250, 250)
 
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
 
@@ -157,13 +162,14 @@ class Game(arcade.Window):
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
-
+        for attacker in self.live_attackers:
+            attacker.draw()
         # THIS IS TEMPORARY SPAWNING UNTIL WE IMPLEMENT SPAWNING SYSTEM
-        self.attacker1.enemy_list.draw()
-        self.attacker2.enemy_list.draw()
-        self.attacker3.enemy_list.draw()
-        self.attacker4.enemy_list.draw()
-        self.attacker5.enemy_list.draw()
+        # self.attacker1.enemy_list.draw()
+        # self.attacker2.enemy_list.draw()
+        # self.attacker3.enemy_list.draw()
+        # self.attacker4.enemy_list.draw()
+        # self.attacker5.enemy_list.draw()
         # self.attacker.enemy_list.draw()
 
         # self.defender.ally_list.draw()
