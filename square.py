@@ -2,7 +2,7 @@
 import constants as c
 
 class Square:
-    '''
+    """
     An object that will make up the grid, and be able to contain a defender.
     The basic unit of measurement for our game.
         __init__: (constructor) defines size of square (using constant),
@@ -12,11 +12,12 @@ class Square:
                   Indicates whether the square is already holding a defender.
         add_plant: changes bool "has_plant" to true
         remove_plant: changes bool "has_plant" to false
-    '''
+    """
     def __init__(self, x, y):
         self.size = c.SQUARE_SIZE
         self.position_list = [x, y]
         self.has_plant = False
+
 
     def get_position(self):
         return self.position_list

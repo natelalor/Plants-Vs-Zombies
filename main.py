@@ -13,6 +13,5 @@ def main():
     game.on_draw()
     arcade.run()
 
-
 main()
 

@@ -2,10 +2,10 @@ import constants as c
 import arcade
 
 
-class Attacker:
-
+class Attacker(arcade.Sprite):
     def __init__(self, type, lane):
-        self.position = []
+        super().__init__()
+        self.position = [0,0]
         self.lane = lane
         self.type = type
         self.dead = False
@@ -57,24 +57,24 @@ class Attacker:
     def alter_speed(self, rate):
         self.speed *= rate
 
-    def draw(self):
-        # placeholder
-        # arcade.draw_rectangle_filled(self.position[0],self.position[1],50,50,arcade.color.RED,0)
-        # TODO: figure out why tf this doesn't work when its here
-        # type is which "kind" of enemy is spawned, i.e. which sprite we should load
-        # if self.type == 1:
-        #     self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.05)
-        # elif self.type == 2:
-        #     self.enemy_sprite = arcade.Sprite("images/chocolate_enemy.png", 0.08)
-        # else:
-        #     self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.08)
-        #
-        # self.set_position_lane(self.lane)
-        # self.enemy_list.append(self.enemy_sprite)
-
-        # this is here so draw() has atleast something lol.. a placeholder
-        if self.type == 99999:
-            return
+    # def draw(self):
+    #     # placeholder
+    #     # arcade.draw_rectangle_filled(self.position[0],self.position[1],50,50,arcade.color.RED,0)
+    #     # TODO: figure out why tf this doesn't work when its here
+    #     # type is which "kind" of enemy is spawned, i.e. which sprite we should load
+    #     # if self.type == 1:
+    #     #     self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.05)
+    #     # elif self.type == 2:
+    #     #     self.enemy_sprite = arcade.Sprite("images/chocolate_enemy.png", 0.08)
+    #     # else:
+    #     #     self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.08)
+    #     #
+    #     # self.set_position_lane(self.lane)
+    #     # self.enemy_list.append(self.enemy_sprite)
+    #
+    #     # this is here so draw() has atleast something lol.. a placeholder
+    #     if self.type == 99999:
+    #         return
 
     def move(self):
         # move leftward
