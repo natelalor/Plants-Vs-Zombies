@@ -13,7 +13,6 @@ import numpy as np
 from scipy.integrate import quad
 
 
-
 class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
@@ -23,22 +22,13 @@ class Game(arcade.Window):
         self.live_attackers = arcade.SpriteList()
         self.total_attacker_weight = 0
         self.scaled_attackers = []
-        self.createAttackers()
+        self.create_attackers()
         self.currency = 100
         self.total_area = quad(self.norm, -np.inf, np.inf, args=c.waves)[0]  # integrate to find area under curve
         for attacker in self.attackers:  # scale the attacker's individual weight in relation to the area
             self.scaled_attackers.append(attacker / self.total_attacker_weight * self.total_area)
 
-        # on_update movement testing:
-        self.change_x = 100
-        self.change_y = 100
-
     def setup(self):
-        # Tests placing an attacker and defender on the grid
-        # first param: 1, 2, are different types: lolli, chocoalte, etc
-        # second param: integer for lane, 1-5
-
-        self.create_enemies()
 
         # SCENE FOR ALL SPRITES TO RENDER ON
         self.scene = arcade.Scene()
@@ -46,17 +36,14 @@ class Game(arcade.Window):
         # TEMP SUN CREATION
         self.sun1 = Sun()
 
-        self.create_enemies()
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
 
-    def create_enemies(self):
-        """
-                    Create a multimodal Gaussian Curve
-                    :param var x: variable for integration
-                    :param dict waves: a dictionary of dictionaries storing the variables for each of the waves
-                """
-
     def norm(self, x, waves):
+        """
+        Create a multimodal Gaussian Curve
+            :param var x: variable for integration
+            :param dict waves: a dictionary of dictionaries storing the variables for each of the waves
+        """
         equation = 0.0
         for i in waves.keys():  # for each wave
             coefficient = 1 / (waves[i]['intensity'] * math.sqrt(2 * math.pi))  # #math
@@ -64,20 +51,18 @@ class Game(arcade.Window):
             equation += coefficient * sp.E ** exponent  # combine the wave
         return equation
 
-
-    """
-        Organize a list semi-randomly
-        :param List attacker: the list to be randomized 
-    """
-
     def randomize(self):
+        """
+        Organize a list semi-randomly
+            :param List attacker: the list to be randomized
+        """
         random.shuffle(self.attackers)
         first_min = self.attackers.index(min(self.attackers))  # find the index of the first instance of minimum
         self.attackers.insert(0, self.attackers.pop(first_min))  # move it to the front
         first_max = self.attackers.index(max(self.attackers))  # find the index of the first instance of the max
         self.attackers.append(self.attackers.pop(first_max))  # move it to the end
 
-    def createAttackers(self):
+    def create_attackers(self):
         for enemyType in c.levelsDict[self.level]:
             self.total_attacker_weight += enemyType[0] * enemyType[1]  # multiply type by weight
             for i in range(enemyType[1]):
@@ -92,10 +77,16 @@ class Game(arcade.Window):
         clicked = False
         print("Mouse button is pressed")
 
-        # DRAWING DEFENDERS MOVED TO MOUSE PRESS
-        self.draw_defenders()
-        time.sleep(3)  # Sleep for 3 seconds
+        # sun click testing
+        if self.sun1.in_sun(x, y):
+            # disappear sprite  # TODO: delete objects (how to make sprites disappear?)
+            # del self.sun1    #this breaks because then it has no sun1 to draw later on. how do we safely remove objects?
+            # update currency
+            self.currency += c.SUN_ADDITION
 
+        ####################################################
+        # \\\\\ ##### GUI MOUSE INTERACTION HERE ##### /////
+        ####################################################
 
         # if x/y is here AND clicked boolean is false, then sunflower is selected
         if (x == 0 and y == 0) and (clicked == False):
@@ -145,13 +136,6 @@ class Game(arcade.Window):
             frozen_pea = False
             clicked = False
 
-        # SUN CLICK TESTING!!!!
-        if self.sun1.in_sun(x, y):
-            # disappear sprite  # TODO: delete objects (how to make sprites disappear?)
-            # del self.sun1    #this breaks because then it has no sun1 to draw later on. how do we safely remove objects?
-            # update currency
-            self.currency += c.SUN_ADDITION
-
 
     def on_draw(self):
         """Render the screen. """
@@ -160,6 +144,7 @@ class Game(arcade.Window):
 
         self.grid.grid_draw()
         self.live_attackers.draw()
+
         # TEMPORARY SUN DRAWING
         self.sun1.sun_list.draw()
 
@@ -167,9 +152,6 @@ class Game(arcade.Window):
         arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
         for attacker in self.live_attackers:
             attacker.draw()
-
-        # self.bullet_list.draw()
-        # self.player_list.draw()
 
     def on_update(self, delta_time):
         self.game_time +=delta_time
