@@ -6,15 +6,30 @@ from defender import Defender
 from attacker import Attacker
 from grid import Grid
 import random
+import sympy as sp
+import numpy as np
+from scipy.integrate import quad
+
 
 
 class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+        self.game_time = 0
         self.level = level
-        self.enemies = []
-        self.create_enemies()
+        self.attackers = []
+        self.live_attackers = arcade.SpriteList()
+        self.total_attacker_weight = 0
+        self.scaled_attackers = []
+        self.createAttackers()
         self.currency = 100
+        self.total_area = quad(self.norm, -np.inf, np.inf, args=c.waves)[0]  # integrate to find area under curve
+        for attacker in self.attackers:  # scale the attacker's individual weight in relation to the area
+            self.scaled_attackers.append(attacker / self.total_attacker_weight * self.total_area)
+
+        # on_update movement testing:
+        self.change_x = 100
+        self.change_y = 100
 
         # Tests placing an attacker and defender on the grid
         # first param: 1, 2, are different types: lolli, chocoalte, etc
@@ -32,9 +47,38 @@ class Game(arcade.Window):
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
 
     def create_enemies(self):
+    """
+        Create a multimodal Gaussian Curve
+        :param var x: variable for integration
+        :param dict waves: a dictionary of dictionaries storing the variables for each of the waves
+    """
+    def norm(self, x, waves):
+        equation = 0.0
+        for i in waves.keys():  # for each wave
+            coefficient = 1 / (waves[i]['intensity'] * math.sqrt(2 * math.pi))  # #math
+            exponent = -waves[i]['weight'] * ((x - waves[i]['x']) / waves[i]['intensity']) ** 2  # #moremath
+            equation += coefficient * sp.E ** exponent  # combine the wave
+        return equation
+
+
+    """
+        Organize a list semi-randomly
+        :param List attacker: the list to be randomized 
+    """
+
+    def randomize(self):
+        random.shuffle(self.attackers)
+        first_min = self.attackers.index(min(self.attackers))  # find the index of the first instance of minimum
+        self.attackers.insert(0, self.attackers.pop(first_min))  # move it to the front
+        first_max = self.attackers.index(max(self.attackers))  # find the index of the first instance of the max
+        self.attackers.append(self.attackers.pop(first_max))  # move it to the end
+
+    def createAttackers(self):
         for enemyType in c.levelsDict[self.level]:
+            self.total_attacker_weight += enemyType[0] * enemyType[1]  # multiply type by weight
             for i in range(enemyType[1]):
-                self.enemies.append(enemyType[0])  # TODO: Change to append enemy object
+                self.attackers.append(enemyType[0])
+        self.randomize()
 
 
 
@@ -108,14 +152,20 @@ class Game(arcade.Window):
         self.clear()
 
         self.grid.grid_draw()
-
+        self.live_attackers.draw()
         # TEMPORARY SUN DRAWING
         self.sun1.sun_list.draw()
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
-
+        for attacker in self.live_attackers:
+            attacker.draw()
         # THIS IS TEMPORARY SPAWNING UNTIL WE IMPLEMENT SPAWNING SYSTEM
+        # self.attacker1.enemy_list.draw()
+        # self.attacker2.enemy_list.draw()
+        # self.attacker3.enemy_list.draw()
+        # self.attacker4.enemy_list.draw()
+        # self.attacker5.enemy_list.draw()
         self.attacker1.enemy_list.draw()
 
         # self.attacker.enemy_list.draw()
@@ -128,17 +178,52 @@ class Game(arcade.Window):
         #self.player_list.draw()
 
     def on_update(self, delta_time):
+        self.game_time +=delta_time
+        current_total = 0
+        # to spawn attackers
+        if len(self.attackers) != 0:
+            area = quad(self.norm, -np.inf, self.game_time / 5, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
+            if area > current_total:
+                current_total += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
+                self.live_attackers.append(Attacker(self.attackers.pop(0), random.randint(1, 5)))
+                print("SPAWN", self.live_attackers)
 
-        self.attacker1.move()
+        for attacker in self.live_attackers:
+            attacker.draw()
+            attacker.move()
 
-        self.sun1.move()
 
-        # good if statement to spawn things at different intervals
         # if random.random() < 0.01:
+        #     # TODO: change to waves of attakcers rather than random semi-constant
+        #     # generate random int for "type" of enemy spawned
+        #     random_type = random.randint(0, 100)
+        #     print("RANDOMTYPE: ", random_type)
+        #     if 0 <= random_type <= 85:
+        #         type = 1
+        #     elif 81 <= random_type <= 95:
+        #         type = 2
+        #     else:
+        #         type = 3
+        #
+        #     # generate random lane it will go on
+        #     random_lane = random.randint(0, 100)
+        #     print("RANDOMLANE: ", random_lane)
+        #     if 0 <= random_lane <= 20:
+        #         lane = 1
+        #     elif 21 <= random_lane <= 40:
+        #         lane = 2
+        #     elif 41 <= random_lane <= 60:
+        #         lane = 3
+        #     elif 61 <= random_lane <= 80:
+        #         lane = 4
+        #     else:
+        #         lane = 5
 
-
-
-
-
-
+            # TODO: fix this! attackers do not show up! type/lane works,
+            #          but why doesnt it render the new attacker animations??
+            # print("create attacker now: ", type, " ", lane)
+            # attacker = Attacker(type, lane)
+            # to move all the new attackers
+            # for enemy in self.attacker.enemy_list:
+            #     enemy.move()
 

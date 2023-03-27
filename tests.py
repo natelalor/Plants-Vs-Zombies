@@ -19,7 +19,7 @@ def testLevelCreation():
                       3: 0,
                       4: 0}
         game = Game(level)
-        for i in game.enemies:
+        for i in game.attackers:
             numEnemies[i] += 1
         for i in numEnemies.keys():
             if numEnemies[i] > 0:
@@ -106,4 +106,4 @@ def run_waves(attackers, scaled_attackers):
         timestep += 1
 
 
-setup_waves(3)
+# setup_waves(3)
