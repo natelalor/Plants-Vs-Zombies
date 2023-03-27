@@ -12,7 +12,7 @@ MARGIN = 5
 GUI_HEIGHT = 100
 
 # for sun clicking, the currency it gives you
-SUN_ADDITION = 20
+SUN_ADDITION = 25
 
 # Do the math to figure out our screen dimensions
 SCREEN_WIDTH = (100 + MARGIN) * SIZE_COLUMNS + MARGIN
