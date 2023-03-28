@@ -4,9 +4,15 @@ import arcade
 
 class Attacker(arcade.Sprite):
     def __init__(self, type):
-        super().__init__()
-        self.position = [0,0]
         self.type = type
+        if self.type == 1:
+            super().__init__("images/lolli_enemy.png", 0.05)
+        elif self.type == 2:
+            super().__init__("images/chocolate_enemy.png", 0.08)
+        else:
+            super().__init__("images/lolli_enemy.png", 0.08)
+
+        self.position = [0, 0]
         self.dead = False
 
         # depending on which "type" of attacker you create, they will have differing preset stats to initialize
@@ -35,19 +41,13 @@ class Attacker(arcade.Sprite):
         # for some reason this code segment has to be ALL TOGETHER or else it will not function at all.
         # this means for now draw function has NOTHING which we can change lol but idk how to fix for now.
         # self.enemy_list = arcade.SpriteList()
-        if self.type == 1:
-            self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.05)
-        elif self.type == 2:
-            self.enemy_sprite = arcade.Sprite("images/chocolate_enemy.png", 0.08)
-        else:
-            self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.08)
 
         # self.enemy_list.append(self.enemy_sprite)
 
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
-        return (self.dead)
+        return self.dead
 
     def decrement_health(self, amount):
         self.durability -= amount
@@ -82,7 +82,7 @@ class Attacker(arcade.Sprite):
             # stop if zombie reaches house TODO: fix this
             if enemy.center_x < 10:
                 enemy.speed = 0
-                #LOSE GAME HERE
+                # LOSE GAME HERE
 
     # a setter for position (which is a list of x & y values).
     # this setter takes in one parameter, the lane, and sets the position of the sprite
@@ -92,40 +92,39 @@ class Attacker(arcade.Sprite):
         # this will set up that enemy to start moving.
 
         if lane == 1:
-            self.enemy_sprite.center_x = 900
-            self.enemy_sprite.center_y = 470
+            self.center_x = 900
+            self.center_y = 470
 
             self.position = [900, 470]
 
         elif lane == 2:
-            self.enemy_sprite.center_x = 900
-            self.enemy_sprite.center_y = 365
+            self.center_x = 900
+            self.center_y = 365
 
             self.position = [900, 365]
 
         elif lane == 3:
-            self.enemy_sprite.center_x = 900
-            self.enemy_sprite.center_y = 260
+            self.center_x = 900
+            self.center_y = 260
 
             self.position = [900, 260]
 
         elif lane == 4:
-            self.enemy_sprite.center_x = 900
-            self.enemy_sprite.center_y = 155
+            self.center_x = 900
+            self.center_y = 155
 
             self.position = [900, 155]
 
         elif lane == 5:
-            self.enemy_sprite.center_x = 900
-            self.enemy_sprite.center_y = 50
+            self.center_x = 900
+            self.center_y = 50
 
             self.position = [900, 50]
         else:
-            self.enemy_sprite.center_x = 100
-            self.enemy_sprite.center_y = 100
+            self.center_x = 100
+            self.center_y = 100
 
             self.position = [100, 100]
-
 
     # similar setter for position but with different parameters, actual x & y for heightened flexibility when needed.
     def set_position_xy(self, position_x, position_y):
@@ -135,3 +134,5 @@ class Attacker(arcade.Sprite):
     # // now that i think about it i dont think we will need this lol... maybe later on //
     def get_position(self):
         return self.position
+    def get_type(self):
+        return self.type

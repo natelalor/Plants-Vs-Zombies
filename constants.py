@@ -21,6 +21,9 @@ SCREEN_HEIGHT = ((100 + MARGIN) * SIZE_ROWS + MARGIN) + GUI_HEIGHT
 # individual square object size
 SQUARE_SIZE = 1
 
+#  slows down spawning, default 10
+SLOW_RATE = 10
+
 LEVEL_TIME = 120
 
 levelsDict = {

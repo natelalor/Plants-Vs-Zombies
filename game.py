@@ -17,13 +17,14 @@ class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
         self.live_attackers = []
-        self.attackers = [Attacker]
+        self.attackers = []
         self.game_time = 0
         self.ally_list = None
         self.level = level
-        self.live_attackers = [Attacker]
-
-
+        self.live_attackers = []
+        self.scene = arcade.Scene()
+        self.current_time = 0
+        self.current_area = 0
 
 
     def setup(self):
@@ -33,11 +34,12 @@ class Game(arcade.Window):
         self.currency = 100
         self.total_area = quad(self.norm, -np.inf, np.inf, args=c.waves)[0]  # integrate to find area under curve
         for attacker in self.attackers:  # scale the attacker's individual weight in relation to the area
-            self.scaled_attackers.append(attacker / self.total_attacker_weight * self.total_area)
+            self.scaled_attackers.append(attacker.get_type() / self.total_attacker_weight * self.total_area)
 
         # on_update movement testing:
         self.change_x = 100
         self.change_y = 100
+        self.scene.add_sprite_list("Attackers")
 
         # Tests placing an attacker and defender on the grid
         # first param: 1, 2, are different types: lolli, chocoalte, etc
@@ -77,10 +79,20 @@ class Game(arcade.Window):
 
     def randomize(self):
         random.shuffle(self.attackers)
-        first_min = self.attackers.index(min(self.attackers))  # find the index of the first instance of minimum
+        min = 100
+        max = 0
+        first_min = 0
+        first_max = 0
+        for i in range(len(self.attackers)):
+            if self.attackers[i].get_type() < min:
+                min = self.attackers[i].get_type()
+                first_min = i
+            if self.attackers[i].get_type() > max:
+                max = self.attackers[i].get_type()
+                first_max = i
         self.attackers.insert(0, self.attackers.pop(first_min))  # move it to the front
-        first_max = self.attackers.index(max(self.attackers))  # find the index of the first instance of the max
         self.attackers.append(self.attackers.pop(first_max))  # move it to the end
+
 
     def createAttackers(self):
         for enemyType in c.levelsDict[self.level]:
@@ -156,10 +168,12 @@ class Game(arcade.Window):
     def on_draw(self):
         """Render the screen. """
 
-        self.clear()
+        # self.clear()
 
-        self.grid.grid_draw()
-        self.live_attackers.draw()
+        arcade.start_render()
+        # self.grid.grid_draw()
+        self.scene.draw()
+        # self.live_attackers.draw()
         # TEMPORARY SUN DRAWING
         self.sun1.sun_list.draw()
 
@@ -175,7 +189,7 @@ class Game(arcade.Window):
         # self.attacker.enemy_list.draw()
 
         # self.defender.ally_list.draw()
-        self.ally_list.draw()
+        # self.ally_list.draw()
 
 
 
@@ -184,15 +198,15 @@ class Game(arcade.Window):
 
     def on_update(self, delta_time):
         self.game_time +=delta_time
-        current_total = 0
         # to spawn attackers
         if len(self.attackers) != 0:
-            area = quad(self.norm, -np.inf, self.game_time / 5, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
-            if area > current_total:
-                current_total += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
+            area = quad(self.norm, -np.inf, self.game_time / c.SLOW_RATE, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
+            if area > self.current_area:
+                self.current_area += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
                 self.attackers[0].set_position_lane(random.randint(1,5))
-                self.live_attackers.append(self.attackers.pop(0))
-                print("SPAWN", self.live_attackers)
+                self.scene.add_sprite("Attackers", self.attackers.pop(0))
+
+                print("SPAWN", round(self.game_time, 1), "s")
 
         for attacker in self.live_attackers:
             # attacker.draw()
