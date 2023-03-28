@@ -28,9 +28,10 @@ class Defender:
             self.shoot_speed = 1
             self.damage = 1
             self.durability = 1
-            self.name = "tbd"
+            self.name = "bug catcher"
 
-        # TODO: figure out why these dont render and appear. (set_position_lane works so its gotta be here?)
+        # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
+        # sprite creation
         self.ally_list = arcade.SpriteList()
         if self.type == 1:
             self.ally_sprite = arcade.Sprite("images/toothbrush_ally.png", 0.05)
@@ -39,7 +40,8 @@ class Defender:
         else:
             self.ally_sprite = arcade.Sprite("images/toothbrush_ally.png", 0.08)
 
-        self.set_position_lane(self.lane)
+        self.set_position(self.lane)
+        print("inside defender sprite creation. sprite created: ", self.type, self.lane)
         self.ally_list.append(self.ally_sprite)
     
     def is_dead(self):
@@ -54,7 +56,7 @@ class Defender:
         # placeholder
         arcade.draw_rectangle_filled(self.position[0], self.position[1], 50, 50, arcade.color.BLUE, 0)
 
-        # this is here so draw() has atleast something lol.. a placeholder
+        # this is here so draw() has at least something lol.. a placeholder
         if self.type == 99999:
             return
 
@@ -63,7 +65,10 @@ class Defender:
     def set_position_xy(self, position_x, position_y):
         self.position = [position_x, position_y]
 
-    def set_position_lane(self, lane):
+    def set_position(self, lane):
+        # TODO: do we need this function? this is just c + v from attacker's set_position_lane function.
+        #  but we may just be able to use square to spawn defenders in specific locations instead of this
+
         # a 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
         # this will set up that enemy to start moving.
 
