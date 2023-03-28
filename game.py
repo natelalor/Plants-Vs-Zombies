@@ -158,11 +158,13 @@ class Game(arcade.Window):
         # self.clear()
 
         arcade.start_render()
-        # self.grid.grid_draw()
+        self.grid.grid_draw()
         self.scene.draw()
         # self.live_attackers.draw()
         # TEMPORARY SUN DRAWING
         self.sun1.sun_list.draw()
+
+
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
