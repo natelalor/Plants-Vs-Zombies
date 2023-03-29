@@ -105,10 +105,13 @@ class Game(arcade.Window):
 
         # sun click testing
         if self.sun1.in_sun(x, y):
-            # disappear sprite  # TODO: delete objects (how to make sprites disappear?)
-            # del self.sun1    #this breaks because then it has no sun1 to draw later on. how do we safely remove objects?
             # update currency
-            self.currency += c.SUN_ADDITION
+            if self.sun1.sun_list != None:
+                self.currency += c.SUN_ADDITION
+
+            # make sprite disappear
+            self.sun1.sun_list = None
+
 
         ####################################################
         # \\\\\ ##### GUI MOUSE INTERACTION HERE ##### /////
@@ -147,8 +150,10 @@ class Game(arcade.Window):
         self.draw_gui()
         self.scene.draw()
         # self.live_attackers.draw()
+
         # TEMPORARY SUN DRAWING
-        self.sun1.sun_list.draw()
+        if self.sun1.sun_list != None:
+            self.sun1.sun_list.draw()
 
         for attacker in self.live_attackers:
             attacker.draw()
