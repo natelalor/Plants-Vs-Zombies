@@ -10,8 +10,8 @@ import random
 import sympy as sp
 import numpy as np
 from scipy.integrate import quad
-
-
+import time
+import multiprocessing
 
 class Game(arcade.Window):
     def __init__(self, level: int):
@@ -24,7 +24,7 @@ class Game(arcade.Window):
         self.live_attackers = []
         self.scene = arcade.Scene()
         self.current_time = 0
-        self.current_area = 0
+        self.release_times = []
 
 
     def setup(self):
@@ -36,6 +36,7 @@ class Game(arcade.Window):
         for attacker in self.attackers:  # scale the attacker's individual weight in relation to the area
             self.scaled_attackers.append(attacker.get_type() / self.total_attacker_weight * self.total_area)
 
+        self.determine_release()
         # SCENE FOR ALL SPRITES TO RENDER ON
         self.scene = arcade.Scene()
 
@@ -46,7 +47,7 @@ class Game(arcade.Window):
 
     def norm(self, x, waves):
         """
-        Create a multimodal Gaussian Curve
+        Create a multimodal Gaussian Curve. See the math here: https://www.desmos.com/calculator/rxrpfq7kim
             :param var x: variable for integration
             :param dict waves: a dictionary of dictionaries storing the variables for each of the waves
         """
@@ -83,6 +84,25 @@ class Game(arcade.Window):
             for i in range(enemyType[1]):
                 self.attackers.append(Attacker(enemyType[0]))
         self.randomize()
+
+    def determine_release(self):
+        print(multiprocessing.cpu_count())
+        current_total = 0
+        t = 0
+        current_area = 0
+        for j in range(len(self.attackers)):  # set the lanes
+            self.attackers[j].set_position_lane(random.randint(1, 5))
+        # figure out when to spawn attackers
+        while len(self.release_times) < len(self.attackers):
+            start = time.perf_counter()
+            area = quad(self.norm, -50, t, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
+            if area > current_area:
+                current_area += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
+                self.release_times.append(t)
+            t += 1
+            elapsed = time.perf_counter()-start
+            print(t, round(elapsed, 1), round(area, 2), round(current_area, 2))
+
 
     def run_game(self):
         pass
@@ -173,18 +193,14 @@ class Game(arcade.Window):
         self.game_time +=delta_time
         current_total = 0
         # to spawn attackers
-        if len(self.attackers) != 0:
-            area = quad(self.norm, -np.inf, self.game_time / c.SLOW_RATE, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
-            if area > self.current_area:
-                self.current_area += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
-                self.attackers[0].set_position_lane(random.randint(1,5))
-                self.scene.add_sprite("Attackers", self.attackers.pop(0))
+        if self.game_time> self.release_times[0]:
+            self.release_times.pop(0)
+            self.scene.add_sprite("Attackers", self.attackers.pop(0))
+            print("SPAWN", round(self.game_time, 1), "s")
 
-                print("SPAWN", round(self.game_time, 1), "s")
+        for attacker in self.scene["Attackers"]:
+            attacker.center_x -= 1
 
-        for attacker in self.live_attackers:
-            # attacker.draw()
-            attacker.move()
 
         self.sun1.move()
 

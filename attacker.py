@@ -74,14 +74,13 @@ class Attacker(arcade.Sprite):
     #     if self.type == 99999:
     #         return
 
-    def move(self):
-        # move leftward
-        for enemy in self.enemy_list:
-            enemy.center_x -= self.speed
+    def on_update(self, delta_time: float = 1 / 60):        # move leftward
+        self.change_x = -self.speed
 
-            # stop if zombie reaches house TODO: fix this
-            if enemy.center_x < 10:
-                enemy.speed = 0
+
+            # # stop if zombie reaches house TODO: fix this
+            # if enemy.center_x < 10:
+            #     enemy.speed = 0
                 # LOSE GAME HERE
 
     # a setter for position (which is a list of x & y values).

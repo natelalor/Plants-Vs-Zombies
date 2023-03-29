@@ -1,9 +1,9 @@
 # CS205 Team 2 Final Project
 ### Team Members:
-- tbd
-- tbd
-- tbd
-- tbd
+- Noel Desmarais
+- Nate Lalor
+- Simon Garen
+- Ryan Martin
 
 ## tbd
 
