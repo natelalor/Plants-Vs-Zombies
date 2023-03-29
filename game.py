@@ -25,8 +25,7 @@ class Game(arcade.Window):
         self.current_time = 0
         self.current_area = 0
 
-        # for function is_selected()
-        self.selector = False
+        # for defender selection/deselection
         self.clicked = 0
 
     def setup(self):
@@ -187,13 +186,3 @@ class Game(arcade.Window):
             attacker.move()
 
         self.sun1.move()
-
-    # a function that swaps returning bool True or
-    # False each time it is called. Used in selecting and deselecting defenders
-    def is_selected(self):
-        if self.selector:
-            self.selector = False
-            return self.selector
-        else:
-            self.selector = True
-            return self.selector
