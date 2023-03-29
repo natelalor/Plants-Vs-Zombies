@@ -88,6 +88,16 @@ class Game(arcade.Window):
     def run_game(self):
         pass
 
+    def draw_gui(self):
+        # RYAN U CAN DRAW GUI HERE
+
+
+        # main gui background
+        arcade.draw_rectangle_filled((c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT - (c.GUI_HEIGHT/2)), c.SCREEN_WIDTH, c.GUI_HEIGHT, arcade.color.AMAZON, 0)
+
+        # currency text (for positioning: 700 is x, 550 is y)
+        arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
+
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
         # clicked = 0
@@ -126,29 +136,6 @@ class Game(arcade.Window):
         #     # new sunflower creation
         #     sunflower1 = Defender(1, 1)
 
-        # # if x/y is here, then pea shooter is selected AND clicked boolean is false
-        # elif (x == 0 and y == 0) and (clicked == False):
-        #     # then call mouse function where its on hover and light up square that its on
-        #     pea_shooter = True
-        #     clicked = True
-        #
-        # # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        # elif (x == 0 and y == 0) and (clicked == True):
-        #     # pea shooter DEselected
-        #     pea_shooter = False
-        #     clicked = False
-        #
-        # # if x/y is here, then frozen pea shooter is selected AND clicked boolean is false
-        # elif (x == 0 and y == 0) and (clicked == False):
-        #     # then call mouse function where its on hover and light up square that its on
-        #     frozen_pea = True
-        #     clicked = True
-        #
-        # # if x/y is here, then frozen pea shooter is selected AND clicked boolean is TRUE,
-        # elif (x == 0 and y == 0) and (clicked == True):
-        #     # Deselect frozen pea
-        #     frozen_pea = False
-        #     clicked = False
 
     def on_draw(self):
         """Render the screen. """
@@ -157,13 +144,12 @@ class Game(arcade.Window):
 
         arcade.start_render()
         self.grid.grid_draw()
+        self.draw_gui()
         self.scene.draw()
         # self.live_attackers.draw()
         # TEMPORARY SUN DRAWING
         self.sun1.sun_list.draw()
 
-        # currency text (for positioning: 700 is x, 550 is y)
-        arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
         for attacker in self.live_attackers:
             attacker.draw()
 
