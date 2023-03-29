@@ -12,7 +12,6 @@ import numpy as np
 from scipy.integrate import quad
 
 
-
 class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
@@ -26,6 +25,8 @@ class Game(arcade.Window):
         self.current_time = 0
         self.current_area = 0
 
+        # for function is_selected()
+        self.selector = False
 
     def setup(self):
         self.total_attacker_weight = 0
@@ -89,7 +90,7 @@ class Game(arcade.Window):
 
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
-        clicked = False
+        # clicked = 0
         print("Mouse button is pressed")
 
         # sun click testing
@@ -104,11 +105,18 @@ class Game(arcade.Window):
         ####################################################
 
         # if x/y is here AND clicked boolean is false, then sunflower is selected
-        if (x == 0 and y == 0) and (clicked == False):
-
+        if ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and not (self.is_selected()):
             # then call mouse function where its on hover and light up square that its on
             sunflower = True
-            clicked = True
+            # clicked = clicked + 1
+            print("Clicked Sunflower Tester IN!")
+
+        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
+        elif ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and (self.is_selected()):
+            # sunflower is DEselected
+            sunflower = False
+            # clicked = clicked + 1
+            print("Clicked Sunflower Tester OUT!")
 
         # TODO: 3/24/23 TESTING!!!! problem: u have to access a square's has_plant(x,y) and im not sure how to get to
         # a specific square... through a grid method maybe? grid.return_square(x, y) ??? (x,y being coordinates clicked?
@@ -118,39 +126,29 @@ class Game(arcade.Window):
         #     # new sunflower creation
         #     sunflower1 = Defender(1, 1)
 
-        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        elif (x == 0 and y == 0) and (clicked == True):
-            # sunflower is DEselected
-            sunflower = False
-            clicked = False
-
-        # if x/y is here, then pea shooter is selected AND clicked boolean is false
-        if (x == 0 and y == 0) and (clicked == False):
-
-            # then call mouse function where its on hover and light up square that its on
-            pea_shooter = True
-            clicked = True
-
-        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        if (x == 0 and y == 0) and (clicked == True):
-            # pea shooter DEselected
-            pea_shooter = False
-            clicked = False
-
-
-        # if x/y is here, then frozen pea shooter is selected AND clicked boolean is false
-        if (x == 0 and y == 0) and (clicked == False):
-
-            # then call mouse function where its on hover and light up square that its on
-            frozen_pea = True
-            clicked = True
-
-        # if x/y is here, then frozen pea shooter is selected AND clicked boolean is TRUE,
-        if (x == 0 and y == 0) and (clicked == True):
-            # Deselect frozen pea
-            frozen_pea = False
-            clicked = False
-
+        # # if x/y is here, then pea shooter is selected AND clicked boolean is false
+        # elif (x == 0 and y == 0) and (clicked == False):
+        #     # then call mouse function where its on hover and light up square that its on
+        #     pea_shooter = True
+        #     clicked = True
+        #
+        # # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
+        # elif (x == 0 and y == 0) and (clicked == True):
+        #     # pea shooter DEselected
+        #     pea_shooter = False
+        #     clicked = False
+        #
+        # # if x/y is here, then frozen pea shooter is selected AND clicked boolean is false
+        # elif (x == 0 and y == 0) and (clicked == False):
+        #     # then call mouse function where its on hover and light up square that its on
+        #     frozen_pea = True
+        #     clicked = True
+        #
+        # # if x/y is here, then frozen pea shooter is selected AND clicked boolean is TRUE,
+        # elif (x == 0 and y == 0) and (clicked == True):
+        #     # Deselect frozen pea
+        #     frozen_pea = False
+        #     clicked = False
 
     def on_draw(self):
         """Render the screen. """
@@ -164,22 +162,21 @@ class Game(arcade.Window):
         # TEMPORARY SUN DRAWING
         self.sun1.sun_list.draw()
 
-
-
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
         for attacker in self.live_attackers:
             attacker.draw()
 
     def on_update(self, delta_time):
-        self.game_time +=delta_time
+        self.game_time += delta_time
         current_total = 0
         # to spawn attackers
         if len(self.attackers) != 0:
-            area = quad(self.norm, -np.inf, self.game_time / c.SLOW_RATE, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
+            area = quad(self.norm, -np.inf, self.game_time / c.SLOW_RATE, args=c.waves)[
+                0]  # integrate and find bounded area (-inf, timestep)
             if area > self.current_area:
                 self.current_area += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
-                self.attackers[0].set_position_lane(random.randint(1,5))
+                self.attackers[0].set_position_lane(random.randint(1, 5))
                 self.scene.add_sprite("Attackers", self.attackers.pop(0))
 
                 print("SPAWN", round(self.game_time, 1), "s")
@@ -190,4 +187,12 @@ class Game(arcade.Window):
 
         self.sun1.move()
 
-
+    # a function that swaps returning bool True or
+    # False each time it is called. Used in selecting and deselecting defenders
+    def is_selected(self):
+        if self.selector:
+            self.selector = False
+            return self.selector
+        else:
+            self.selector = True
+            return self.selector

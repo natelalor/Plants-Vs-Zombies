@@ -106,3 +106,5 @@ class Defender:
             self.ally_sprite.center_y = 100
 
             self.position = [100, 100]
+
+

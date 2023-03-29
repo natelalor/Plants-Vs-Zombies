@@ -37,13 +37,6 @@ class Attacker(arcade.Sprite):
             self.durability = 1
             self.name = "bug catcher"
 
-        # // IMPORTANT NOTE  (lastest work 3/14/23) //
-        # for some reason this code segment has to be ALL TOGETHER or else it will not function at all.
-        # this means for now draw function has NOTHING which we can change lol but idk how to fix for now.
-        # self.enemy_list = arcade.SpriteList()
-
-        # self.enemy_list.append(self.enemy_sprite)
-
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
@@ -54,25 +47,6 @@ class Attacker(arcade.Sprite):
 
     def alter_speed(self, rate):
         self.speed *= rate
-
-    # def draw(self):
-    #     # placeholder
-    #     # arcade.draw_rectangle_filled(self.position[0],self.position[1],50,50,arcade.color.RED,0)
-    #     # TODO: figure out why tf this doesn't work when its here
-    #     # type is which "kind" of enemy is spawned, i.e. which sprite we should load
-    #     # if self.type == 1:
-    #     #     self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.05)
-    #     # elif self.type == 2:
-    #     #     self.enemy_sprite = arcade.Sprite("images/chocolate_enemy.png", 0.08)
-    #     # else:
-    #     #     self.enemy_sprite = arcade.Sprite("images/lolli_enemy.png", 0.08)
-    #     #
-    #     # self.set_position_lane(self.lane)
-    #     # self.enemy_list.append(self.enemy_sprite)
-    #
-    #     # this is here so draw() has atleast something lol.. a placeholder
-    #     if self.type == 99999:
-    #         return
 
     def move(self):
         # move leftward
@@ -131,7 +105,7 @@ class Attacker(arcade.Sprite):
         self.position = [position_x, position_y]
 
     # a getter to return the current attacker's position (which is a list of x & y coordinates)
-    # // now that i think about it i dont think we will need this lol... maybe later on //
+    # // now that i think about it i don't think we will need this lol... maybe later on //
     def get_position(self):
         return self.position
     def get_type(self):
