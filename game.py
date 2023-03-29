@@ -27,6 +27,7 @@ class Game(arcade.Window):
 
         # for function is_selected()
         self.selector = False
+        self.clicked = 0
 
     def setup(self):
         self.total_attacker_weight = 0
@@ -105,17 +106,17 @@ class Game(arcade.Window):
         ####################################################
 
         # if x/y is here AND clicked boolean is false, then sunflower is selected
-        if ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and not (self.is_selected()):
+        if ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and (self.clicked % 2 == 0):
             # then call mouse function where its on hover and light up square that its on
             sunflower = True
-            # clicked = clicked + 1
+            self.clicked = self.clicked + 1
             print("Clicked Sunflower Tester IN!")
 
         # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        elif ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and (self.is_selected()):
+        elif ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and not (self.clicked % 2 == 0):
             # sunflower is DEselected
             sunflower = False
-            # clicked = clicked + 1
+            self.clicked = self.clicked + 1
             print("Clicked Sunflower Tester OUT!")
 
         # TODO: 3/24/23 TESTING!!!! problem: u have to access a square's has_plant(x,y) and im not sure how to get to
