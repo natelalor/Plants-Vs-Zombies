@@ -1,6 +1,6 @@
 import constants as c
 import arcade
-class Defender:
+class Defender(arcade.Sprite):
     
     def __init__(self, type, lane):
         self.position = []

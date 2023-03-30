@@ -98,7 +98,7 @@ class Game(arcade.Window):
             area = quad(self.norm, -50, t, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
             if area > current_area:
                 current_area += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
-                self.release_times.append(t)
+                self.release_times.append(t*c.SLOW_RATE)
             t += 1
             elapsed = time.perf_counter()-start
             print(t, round(elapsed, 1), round(area, 2), round(current_area, 2))
@@ -193,7 +193,7 @@ class Game(arcade.Window):
         self.game_time +=delta_time
         current_total = 0
         # to spawn attackers
-        if self.game_time> self.release_times[0]:
+        if self.release_times and self.game_time > self.release_times[0]:
             self.release_times.pop(0)
             self.scene.add_sprite("Attackers", self.attackers.pop(0))
             print("SPAWN", round(self.game_time, 1), "s")

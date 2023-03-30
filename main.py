@@ -2,6 +2,8 @@ import tests
 from game import Game
 import arcade
 import constants as c
+import multiprocessing
+
 
 def main():
     # commented this out for now as it was making extra windows
@@ -10,8 +12,10 @@ def main():
     # arcade.start_render()
     # arcade.finish_render()
     game = Game(1)
+
     game.setup()
     arcade.run()
 
-main()
 
+if __name__ == '__main__':
+    main()
