@@ -206,6 +206,9 @@ class Game(arcade.Window):
 
         for attacker in self.scene["Attackers"]:
             attacker.center_x -= 1
+            #testing killing attackers
+            if attacker.is_dead():
+                self.scene["Attackers"].remove(attacker)
 
         #testing updtaing bullets and such
         self.defender_list.on_update(delta_time)
@@ -213,7 +216,12 @@ class Game(arcade.Window):
             if bullet.center_x > c.SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
             if arcade.check_for_collision_with_list(bullet,self.scene["Attackers"]):
-                print("HITPOINT")
+                #get the sprite object hit by the bullet
+                attackerHit = arcade.check_for_collision_with_list(bullet,self.scene["Attackers"])[0]
+                print("Current health",attackerHit.get_durability())
+                attackerHit.decrement_health(15)
+                print("Is enemy dead: ",attackerHit.is_dead())
+                print("End hitpoint")
                 bullet.remove_from_sprite_lists()
 
         self.bullet_list.update()
