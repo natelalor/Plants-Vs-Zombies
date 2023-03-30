@@ -42,6 +42,7 @@ class Sun:
                 self.sun_sprite.center_y = 1000
 
     def move(self):
-        for sun in self.sun_list:
-            sun.center_y -= self.speed
+        if self.sun_list != None:
+            for sun in self.sun_list:
+                sun.center_y -= self.speed
 

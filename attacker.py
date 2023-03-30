@@ -37,13 +37,6 @@ class Attacker(arcade.Sprite):
             self.durability = 1
             self.name = "bug catcher"
 
-        # // IMPORTANT NOTE  (lastest work 3/14/23) //
-        # for some reason this code segment has to be ALL TOGETHER or else it will not function at all.
-        # this means for now draw function has NOTHING which we can change lol but idk how to fix for now.
-        # self.enemy_list = arcade.SpriteList()
-
-        # self.enemy_list.append(self.enemy_sprite)
-
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
@@ -74,14 +67,7 @@ class Attacker(arcade.Sprite):
     #     if self.type == 99999:
     #         return
 
-    def on_update(self, delta_time: float = 1 / 60):        # move leftward
-        self.change_x = -self.speed
 
-
-            # # stop if zombie reaches house TODO: fix this
-            # if enemy.center_x < 10:
-            #     enemy.speed = 0
-                # LOSE GAME HERE
 
     # a setter for position (which is a list of x & y values).
     # this setter takes in one parameter, the lane, and sets the position of the sprite
@@ -130,7 +116,7 @@ class Attacker(arcade.Sprite):
         self.position = [position_x, position_y]
 
     # a getter to return the current attacker's position (which is a list of x & y coordinates)
-    # // now that i think about it i dont think we will need this lol... maybe later on //
+    # // now that i think about it i don't think we will need this lol... maybe later on //
     def get_position(self):
         return self.position
     def get_type(self):

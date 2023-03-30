@@ -24,8 +24,11 @@ class Game(arcade.Window):
         self.live_attackers = []
         self.scene = arcade.Scene()
         self.current_time = 0
+        self.current_area = 0
         self.release_times = []
 
+        # for defender selection/deselection
+        self.clicked = 0
 
     def setup(self):
         self.total_attacker_weight = 0
@@ -107,28 +110,48 @@ class Game(arcade.Window):
     def run_game(self):
         pass
 
+    def draw_gui(self):
+        # RYAN U CAN DRAW GUI HERE
+
+
+        # main gui background
+        arcade.draw_rectangle_filled((c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT - (c.GUI_HEIGHT/2)), c.SCREEN_WIDTH, c.GUI_HEIGHT, arcade.color.AMAZON, 0)
+
+        # currency text (for positioning: 700 is x, 550 is y)
+        arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
+
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
-        clicked = False
+        # clicked = 0
         print("Mouse button is pressed")
 
         # sun click testing
         if self.sun1.in_sun(x, y):
-            # disappear sprite  # TODO: delete objects (how to make sprites disappear?)
-            # del self.sun1    #this breaks because then it has no sun1 to draw later on. how do we safely remove objects?
             # update currency
-            self.currency += c.SUN_ADDITION
+            if self.sun1.sun_list != None:
+                self.currency += c.SUN_ADDITION
+
+            # make sprite disappear
+            self.sun1.sun_list = None
+
 
         ####################################################
         # \\\\\ ##### GUI MOUSE INTERACTION HERE ##### /////
         ####################################################
 
         # if x/y is here AND clicked boolean is false, then sunflower is selected
-        if (x == 0 and y == 0) and (clicked == False):
-
+        if ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and (self.clicked % 2 == 0):
             # then call mouse function where its on hover and light up square that its on
             sunflower = True
-            clicked = True
+            self.clicked = self.clicked + 1
+            print("Clicked Sunflower Tester IN!")
+
+        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
+        elif ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and not (self.clicked % 2 == 0):
+            # sunflower is DEselected
+            sunflower = False
+            self.clicked = self.clicked + 1
+            print("Clicked Sunflower Tester OUT!")
 
         # TODO: 3/24/23 TESTING!!!! problem: u have to access a square's has_plant(x,y) and im not sure how to get to
         # a specific square... through a grid method maybe? grid.return_square(x, y) ??? (x,y being coordinates clicked?
@@ -138,39 +161,6 @@ class Game(arcade.Window):
         #     # new sunflower creation
         #     sunflower1 = Defender(1, 1)
 
-        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        elif (x == 0 and y == 0) and (clicked == True):
-            # sunflower is DEselected
-            sunflower = False
-            clicked = False
-
-        # if x/y is here, then pea shooter is selected AND clicked boolean is false
-        if (x == 0 and y == 0) and (clicked == False):
-
-            # then call mouse function where its on hover and light up square that its on
-            pea_shooter = True
-            clicked = True
-
-        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        if (x == 0 and y == 0) and (clicked == True):
-            # pea shooter DEselected
-            pea_shooter = False
-            clicked = False
-
-
-        # if x/y is here, then frozen pea shooter is selected AND clicked boolean is false
-        if (x == 0 and y == 0) and (clicked == False):
-
-            # then call mouse function where its on hover and light up square that its on
-            frozen_pea = True
-            clicked = True
-
-        # if x/y is here, then frozen pea shooter is selected AND clicked boolean is TRUE,
-        if (x == 0 and y == 0) and (clicked == True):
-            # Deselect frozen pea
-            frozen_pea = False
-            clicked = False
-
 
     def on_draw(self):
         """Render the screen. """
@@ -178,19 +168,20 @@ class Game(arcade.Window):
         # self.clear()
 
         arcade.start_render()
-        # self.grid.grid_draw()
+        self.grid.grid_draw()
+        self.draw_gui()
         self.scene.draw()
         # self.live_attackers.draw()
-        # TEMPORARY SUN DRAWING
-        self.sun1.sun_list.draw()
 
-        # currency text (for positioning: 700 is x, 550 is y)
-        arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
+        # TEMPORARY SUN DRAWING
+        if self.sun1.sun_list != None:
+            self.sun1.sun_list.draw()
+
         for attacker in self.live_attackers:
             attacker.draw()
 
     def on_update(self, delta_time):
-        self.game_time +=delta_time
+        self.game_time += delta_time
         current_total = 0
         # to spawn attackers
         if self.release_times and self.game_time > self.release_times[0]:
@@ -203,5 +194,3 @@ class Game(arcade.Window):
 
 
         self.sun1.move()
-
-
