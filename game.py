@@ -30,6 +30,10 @@ class Game(arcade.Window):
         # for defender selection/deselection
         self.clicked = 0
 
+        #testing Defenders and Bullets
+        self.defender_list = None
+        self.bullet_list = None
+
     def setup(self):
         self.total_attacker_weight = 0
         self.scaled_attackers = []
@@ -45,6 +49,14 @@ class Game(arcade.Window):
 
         # TEMP SUN CREATION
         self.sun1 = Sun()
+
+        #test bullet and defenders
+        self.defender_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
+        defender1 = Defender(1,1,self.bullet_list,1.5)
+        self.defender_list.append(defender1)
+        defender3 = Defender(2,3,self.bullet_list,1.3)
+        self.defender_list.append(defender3)
 
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
 
@@ -179,6 +191,9 @@ class Game(arcade.Window):
 
         for attacker in self.live_attackers:
             attacker.draw()
+        
+        self.defender_list.draw()
+        self.bullet_list.draw()
 
     def on_update(self, delta_time):
         self.game_time += delta_time
@@ -191,6 +206,24 @@ class Game(arcade.Window):
 
         for attacker in self.scene["Attackers"]:
             attacker.center_x -= 1
+            #testing killing attackers
+            if attacker.is_dead():
+                self.scene["Attackers"].remove(attacker)
 
+        #testing updtaing bullets and such
+        self.defender_list.on_update(delta_time)
+        for bullet in self.bullet_list:
+            if bullet.center_x > c.SCREEN_WIDTH:
+                bullet.remove_from_sprite_lists()
+            if arcade.check_for_collision_with_list(bullet,self.scene["Attackers"]):
+                #get the sprite object hit by the bullet
+                attackerHit = arcade.check_for_collision_with_list(bullet,self.scene["Attackers"])[0]
+                print("Current health",attackerHit.get_durability())
+                attackerHit.decrement_health(15)
+                print("Is enemy dead: ",attackerHit.is_dead())
+                print("End hitpoint")
+                bullet.remove_from_sprite_lists()
+
+        self.bullet_list.update()
 
         self.sun1.move()

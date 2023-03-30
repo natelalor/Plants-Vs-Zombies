@@ -19,22 +19,22 @@ class Attacker(arcade.Sprite):
         if self.type == 1:
             self.speed = 1
             self.damage = 1
-            self.durability = 1
+            self.durability = 100
             self.name = "lollipop"
         elif self.type == 2:
             self.speed = 1
             self.damage = 1
-            self.durability = 1
+            self.durability = 100
             self.name = "chocolate"
         elif self.type == 3:
             self.speed = 1
             self.damage = 1
-            self.durability = 1
+            self.durability = 100
             self.name = "creampuff"
         else:
             self.speed = 1
             self.damage = 1
-            self.durability = 1
+            self.durability = 100
             self.name = "bug catcher"
 
     def is_dead(self):
@@ -121,3 +121,6 @@ class Attacker(arcade.Sprite):
         return self.position
     def get_type(self):
         return self.type
+
+    def get_durability(self):
+        return self.durability
