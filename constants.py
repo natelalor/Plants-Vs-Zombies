@@ -57,3 +57,5 @@ waves = {
         "weight": .1
         }
 }
+
+BULLET_SPEED = 4

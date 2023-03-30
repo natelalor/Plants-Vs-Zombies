@@ -1,48 +1,55 @@
 import constants as c
 import arcade
+from bullet import Bullet
 class Defender(arcade.Sprite):
     
-    def __init__(self, type, lane):
-        self.position = []
+    def __init__(self, type, lane,bullet_list,time_between_firing):
+        
         self.lane = lane
         self.type = type
         self.dead = False
 
+        self.time_since_last_firing = 0
+        self.time_between_firing = time_between_firing
+
+        self.bullet_list = bullet_list
+
         # depending on which "type" of defender you create, they will have differing preset stats to initialize
+
+
         if self.type == 1:
+            super().__init__("images/toothbrush_ally.png", 0.05)
             self.shoot_speed = 1
             self.damage = 1
             self.durability = 1
             self.name = "toothbrush"
         elif self.type == 2:
+            super().__init__("images/toothbrush_ally.png", 0.05)
             self.shoot_speed = 1
             self.damage = 1
             self.durability = 1
             self.name = "toothpaste"
         elif self.type == 3:
+            super().__init__("images/toothbrush_ally.png", 0.05)
             self.shoot_speed = 1
             self.damage = 1
             self.durability = 1
             self.name = "floss"
         else:
+            super().__init__("images/toothbrush_ally.png", 0.05)
             self.shoot_speed = 1
             self.damage = 1
             self.durability = 1
             self.name = "bug catcher"
 
+        self.position = [0,0]
+
         # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
         # sprite creation
-        self.ally_list = arcade.SpriteList()
-        if self.type == 1:
-            self.ally_sprite = arcade.Sprite("images/toothbrush_ally.png", 0.05)
-        elif self.type == 2:
-            self.ally_sprite = arcade.Sprite("images/toothpaste_ally.png", 0.08)
-        else:
-            self.ally_sprite = arcade.Sprite("images/toothbrush_ally.png", 0.08)
-
+       
         self.set_position(self.lane)
         print("inside defender sprite creation. sprite created: ", self.type, self.lane)
-        self.ally_list.append(self.ally_sprite)
+        
     
     def is_dead(self):
         if self.durability <= 0:
@@ -73,38 +80,50 @@ class Defender(arcade.Sprite):
         # this will set up that enemy to start moving.
 
         if lane == 1:
-            self.ally_sprite.center_x = 50
-            self.ally_sprite.center_y = 470
+            self.center_x = 50
+            self.center_y = 470
 
             self.position = [50, 470]
 
         elif lane == 2:
-            self.ally_sprite.center_x = 50
-            self.ally_sprite.center_y = 365
+            self.center_x = 50
+            self.center_y = 365
 
             self.position = [50, 365]
 
         elif lane == 3:
-            self.ally_sprite.center_x = 50
-            self.ally_sprite.center_y = 260
+            self.center_x = 50
+            self.center_y = 260
 
             self.position = [50, 260]
 
         elif lane == 4:
-            self.ally_sprite.center_x = 50
-            self.ally_sprite.center_y = 155
+            self.center_x = 50
+            self.center_y = 155
 
             self.position = [50, 155]
 
         elif lane == 5:
-            self.ally_sprite.center_x = 50
-            self.ally_sprite.center_y = 50
+            self.center_x = 50
+            self.center_y = 50
 
             self.position = [50, 50]
         else:
-            self.ally_sprite.center_x = 100
-            self.ally_sprite.center_y = 100
+            self.center_x = 100
+            self.center_y = 100
 
             self.position = [100, 100]
 
 
+    def on_update(self, delta_time: float = 1 / 60):
+        
+        self.time_since_last_firing += delta_time
+        
+        if self.time_since_last_firing >= self.time_between_firing:
+            
+            self.time_since_last_firing = 0
+
+            #create the bullet
+            bullet = Bullet(1,self.center_x,self.center_y,c.BULLET_SPEED)
+            
+            self.bullet_list.append(bullet)
