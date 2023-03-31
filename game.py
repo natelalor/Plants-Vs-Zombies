@@ -217,7 +217,8 @@ class Game(arcade.Window):
             self.live_attackers.append(self.attackers_list.pop(0))
 
         for attacker in self.live_attackers:
-            attacker.center_x -= 1
+            #change speed (for snowballs)
+            attacker.center_x -= attacker.speed
             #testing killing attackers
             if attacker.is_dead():
                 self.live_attackers.remove(attacker)
@@ -230,10 +231,13 @@ class Game(arcade.Window):
             if arcade.check_for_collision_with_list(bullet,self.live_attackers):
                 #get the sprite object hit by the bullet
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
-                print("Current health",attackerHit.get_durability())
-                attackerHit.decrement_health(15)
-                print("Is enemy dead: ",attackerHit.is_dead())
-                print("End hitpoint")
+                #different effects for each bullet type
+                if bullet.type == 1:
+                    
+                    attackerHit.decrement_health(15)
+                else:
+                    attackerHit.alter_speed(.9) 
+                    attackerHit.decrement_health(8)   
                 bullet.remove_from_sprite_lists()
 
         self.bullet_list.update()

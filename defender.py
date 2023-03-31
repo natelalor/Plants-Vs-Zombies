@@ -105,6 +105,8 @@ class Defender(arcade.Sprite):
                 self.time_since_last_firing = 0
 
                 # create the bullet
-                bullet = Bullet(1, self.center_x, self.center_y, c.BULLET_SPEED)
-
+                if self.type == 2:
+                    bullet = Bullet(2, self.center_x, self.center_y, c.BULLET_SPEED)
+                else:
+                    bullet = Bullet(1, self.center_x, self.center_y, c.BULLET_SPEED)
                 self.bullet_list.append(bullet)
