@@ -12,6 +12,7 @@ import numpy as np
 from scipy.integrate import quad
 import time
 import multiprocessing
+import arcade.gui
 
 class Game(arcade.Window):
     def __init__(self, level: int):
