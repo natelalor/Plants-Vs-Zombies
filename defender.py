@@ -1,13 +1,17 @@
 import constants as c
+from constants import defenders_data
 import arcade
 from bullet import Bullet
+
+
 class Defender(arcade.Sprite):
-    
-    def __init__(self, type, lane,bullet_list,time_between_firing):
-        
+
+    def __init__(self, type, lane, bullet_list, time_between_firing):
+
         self.lane = lane
         self.type = type
         self.dead = False
+        self.is_active = False
 
         self.time_since_last_firing = 0
         self.time_between_firing = time_between_firing
@@ -15,47 +19,25 @@ class Defender(arcade.Sprite):
         self.bullet_list = bullet_list
 
         # depending on which "type" of defender you create, they will have differing preset stats to initialize
+        super().__init__(defenders_data[self.type]['image'], 0.05)
+        self.name = defenders_data[self.type]['name']
+        self.shoot_speed = defenders_data[self.type]['speed']
+        self.damage = defenders_data[self.type]['damage']
+        self.durability = defenders_data[self.type]['durability']
 
-
-        if self.type == 1:
-            super().__init__("images/toothbrush_ally.png", 0.05)
-            self.shoot_speed = 1
-            self.damage = 1
-            self.durability = 1
-            self.name = "toothbrush"
-        elif self.type == 2:
-            super().__init__("images/toothbrush_ally.png", 0.05)
-            self.shoot_speed = 1
-            self.damage = 1
-            self.durability = 1
-            self.name = "toothpaste"
-        elif self.type == 3:
-            super().__init__("images/toothbrush_ally.png", 0.05)
-            self.shoot_speed = 1
-            self.damage = 1
-            self.durability = 1
-            self.name = "floss"
-        else:
-            super().__init__("images/toothbrush_ally.png", 0.05)
-            self.shoot_speed = 1
-            self.damage = 1
-            self.durability = 1
-            self.name = "bug catcher"
-
-        self.position = [0,0]
+        self.position = [0, 0]
 
         # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
         # sprite creation
-       
+
         self.set_position(self.lane)
         print("inside defender sprite creation. sprite created: ", self.type, self.lane)
-        
-    
+
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
         return (self.dead)
-    
+
     def decrement_health(self, amount):
         self.durability -= amount
 
@@ -114,16 +96,15 @@ class Defender(arcade.Sprite):
 
             self.position = [100, 100]
 
-
     def on_update(self, delta_time: float = 1 / 60):
-        
-        self.time_since_last_firing += delta_time
-        
-        if self.time_since_last_firing >= self.time_between_firing:
-            
-            self.time_since_last_firing = 0
 
-            #create the bullet
-            bullet = Bullet(1,self.center_x,self.center_y,c.BULLET_SPEED)
-            
-            self.bullet_list.append(bullet)
+        self.time_since_last_firing += delta_time
+
+        if self.is_active:
+            if self.time_since_last_firing >= self.time_between_firing:
+                self.time_since_last_firing = 0
+
+                # create the bullet
+                bullet = Bullet(1, self.center_x, self.center_y, c.BULLET_SPEED)
+
+                self.bullet_list.append(bullet)

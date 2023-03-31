@@ -16,16 +16,15 @@ import multiprocessing
 class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
-        self.live_attackers = []
-        self.attackers = []
+        self.live_attackers = None
         self.game_time = 0
         self.ally_list = None
         self.level = level
-        self.live_attackers = []
         self.scene = arcade.Scene()
         self.current_time = 0
         self.current_area = 0
         self.release_times = []
+        self.attackers_list = None
 
         # for defender selection/deselection
         self.clicked = 0
@@ -37,10 +36,12 @@ class Game(arcade.Window):
     def setup(self):
         self.total_attacker_weight = 0
         self.scaled_attackers = []
+        self.attackers_list = arcade.SpriteList()
+        self.live_attackers = arcade.SpriteList()
         self.create_attackers()
         self.currency = 100
         self.total_area = quad(self.norm, -np.inf, np.inf, args=c.waves)[0]  # integrate to find area under curve
-        for attacker in self.attackers:  # scale the attacker's individual weight in relation to the area
+        for attacker in self.attackers_list:  # scale the attacker's individual weight in relation to the area
             self.scaled_attackers.append(attacker.get_type() / self.total_attacker_weight * self.total_area)
 
         self.determine_release()
@@ -57,8 +58,15 @@ class Game(arcade.Window):
         self.defender_list.append(defender1)
         defender3 = Defender(2,3,self.bullet_list,1.3)
         self.defender_list.append(defender3)
+        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5))
+
+
 
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
+        # for i in c.SIZE_ROWS:
+        #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
 
     def norm(self, x, waves):
         """
@@ -78,26 +86,26 @@ class Game(arcade.Window):
         Organize a list semi-randomly
             :param List attacker: the list to be randomized
         """
-        random.shuffle(self.attackers)
+        random.shuffle(list(self.attackers_list))
         min = 100
         max = 0
         first_min = 0
         first_max = 0
-        for i in range(len(self.attackers)):
-            if self.attackers[i].get_type() < min:
-                min = self.attackers[i].get_type()
+        for i, attacker in enumerate(self.attackers_list):
+            if attacker.get_type() < min:
+                min = attacker.get_type()
                 first_min = i
-            if self.attackers[i].get_type() > max:
-                max = self.attackers[i].get_type()
+            if attacker.get_type() > max:
+                max = attacker.get_type()
                 first_max = i
-        self.attackers.insert(0, self.attackers.pop(first_min))  # move it to the front
-        self.attackers.append(self.attackers.pop(first_max))  # move it to the end
+        self.attackers_list.insert(0, self.attackers_list.pop(first_min))  # move it to the front
+        self.attackers_list.append(self.attackers_list.pop(first_max))  # move it to the end
 
     def create_attackers(self):
         for enemyType in c.levelsDict[self.level]:
             self.total_attacker_weight += enemyType[0] * enemyType[1]  # multiply type by weight
             for i in range(enemyType[1]):
-                self.attackers.append(Attacker(enemyType[0]))
+                self.attackers_list.append(Attacker(enemyType[0]))
         self.randomize()
 
     def determine_release(self):
@@ -105,10 +113,10 @@ class Game(arcade.Window):
         current_total = 0
         t = 0
         current_area = 0
-        for j in range(len(self.attackers)):  # set the lanes
-            self.attackers[j].set_position_lane(random.randint(1, 5))
+        for attacker in self.attackers_list:  # set the lanes
+            attacker.set_position_lane(random.randint(1, 5))
         # figure out when to spawn attackers
-        while len(self.release_times) < len(self.attackers):
+        while len(self.release_times) < len(self.attackers_list):
             start = time.perf_counter()
             area = quad(self.norm, -50, t, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
             if area > current_area:
@@ -188,9 +196,7 @@ class Game(arcade.Window):
         # TEMPORARY SUN DRAWING
         if self.sun1.sun_list != None:
             self.sun1.sun_list.draw()
-
-        for attacker in self.live_attackers:
-            attacker.draw()
+        self.live_attackers.draw()
         
         self.defender_list.draw()
         self.bullet_list.draw()
@@ -198,26 +204,32 @@ class Game(arcade.Window):
     def on_update(self, delta_time):
         self.game_time += delta_time
         current_total = 0
+        for defender in self.defender_list:
+            defender.is_active = False
+            for attacker in self.live_attackers:
+                if attacker.lane == defender.lane:
+                    defender.is_active = True
+                    break
+
         # to spawn attackers
         if self.release_times and self.game_time > self.release_times[0]:
             self.release_times.pop(0)
-            self.scene.add_sprite("Attackers", self.attackers.pop(0))
-            print("SPAWN", round(self.game_time, 1), "s")
+            self.live_attackers.append(self.attackers_list.pop(0))
 
-        for attacker in self.scene["Attackers"]:
+        for attacker in self.live_attackers:
             attacker.center_x -= 1
             #testing killing attackers
             if attacker.is_dead():
-                self.scene["Attackers"].remove(attacker)
+                self.live_attackers.remove(attacker)
 
         #testing updtaing bullets and such
         self.defender_list.on_update(delta_time)
         for bullet in self.bullet_list:
             if bullet.center_x > c.SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
-            if arcade.check_for_collision_with_list(bullet,self.scene["Attackers"]):
+            if arcade.check_for_collision_with_list(bullet,self.live_attackers):
                 #get the sprite object hit by the bullet
-                attackerHit = arcade.check_for_collision_with_list(bullet,self.scene["Attackers"])[0]
+                attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 print("Current health",attackerHit.get_durability())
                 attackerHit.decrement_health(15)
                 print("Is enemy dead: ",attackerHit.is_dead())

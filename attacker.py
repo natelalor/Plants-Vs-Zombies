@@ -1,41 +1,20 @@
 import constants as c
 import arcade
+from constants import attackers_data
 
 
 class Attacker(arcade.Sprite):
     def __init__(self, type):
+        self.lane = None
         self.type = type
-        if self.type == 1:
-            super().__init__("images/lolli_enemy.png", 0.05)
-        elif self.type == 2:
-            super().__init__("images/chocolate_enemy.png", 0.08)
-        else:
-            super().__init__("images/lolli_enemy.png", 0.08)
 
+        super().__init__(attackers_data[self.type]['image'], 0.05)
+        self.name = attackers_data[self.type]['name']
+        self.speed = attackers_data[self.type]['speed']
+        self.damage = attackers_data[self.type]['damage']
+        self.durability = attackers_data[self.type]['durability']
         self.position = [0, 0]
         self.dead = False
-
-        # depending on which "type" of attacker you create, they will have differing preset stats to initialize
-        if self.type == 1:
-            self.speed = 1
-            self.damage = 1
-            self.durability = 100
-            self.name = "lollipop"
-        elif self.type == 2:
-            self.speed = 1
-            self.damage = 1
-            self.durability = 100
-            self.name = "chocolate"
-        elif self.type == 3:
-            self.speed = 1
-            self.damage = 1
-            self.durability = 100
-            self.name = "creampuff"
-        else:
-            self.speed = 1
-            self.damage = 1
-            self.durability = 100
-            self.name = "bug catcher"
 
     def is_dead(self):
         if self.durability <= 0:
@@ -67,15 +46,13 @@ class Attacker(arcade.Sprite):
     #     if self.type == 99999:
     #         return
 
-
-
     # a setter for position (which is a list of x & y values).
     # this setter takes in one parameter, the lane, and sets the position of the sprite
     # to that corresponding spot. Used in the beginning of the game to initialize enemy's starting spot
     def set_position_lane(self, lane):
         # a 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
         # this will set up that enemy to start moving.
-
+        self.lane = lane
         if lane == 1:
             self.center_x = 900
             self.center_y = 470
@@ -119,6 +96,7 @@ class Attacker(arcade.Sprite):
     # // now that i think about it i don't think we will need this lol... maybe later on //
     def get_position(self):
         return self.position
+
     def get_type(self):
         return self.type
 

@@ -39,6 +39,53 @@ enemiesDict = {1: "easy",
                2: "normal",
                3: "cone",
                4: "bucket"}
+attackers_data = {
+    1: {
+        'name': 'lollipop',
+        'speed': 1,
+        'damage': 1,
+        'durability': 100,
+        'image': "images/lolli_enemy.png",
+    },
+    2: {
+        'name': 'chocolate',
+        'speed': 1,
+        'damage': 1,
+        'durability': 100,
+        'image': "images/chocolate_enemy.png",
+    },
+    3: {
+        'name': 'creampuff',
+        'speed': 1,
+        'damage': 1,
+        'durability': 100,
+        'image': "images/lolli_enemy.png",
+    },
+
+}
+defenders_data = {
+    1: {
+        'name': 'toothbrush',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/toothbrush_ally.png",
+    },
+    2: {
+        'name': 'toothpaste',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/toothbrush_ally.png",
+    },
+    3: {
+        'name': 'floss',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/toothbrush_ally.png",
+    }
+}
 
 waves = {
     1: {
