@@ -14,9 +14,12 @@ import time
 import multiprocessing
 import arcade.gui
 
+
 class Game(arcade.Window):
     def __init__(self, level: int):
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
         self.live_attackers = None
         self.game_time = 0
         self.ally_list = None
@@ -272,10 +275,10 @@ class Game(arcade.Window):
 
 
         # main gui background
-        arcade.draw_rectangle_filled((c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT - (c.GUI_HEIGHT/2)), c.SCREEN_WIDTH, c.GUI_HEIGHT, arcade.color.AMAZON, 0)
+        arcade.draw_rectangle_filled((c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT - (c.GUI_HEIGHT/2)), c.SCREEN_WIDTH, c.GUI_HEIGHT, arcade.color.BLACK, 0)
 
-        # currency text (for positioning: 700 is x, 550 is y)
-        arcade.draw_text("Currency: " + str(self.currency), 700, 550, arcade.color.ALICE_BLUE, 20, 40, 'left')
+
+
 
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
@@ -330,9 +333,7 @@ class Game(arcade.Window):
         self.scene.draw()
         # self.live_attackers.draw()
 
-        # TEMPORARY SUN DRAWING
-        if self.sun1.sun_list != None:
-            self.sun1.sun_list.draw()
+
         self.live_attackers.draw()
         
         self.defender_list.draw()
@@ -412,7 +413,9 @@ class Game(arcade.Window):
         if (self.shovel_selected):
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
             arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76, border_width=5)
-
+        # TEMPORARY SUN DRAWING
+        if self.sun1.sun_list != None:
+            self.sun1.sun_list.draw()
     def on_update(self, delta_time):
         self.game_time += delta_time
         current_total = 0
