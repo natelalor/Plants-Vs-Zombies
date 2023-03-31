@@ -13,7 +13,7 @@ class Bullet(arcade.Sprite):
         if self.type == 1:
             super().__init__("images/baseball.png", 0.08)
         elif self.type == 2:
-            super().__init__("images/baseball.png", 0.08)
+            super().__init__("images/snowball.png", 0.13)
         else:
             super().__init__("images/baseball.png", 0.08)
 
