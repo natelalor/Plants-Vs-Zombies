@@ -33,6 +33,142 @@ class Game(arcade.Window):
         self.defender_list = None
         self.bullet_list = None
 
+        # Create a horizontal BoxGroup to align buttons
+        self.h_box = arcade.gui.UIBoxLayout(vertical=False, )
+
+        # Creating the buttons, each button has a loaded texture for hover, and clicked
+
+        plant1_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sunflower.png'),texture_hovered= arcade.load_texture('images/sunflowerHover.png'),texture_pressed=arcade.load_texture('images/sunflowerSelected.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(plant1_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(plant2_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(plant3_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(plant4_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(plant5_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/shovel.png'),texture_hovered= arcade.load_texture('images/shovel.png'),texture_pressed=arcade.load_texture('images/shovel.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(shovel_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        sun = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sun.png'), width=75, height= 75)
+        self.h_box.add(arcade.gui.UIBorder(sun.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+
+        # THIS MIGHT BE TEMPORARY its just to display the round
+        round = arcade.gui.UITextureButton(texture=arcade.load_texture('images/round.png'), width=100, height= 100)
+        self.h_box.add(round.with_space_around(left=155))
+
+        # Initially all plant selections are set to false, these are only true if a plant is clicked on
+        self.plant1_selected = False
+        self.plant2_selected = False
+        self.plant3_selected = False
+        self.plant4_selected = False
+        self.plant5_selected = False
+        self.shovel_selected = False
+
+        # each of these controls an individual button
+        # when clicked it sets the buttons selected variable to true and all the other buttons to false
+        @plant1_button.event("on_click")
+        def on_click_settings(event):
+            if (self.plant1_selected):
+                self.plant1_selected = False
+            else:
+                self.plant1_selected = True
+                # set others to false
+                self.shovel_selected = False
+                self.plant2_selected = False
+                self.plant3_selected = False
+                self.plant5_selected = False
+                self.plant4_selected = False
+
+
+
+        @shovel_button.event("on_click")
+        def on_click_settings(event):
+            if (self.shovel_selected):
+                self.shovel_selected = False
+            else:
+                # set clicked to true
+                self.shovel_selected = True
+                # set others to false
+                self.plant1_selected = False
+                self.plant2_selected = False
+                self.plant3_selected = False
+                self.plant5_selected = False
+                self.plant4_selected = False
+
+        @plant2_button.event("on_click")
+        def on_click_settings(event):
+            if (self.plant2_selected):
+                self.plant2_selected = False
+            else:
+                # set clicked to true
+                self.plant2_selected = True
+                # set others to false
+                self.plant1_selected = False
+                self.plant4_selected = False
+                self.plant3_selected = False
+                self.plant5_selected = False
+                self.shovel_selected = False
+        @plant3_button.event("on_click")
+        def on_click_settings(event):
+            if (self.plant3_selected):
+                self.plant3_selected = False
+            else:
+                # set clicked to true
+                self.plant3_selected = True
+                # set others to false
+                self.plant1_selected = False
+                self.plant2_selected = False
+                self.plant4_selected = False
+                self.plant5_selected = False
+                self.shovel_selected = False
+
+
+        @plant4_button.event("on_click")
+        def on_click_settings(event):
+            if (self.plant4_selected):
+                self.plant4_selected = False
+            else:
+                # set clicked to true
+                self.plant4_selected = True
+                # set others to false
+                self.plant1_selected = False
+                self.plant2_selected = False
+                self.plant3_selected = False
+                self.plant5_selected = False
+                self.shovel_selected = False
+            #check plant object to see if you have enough currency to buy
+            #if not enough set clicked to false
+
+
+        @plant5_button.event("on_click")
+        def on_click_settings(event):
+            if (self.plant5_selected):
+                self.plant5_selected = False
+            else:
+                self.plant5_selected = True
+                # set others to false
+                self.plant1_selected = False
+                self.plant2_selected = False
+                self.plant3_selected = False
+                self.plant4_selected = False
+                self.shovel_selected = False
+
+        # Create a widget to hold the h_box(horizontal box) widget, that will center the buttons along the top
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="left",
+                anchor_y="top",
+                child=self.h_box)
+        )
+
+
     def setup(self):
         self.total_attacker_weight = 0
         self.scaled_attackers = []
@@ -200,6 +336,81 @@ class Game(arcade.Window):
         
         self.defender_list.draw()
         self.bullet_list.draw()
+
+        #GUI
+        self.manager.draw()
+
+
+        # currency text (for positioning: 700 is x, 550 is y)
+        arcade.draw_text(str(self.currency), 623.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+
+        # GUI SLOTS
+        # FIFTH GUI SLOT
+        if (self.currency >= 300):
+            # currency text
+            arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+            if (self.plant5_selected):
+                arcade.draw_rectangle_filled(center_x=445, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                arcade.draw_rectangle_outline(center_x=445, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width= 5)
+                arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+        else:
+            arcade.draw_rectangle_filled(center_x=445, center_y=581,color=(50, 50, 50, 200), width=75, height=75 )
+            arcade.draw_text(str(300), 423.5, 535, arcade.color.RED, 20, 40, 'center')
+            self.plant5_selected = False
+
+        # FOURTH GUI SLOT
+        if (self.currency >= 200):
+            arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+            if (self.plant4_selected):
+                arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                arcade.draw_rectangle_outline(center_x=346, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+        else:
+            arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
+            arcade.draw_text(str(200), 323.5, 535, arcade.color.RED, 20, 40, 'center')
+            self.plant4_selected = False
+
+        # THIRD GUI SLOT
+        if (self.currency >= 150):
+            arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+            if (self.plant3_selected):
+                arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+
+        else:
+            arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
+            arcade.draw_text(str(150), 223.5, 535, arcade.color.RED, 20, 40, 'center')
+            self.plant3_selected = False
+
+        # SECOND GUI SLOT
+        if (self.currency >= 100):
+            arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+            if (self.plant2_selected):
+                arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                arcade.draw_rectangle_outline(center_x=150, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+        else:
+            arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
+            arcade.draw_text(str(100), 123.5, 535, arcade.color.RED, 20, 40, 'center')
+            self.plant2_selected = False
+
+        # FIRST GUI SLOT
+        if (self.currency >= 50):
+            arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+            if (self.plant1_selected):
+                arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                arcade.draw_rectangle_outline(center_x=50, center_y=581, color=(245, 245, 0), width=76, height=76, border_width=5)
+                arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+        else:
+            arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
+            arcade.draw_text(str(50), 23.5, 535, arcade.color.RED, 20, 40, 'center')
+            self.plant1_selected = False
+
+
+        if (self.shovel_selected):
+            arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+            arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76, border_width=5)
 
     def on_update(self, delta_time):
         self.game_time += delta_time
