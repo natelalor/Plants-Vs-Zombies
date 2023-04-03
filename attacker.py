@@ -54,34 +54,34 @@ class Attacker(arcade.Sprite):
         # this will set up that enemy to start moving.
         self.lane = lane
         if lane == 1:
-            self.center_x = 900
+            self.center_x = 1000
             self.center_y = 470
 
-            self.position = [900, 470]
+            self.position = [1000, 470]
 
         elif lane == 2:
-            self.center_x = 900
+            self.center_x = 1000
             self.center_y = 365
 
-            self.position = [900, 365]
+            self.position = [1000, 365]
 
         elif lane == 3:
-            self.center_x = 900
+            self.center_x = 1000
             self.center_y = 260
 
-            self.position = [900, 260]
+            self.position = [1000, 260]
 
         elif lane == 4:
-            self.center_x = 900
+            self.center_x = 1000
             self.center_y = 155
 
-            self.position = [900, 155]
+            self.position = [1000, 155]
 
         elif lane == 5:
-            self.center_x = 900
+            self.center_x = 1000
             self.center_y = 50
 
-            self.position = [900, 50]
+            self.position = [1000, 50]
         else:
             self.center_x = 100
             self.center_y = 100

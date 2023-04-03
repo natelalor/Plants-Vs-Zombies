@@ -10,6 +10,8 @@ class Sun:
         self.sun_list = arcade.SpriteList()
         self.sun_sprite = arcade.Sprite("images/sun.png", 0.05)
         self.sun_list.append(self.sun_sprite)
+        self.location = []
+        self.end_location = []
 
         # call to function to set up random spawnpoint
         self.random_spawning()
