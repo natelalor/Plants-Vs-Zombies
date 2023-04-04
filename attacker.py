@@ -20,6 +20,8 @@ class Attacker(arcade.Sprite):
         if self.durability <= 0:
             self.dead = True
         return self.dead
+    def kill(self):
+        self.dead = True
 
     def decrement_health(self, amount):
         self.durability -= amount

@@ -22,13 +22,13 @@ SCREEN_HEIGHT = ((100 + MARGIN) * SIZE_ROWS + MARGIN) + GUI_HEIGHT
 SQUARE_SIZE = 1
 
 #  slows down spawning, default 10
-SLOW_RATE = 20
+SLOW_RATE = 15
 
 LEVEL_TIME = 120
 
 levelsDict = {
     # level: [[enemyType, number of that type]]
-    1: [[2, 10], [3, 2]],
+    1: [[2, 15], [3, 6]],
     2: [[2, 8], [3, 2], [4, 2]],
     3: [[2, 8], [3, 4], [4, 3]],
     4: [[2, 4], [3, 0]]
@@ -105,4 +105,8 @@ waves = {
         }
 }
 
+
 BULLET_SPEED = 4
+
+GAME_LENGTH = 60
+FIRST_ROUND_PERCENT = .4

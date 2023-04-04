@@ -25,10 +25,14 @@ class Game(arcade.Window):
         self.ally_list = None
         self.level = level
         self.scene = arcade.Scene()
-        self.current_time = 0
-        self.current_area = 0
-        self.release_times = []
         self.attackers_list = None
+        self.waves = []
+        self.current_wave = 0
+        self.wave_0_spawn_times = []
+        self.num_dead_attackers = 0
+        self.num_attackers_to_kill = 0
+        self.pause_between_waves = 0
+        self.wait_to_start_wave = True
 
         # for defender selection/deselection
         self.clicked = 0
@@ -180,12 +184,7 @@ class Game(arcade.Window):
         self.live_attackers = arcade.SpriteList()
         self.create_attackers()
         self.currency = 100
-        self.total_area = quad(self.norm, -np.inf, np.inf, args=c.waves)[0]  # integrate to find area under curve
-        for attacker in self.attackers_list:  # scale the attacker's individual weight in relation to the area
-            self.scaled_attackers.append(attacker.get_type() / self.total_attacker_weight * self.total_area)
-
-        self.determine_release()
-        # SCENE FOR ALL SPRITES TO RENDER ON
+                # SCENE FOR ALL SPRITES TO RENDER ON
         self.scene = arcade.Scene()
 
         # TEMP SUN CREATION
@@ -201,25 +200,15 @@ class Game(arcade.Window):
         self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5))
         self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5))
         self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5))
+        self.num_attackers_to_kill = len(self.waves[0])
 
 
 
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
+        self.game_time = 0
         # for i in c.SIZE_ROWS:
         #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
 
-    def norm(self, x, waves):
-        """
-        Create a multimodal Gaussian Curve. See the math here: https://www.desmos.com/calculator/rxrpfq7kim
-            :param var x: variable for integration
-            :param dict waves: a dictionary of dictionaries storing the variables for each of the waves
-        """
-        equation = 0.0
-        for i in waves.keys():  # for each wave
-            coefficient = 1 / (waves[i]['intensity'] * math.sqrt(2 * math.pi))  # #math
-            exponent = -waves[i]['weight'] * ((x - waves[i]['x']) / waves[i]['intensity']) ** 2  # #moremath
-            equation += coefficient * sp.E ** exponent  # combine the wave
-        return equation
 
     def randomize(self):
         """
@@ -240,31 +229,24 @@ class Game(arcade.Window):
                 first_max = i
         self.attackers_list.insert(0, self.attackers_list.pop(first_min))  # move it to the front
         self.attackers_list.append(self.attackers_list.pop(first_max))  # move it to the end
+        for attacker in self.attackers_list:  # set the lanes
+            attacker.set_position_lane(random.randint(1, 5))
 
     def create_attackers(self):
         for enemyType in c.levelsDict[self.level]:
-            self.total_attacker_weight += enemyType[0] * enemyType[1]  # multiply type by weight
             for i in range(enemyType[1]):
                 self.attackers_list.append(Attacker(enemyType[0]))
         self.randomize()
-
-    def determine_release(self):
-        print(multiprocessing.cpu_count())
-        current_total = 0
-        t = 0
-        current_area = 0
-        for attacker in self.attackers_list:  # set the lanes
-            attacker.set_position_lane(random.randint(1, 5))
-        # figure out when to spawn attackers
-        while len(self.release_times) < len(self.attackers_list):
-            start = time.perf_counter()
-            area = quad(self.norm, -50, t, args=c.waves)[0]  # integrate and find bounded area (-inf, timestep)
-            if area > current_area:
-                current_area += self.scaled_attackers.pop(0)  # add scaled attacker weight to the current total
-                self.release_times.append(t*c.SLOW_RATE)
-            t += 1
-            elapsed = time.perf_counter()-start
-            print(t, round(elapsed, 1), round(area, 2), round(current_area, 2))
+        wave_1_end = round(len(self.attackers_list) * .25)
+        self.waves.append(self.attackers_list[0:wave_1_end])  # first wave includes 25% of attackers
+        wave_2_end = round(len(self.attackers_list) * .3 + wave_1_end)
+        self.waves.append(self.attackers_list[wave_1_end:wave_2_end])  # second wave is 30% of attackers
+        self.waves.append(self.attackers_list[wave_2_end:])  # final wave is 45% of the attackers
+        for attacker in self.waves[0]:
+            self.wave_0_spawn_times.append(random.randint(0, c.GAME_LENGTH*c.FIRST_ROUND_PERCENT))
+        print("UNSORTED WAVE 0:",self.wave_0_spawn_times)
+        self.wave_0_spawn_times.sort()
+        print("SORTED WAVE 0:",self.wave_0_spawn_times)
 
 
     def run_game(self):
@@ -427,16 +409,47 @@ class Game(arcade.Window):
                     break
 
         # to spawn attackers
-        if self.release_times and self.game_time > self.release_times[0]:
-            self.release_times.pop(0)
-            self.live_attackers.append(self.attackers_list.pop(0))
+        if self.current_wave == 0:
+            if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0]+10:
+                self.wait_to_start_wave = False
+                print(self.game_time, self.wave_0_spawn_times[0])
+                self.wave_0_spawn_times.pop(0)
+                print(self.wave_0_spawn_times)
+                self.live_attackers.append(self.waves[0].pop(0))
+            if not self.live_attackers and not self.wait_to_start_wave:
+                self.current_wave += 1
+                self.pause_between_waves = self.game_time + 10
+
+        elif self.current_wave == 1:
+            if self.game_time > self.pause_between_waves:
+                print("WAVE 1")
+                if self.waves[self.current_wave] and random.randint(0,10) > 9:
+                    self.live_attackers.append(self.waves[self.current_wave].pop(0))
+                    self.pause_between_waves = 0
+            if self.pause_between_waves == 0 and not self.live_attackers:
+                self.current_wave += 1
+                self.pause_between_waves = self.game_time + 10
+        elif self.current_wave == 2:
+            if self.game_time > self.pause_between_waves:
+                print("WAVE 2")
+                if self.waves[self.current_wave] and random.randint(0, 10) > 9:
+                    self.live_attackers.append(self.waves[self.current_wave].pop(0))
+                    self.pause_between_waves = 0
+            if self.pause_between_waves == 0 and not self.live_attackers:
+                print("GAME OVER")
+                exit()
+
+
 
         for attacker in self.live_attackers:
             #change speed (for snowballs)
             attacker.center_x -= attacker.speed
+            if attacker.center_x <= 0:
+                attacker.kill()
             #testing killing attackers
             if attacker.is_dead():
                 self.live_attackers.remove(attacker)
+
 
         #testing updtaing bullets and such
         self.defender_list.on_update(delta_time)
@@ -458,3 +471,5 @@ class Game(arcade.Window):
         self.bullet_list.update()
 
         self.sun1.move()
+
+
