@@ -20,6 +20,7 @@ class Attacker(arcade.Sprite):
         if self.durability <= 0:
             self.dead = True
         return self.dead
+
     def kill(self):
         self.dead = True
 

@@ -33,6 +33,7 @@ class Game(arcade.Window):
         self.num_attackers_to_kill = 0
         self.pause_between_waves = 0
         self.wait_to_start_wave = True
+        self.lanes = [1, 2, 3, 4, 5]
 
         # for defender selection/deselection
         self.clicked = 0
@@ -211,26 +212,40 @@ class Game(arcade.Window):
 
 
     def randomize(self):
+        def random_lane() -> int:
+            if not self.lanes:
+                self.lanes = [1, 2, 3, 4, 5]
+            loc = random.randint(0, len(self.lanes)-1)
+            if random.randint(0, 10) > 2: # 80% of the time fill the unused lanes
+                return self.lanes.pop(loc)
+            return random.randint(1,5)  # the rest of the time choose a random lane
+
         """
         Organize a list semi-randomly
             :param List attacker: the list to be randomized
         """
-        random.shuffle(list(self.attackers_list))
+        for i in range(len(self.attackers_list)*10):
+            rand = random.randint(0, len(self.attackers_list)-1)
+            self.attackers_list.append(self.attackers_list.pop(rand))
         min = 100
         max = 0
         first_min = 0
         first_max = 0
-        for i, attacker in enumerate(self.attackers_list):
+        for i, attacker in enumerate(self.attackers_list): # find the indicies of the min and max attackers
             if attacker.get_type() < min:
                 min = attacker.get_type()
                 first_min = i
-            if attacker.get_type() > max:
+            elif attacker.get_type() > max:
                 max = attacker.get_type()
                 first_max = i
         self.attackers_list.insert(0, self.attackers_list.pop(first_min))  # move it to the front
         self.attackers_list.append(self.attackers_list.pop(first_max))  # move it to the end
         for attacker in self.attackers_list:  # set the lanes
-            attacker.set_position_lane(random.randint(1, 5))
+            attacker.set_position_lane(random_lane())
+        print("FIXED ATTACKERS_LIST")
+        for i in self.attackers_list:
+            print(i.get_type(), end=", ")
+
 
     def create_attackers(self):
         for enemyType in c.levelsDict[self.level]:
@@ -244,9 +259,7 @@ class Game(arcade.Window):
         self.waves.append(self.attackers_list[wave_2_end:])  # final wave is 45% of the attackers
         for attacker in self.waves[0]:
             self.wave_0_spawn_times.append(random.randint(0, c.GAME_LENGTH*c.FIRST_ROUND_PERCENT))
-        print("UNSORTED WAVE 0:",self.wave_0_spawn_times)
         self.wave_0_spawn_times.sort()
-        print("SORTED WAVE 0:",self.wave_0_spawn_times)
 
 
     def run_game(self):
@@ -419,23 +432,25 @@ class Game(arcade.Window):
             if not self.live_attackers and not self.wait_to_start_wave:
                 self.current_wave += 1
                 self.pause_between_waves = self.game_time + 10
+                self.wait_to_start_wave = True
 
         elif self.current_wave == 1:
             if self.game_time > self.pause_between_waves:
                 print("WAVE 1")
-                if self.waves[self.current_wave] and random.randint(0,10) > 9:
+                if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
                     self.live_attackers.append(self.waves[self.current_wave].pop(0))
-                    self.pause_between_waves = 0
-            if self.pause_between_waves == 0 and not self.live_attackers:
+                    self.wait_to_start_wave = False
+            if not self.wait_to_start_wave and not self.live_attackers:
                 self.current_wave += 1
                 self.pause_between_waves = self.game_time + 10
+                self.wait_to_start_wave = True
         elif self.current_wave == 2:
             if self.game_time > self.pause_between_waves:
                 print("WAVE 2")
-                if self.waves[self.current_wave] and random.randint(0, 10) > 9:
+                if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
                     self.live_attackers.append(self.waves[self.current_wave].pop(0))
-                    self.pause_between_waves = 0
-            if self.pause_between_waves == 0 and not self.live_attackers:
+                    self.wait_to_start_wave = False
+            if not self.wait_to_start_wave and not self.live_attackers:
                 print("GAME OVER")
                 exit()
 
