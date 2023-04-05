@@ -22,7 +22,6 @@ class Game(arcade.Window):
         self.manager.enable()
         self.live_attackers = None
         self.game_time = 0
-        self.ally_list = None
         self.level = level
         self.scene = arcade.Scene()
         self.attackers_list = None
@@ -233,7 +232,7 @@ class Game(arcade.Window):
         first_max = 0
         for i, attacker in enumerate(self.attackers_list): # find the indicies of the min and max attackers
             if attacker.get_type() < min:
-                min = attacker.get_type()
+                min = attacker.ge8t_type()
                 first_min = i
             elif attacker.get_type() > max:
                 max = attacker.get_type()
@@ -420,10 +419,10 @@ class Game(arcade.Window):
                 if attacker.lane == defender.lane:
                     defender.is_active = True
                     break
-
+        # Wave 0 is just random spawning
         # to spawn attackers
         if self.current_wave == 0:
-            if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0]+10:
+            if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:  # +10 for now because game time atarts at ~10
                 self.wait_to_start_wave = False
                 print(self.game_time, self.wave_0_spawn_times[0])
                 self.wave_0_spawn_times.pop(0)
@@ -434,9 +433,10 @@ class Game(arcade.Window):
                 self.pause_between_waves = self.game_time + 10
                 self.wait_to_start_wave = True
 
-        elif self.current_wave == 1:
-            if self.game_time > self.pause_between_waves:
-                print("WAVE 1")
+        # Waves 1 and 2 are released all at once (ish)
+        elif self.current_wave == 1 or self.current_wave == 2: # for the actual waves of attackers
+            if self.game_time > self.pause_between_waves:  # wait 10 secs between waves
+                print("WAVE", self.current_wave)
                 if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
                     self.live_attackers.append(self.waves[self.current_wave].pop(0))
                     self.wait_to_start_wave = False
@@ -444,15 +444,9 @@ class Game(arcade.Window):
                 self.current_wave += 1
                 self.pause_between_waves = self.game_time + 10
                 self.wait_to_start_wave = True
-        elif self.current_wave == 2:
-            if self.game_time > self.pause_between_waves:
-                print("WAVE 2")
-                if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
-                    self.live_attackers.append(self.waves[self.current_wave].pop(0))
-                    self.wait_to_start_wave = False
-            if not self.wait_to_start_wave and not self.live_attackers:
-                print("GAME OVER")
-                exit()
+        elif self.current_wave >= 3:
+            print("GAME OVER")
+            exit()
 
 
 
