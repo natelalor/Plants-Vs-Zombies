@@ -3,6 +3,8 @@ from game import Game
 import arcade
 import constants as c
 import multiprocessing
+import entrance
+
 
 
 def main():
@@ -15,6 +17,7 @@ def main():
 
     game.setup()
     arcade.run()
+    # entrance()
 
 
 if __name__ == '__main__':

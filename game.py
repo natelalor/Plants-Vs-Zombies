@@ -188,7 +188,12 @@ class Game(arcade.Window):
         self.scene = arcade.Scene()
 
         # TEMP SUN CREATION
-        self.sun1 = Sun()
+        # self.sun1 = Sun()
+        self.sun_list = arcade.SpriteList()
+        for x in range(0, 10):
+            sun = Sun()
+            self.sun_list.append(sun)
+
 
         #test bullet and defenders
         self.defender_list = arcade.SpriteList()
@@ -232,7 +237,7 @@ class Game(arcade.Window):
         first_max = 0
         for i, attacker in enumerate(self.attackers_list): # find the indicies of the min and max attackers
             if attacker.get_type() < min:
-                min = attacker.ge8t_type()
+                min = attacker.get_type()
                 first_min = i
             elif attacker.get_type() > max:
                 max = attacker.get_type()
@@ -264,56 +269,22 @@ class Game(arcade.Window):
     def run_game(self):
         pass
 
-    def draw_gui(self):
-        # RYAN U CAN DRAW GUI HERE
-
-
-        # main gui background
-        arcade.draw_rectangle_filled((c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT - (c.GUI_HEIGHT/2)), c.SCREEN_WIDTH, c.GUI_HEIGHT, arcade.color.BLACK, 0)
-
-
-
-
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
         # clicked = 0
         print("Mouse button is pressed")
 
         # sun click testing
-        if self.sun1.in_sun(x, y):
-            # update currency
-            if self.sun1.sun_list != None:
-                self.currency += c.SUN_ADDITION
+        for x in self.sun_list:
+            if x.in_sun(x, y):
+                if self.sun_list != None:
+                    self.currency += c.SUN_ADDITION
 
             # make sprite disappear
-            self.sun1.sun_list = None
+            self.sun_list.remove(x)
+            # self.sun1.sun_list = None
 
 
-        ####################################################
-        # \\\\\ ##### GUI MOUSE INTERACTION HERE ##### /////
-        ####################################################
-
-        # if x/y is here AND clicked boolean is false, then sunflower is selected
-        if ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and (self.clicked % 2 == 0):
-            # then call mouse function where its on hover and light up square that its on
-            sunflower = True
-            self.clicked = self.clicked + 1
-            print("Clicked Sunflower Tester IN!")
-
-        # elif x/y is here AND clicked boolean is true, then sunflower is DEselected
-        elif ((x >= 10 and y >= 10) and (x < 200 and y < 200)) and not (self.clicked % 2 == 0):
-            # sunflower is DEselected
-            sunflower = False
-            self.clicked = self.clicked + 1
-            print("Clicked Sunflower Tester OUT!")
-
-        # TODO: 3/24/23 TESTING!!!! problem: u have to access a square's has_plant(x,y) and im not sure how to get to
-        # a specific square... through a grid method maybe? grid.return_square(x, y) ??? (x,y being coordinates clicked?
-
-        # whichever square you place, if there is no plant there, it creates a new defender for you
-        # if (x == 0 and y == 0) and (self.grid.has_plant(x, y)):
-        #     # new sunflower creation
-        #     sunflower1 = Defender(1, 1)
 
 
     def on_draw(self):
@@ -323,13 +294,13 @@ class Game(arcade.Window):
 
         arcade.start_render()
         self.grid.grid_draw()
-        self.draw_gui()
         self.scene.draw()
         # self.live_attackers.draw()
 
 
         self.live_attackers.draw()
-        
+
+        self.sun_list.draw()
         self.defender_list.draw()
         self.bullet_list.draw()
 
@@ -408,8 +379,8 @@ class Game(arcade.Window):
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
             arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76, border_width=5)
         # TEMPORARY SUN DRAWING
-        if self.sun1.sun_list != None:
-            self.sun1.sun_list.draw()
+        # if self.sun1.sun_list != None:
+        #     self.sun1.sun_list.draw()
     def on_update(self, delta_time):
         self.game_time += delta_time
         current_total = 0
@@ -479,6 +450,10 @@ class Game(arcade.Window):
 
         self.bullet_list.update()
 
-        self.sun1.move()
+        #SUN MOVEMENT
+        for x in range(len(self.sun_list)):
+            if (not self.sun_list[x].is_dead()):
+                self.sun_list[x].move()
+
 
 
