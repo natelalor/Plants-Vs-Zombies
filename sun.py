@@ -17,9 +17,9 @@ class Sun(arcade.Sprite):
     # a function that returns a boolean.
     # given parameters x, y, it will see if those x and y are within the sprite's borders
     def in_sun(self, x, y):
-        print("SLEF POSITION 0 :  ", self.position[1])
+        print("x: ", x, "y: ", y)
         if (x <= (self.position[0] + 50) and y <= (self.position[1] + 50)) \
-                and (x > (self.position[0]- 50) and y > (self.position[1] - 50)):
+                and (x > (self.position[0] - 50) and y > (self.position[1] - 50)):
             print("You have clicked the sun!")
             return True
         else:

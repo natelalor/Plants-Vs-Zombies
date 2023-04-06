@@ -275,16 +275,13 @@ class Game(arcade.Window):
         print("Mouse button is pressed")
 
         # sun click testing
-        for x in self.sun_list:
-            if x.in_sun(x, y):
+        for z in self.sun_list:
+            if z.in_sun(x, y):
                 if self.sun_list != None:
                     self.currency += c.SUN_ADDITION
 
-            # make sprite disappear
-            self.sun_list.remove(x)
-            # self.sun1.sun_list = None
-
-
+                # make sprite disappear
+                self.sun_list.remove(z)
 
 
     def on_draw(self):
@@ -454,6 +451,9 @@ class Game(arcade.Window):
         for x in range(len(self.sun_list)):
             if (not self.sun_list[x].is_dead()):
                 self.sun_list[x].move()
+                print("moving: ", x)
+
+
 
 
 
