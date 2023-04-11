@@ -20,6 +20,7 @@ class Attacker(arcade.Sprite):
         self.cur_texture = 0
         self.walk_textures = []
 
+        # Load texture based off of attacker type
         if self.name == 'zombie':
             main_path = "animations/zombie_walk/"
             self.num_pngs = 22
@@ -29,8 +30,9 @@ class Attacker(arcade.Sprite):
         elif self.name == 'buckethead_zombie':
             main_path = "animations/buckethead_walk/"
             self.num_pngs = 14
-        x = 0
 
+        # Load all the pngs from the correct path into a list
+        x = 0
         for i in range(self.num_pngs):
             texture = arcade.load_texture(f"{main_path}{x}.png")
             self.walk_textures.append(texture)

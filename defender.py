@@ -45,8 +45,7 @@ class Defender(arcade.Sprite):
             main_path = "animations/sunflower/"
             self.num_png = 17
 
-
-        # Load textures
+        # Load textures into a list
         self.cur_texture = 0
         self.idle_textures = []
         x = 0
