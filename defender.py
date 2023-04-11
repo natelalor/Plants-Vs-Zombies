@@ -27,6 +27,24 @@ class Defender(arcade.Sprite):
 
         self.position = [0, 0]
 
+        # animations
+        # main path is determined by what type of defender it is
+        if self.name == 'peashooter':
+            main_path = "animations/pea_shooter/"
+            self.num_png = 13
+        if self.name == 'snowpea':
+            main_path = "animations/snowpea/"
+            self.num_png = 14
+
+        # Load textures
+        self.cur_texture = 0
+        self.idle_textures = []
+        x = 0
+        for i in range(self.num_png):
+            texture = arcade.load_texture(f"{main_path}{x}.png")
+            self.idle_textures.append(texture)
+            x += 1
+
         # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
         # sprite creation
 
@@ -110,3 +128,13 @@ class Defender(arcade.Sprite):
                 else:
                     bullet = Bullet(1, self.center_x, self.center_y, c.BULLET_SPEED)
                 self.bullet_list.append(bullet)
+
+    def update_animation(self, delta_time: float = 1 / 60):
+
+        # sets texture to the correct one in the list
+        self.cur_texture += 1
+        if self.cur_texture >= self.num_png:
+            self.cur_texture = 0
+        frame = self.cur_texture
+
+        self.texture = self.idle_textures[frame]

@@ -37,6 +37,10 @@ class Game(arcade.Window):
         # for defender selection/deselection
         self.clicked = 0
 
+        # aniamtion
+        self.update_animation = True
+        self.frame_count = 0
+
         #testing Defenders and Bullets
         self.defender_list = None
         self.bullet_list = None
@@ -452,6 +456,18 @@ class Game(arcade.Window):
             if (not self.sun_list[x].is_dead()):
                 self.sun_list[x].move()
                 print("moving: ", x)
+
+        if self.update_animation:
+            self.live_attackers.update_animation()
+            self.defender_list.update_animation()
+
+            self.update_animation = False
+        else:
+            if self.frame_count > 2:
+                self.frame_count = 0
+                self.update_animation = True
+            else:
+                self.frame_count += 1
 
 
 

@@ -41,21 +41,21 @@ enemiesDict = {1: "easy",
                4: "bucket"}
 attackers_data = {
     1: {
-        'name': 'lollipop',
+        'name': 'conehead_zombie',
         'speed': 1,
         'damage': 1,
         'durability': 100,
         'image': "images/lolli_enemy.png",
     },
     2: {
-        'name': 'chocolate',
+        'name': 'zombie',
         'speed': 1,
         'damage': 1,
         'durability': 100,
         'image': "images/chocolate_enemy.png",
     },
     3: {
-        'name': 'creampuff',
+        'name': 'buckethead_zombie',
         'speed': 1,
         'damage': 1,
         'durability': 100,
@@ -65,21 +65,21 @@ attackers_data = {
 }
 defenders_data = {
     1: {
-        'name': 'toothbrush',
+        'name': 'peashooter',
         'speed': 1,
         'damage': 1,
         'durability': 1,
         'image': "images/toothbrush_ally.png",
     },
     2: {
-        'name': 'toothpaste',
+        'name': 'snowpea',
         'speed': 1,
         'damage': 1,
         'durability': 1,
         'image': "images/toothbrush_ally.png",
     },
     3: {
-        'name': 'floss',
+        'name': 'peashooter',
         'speed': 1,
         'damage': 1,
         'durability': 1,

@@ -16,6 +16,26 @@ class Attacker(arcade.Sprite):
         self.position = [0, 0]
         self.dead = False
 
+        # Load textures
+        self.cur_texture = 0
+        self.walk_textures = []
+
+        if self.name == 'zombie':
+            main_path = "animations/zombie_walk/"
+            self.num_pngs = 22
+        elif self.name == 'conehead_zombie':
+            main_path = "animations/conehead_walk/"
+            self.num_pngs = 21
+        elif self.name == 'buckethead_zombie':
+            main_path = "animations/buckethead_walk/"
+            self.num_pngs = 14
+        x = 0
+
+        for i in range(self.num_pngs):
+            texture = arcade.load_texture(f"{main_path}{x}.png")
+            self.walk_textures.append(texture)
+            x += 1
+
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
@@ -105,3 +125,13 @@ class Attacker(arcade.Sprite):
 
     def get_durability(self):
         return self.durability
+
+    def update_animation(self, delta_time: float = 1 / 60):
+
+        # sets texture to the correct one in the list
+        self.cur_texture += 1
+        if self.cur_texture >= self.num_pngs:
+            self.cur_texture = 0
+        frame = self.cur_texture
+
+        self.texture = self.walk_textures[frame]
