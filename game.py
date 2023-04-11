@@ -56,10 +56,10 @@ class Game(arcade.Window):
         plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/pea_shooter.png'),texture_hovered= arcade.load_texture('GUI/pea_shooter_hover.png'),texture_pressed=arcade.load_texture('GUI/pea_shooter_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant2_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
+        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/Wall-nut.png'),texture_hovered= arcade.load_texture('GUI/Wall-nut_hover.png'),texture_pressed=arcade.load_texture('GUI/Wall-nut_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant3_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
+        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/SnowPea.png'),texture_hovered= arcade.load_texture('GUI/SnowPea_Hover.png'),texture_pressed=arcade.load_texture('GUI/SnowPea_Selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant4_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
         plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
@@ -345,7 +345,7 @@ class Game(arcade.Window):
             arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant3_selected):
                 arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(245, 206, 66, 255), width=76, height=76, border_width=5)
                 arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
 
         else:
