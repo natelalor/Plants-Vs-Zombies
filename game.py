@@ -50,22 +50,22 @@ class Game(arcade.Window):
 
         # Creating the buttons, each button has a loaded texture for hover, and clicked
 
-        plant1_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sunflower.png'),texture_hovered= arcade.load_texture('images/sunflowerHover.png'),texture_pressed=arcade.load_texture('images/sunflowerSelected.png'), width=75, height= 75)
+        plant1_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/sunflower.png'),texture_hovered= arcade.load_texture('GUI/sunflowerHover.png'),texture_pressed=arcade.load_texture('GUI/sunflowerSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant1_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/pea_shooter.png'),texture_hovered= arcade.load_texture('GUI/pea_shooter_hover.png'),texture_pressed=arcade.load_texture('GUI/pea_shooter_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant2_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant3_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant4_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant5_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/shovel.png'),texture_hovered= arcade.load_texture('images/shovel.png'),texture_pressed=arcade.load_texture('images/shovel.png'), width=75, height= 75)
+        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/shovel.png'),texture_hovered= arcade.load_texture('GUI/Shovel_hover.png'),texture_pressed=arcade.load_texture('GUI/Shovel_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(shovel_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
         sun = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sun.png'), width=75, height= 75)
@@ -301,12 +301,14 @@ class Game(arcade.Window):
 
         self.live_attackers.draw()
 
-        self.sun_list.draw()
+
         self.defender_list.draw()
         self.bullet_list.draw()
 
         #GUI
         self.manager.draw()
+
+
 
 
         # currency text (for positioning: 700 is x, 550 is y)
@@ -382,6 +384,9 @@ class Game(arcade.Window):
         # TEMPORARY SUN DRAWING
         # if self.sun1.sun_list != None:
         #     self.sun1.sun_list.draw()
+
+        # SUN
+        self.sun_list.draw()
     def on_update(self, delta_time):
         self.game_time += delta_time
         current_total = 0
