@@ -79,9 +79,9 @@ defenders_data = {
         'image': "images/toothbrush_ally.png",
     },
     3: {
-        'name': 'peashooter',
+        'name': 'repeater',
         'speed': 1,
-        'damage': 1,
+        'damage': 3,
         'durability': 1,
         'image': "images/toothbrush_ally.png",
     }

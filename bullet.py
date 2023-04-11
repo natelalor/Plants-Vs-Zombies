@@ -19,8 +19,8 @@ class Bullet(arcade.Sprite):
 
         
         #important to set the center coords here
-        self.center_x = self.x
-        self.center_y = self.y
+        self.center_x = self.x + 10
+        self.center_y = self.y + 10
         self.position = [self.center_x,self.center_y]
         self.change_x = speed
         

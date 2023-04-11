@@ -35,6 +35,16 @@ class Defender(arcade.Sprite):
         if self.name == 'snowpea':
             main_path = "animations/snowpea/"
             self.num_png = 14
+        if self.name == 'repeater':
+            main_path = "animations/Reapeater/"
+            self.num_png = 14
+        if self.name == 'WallNut':
+            main_path = "animations/WallNut/"
+            self.num_png = 14
+        if self.name == 'sunflower':
+            main_path = "animations/sunflower/"
+            self.num_png = 17
+
 
         # Load textures
         self.cur_texture = 0

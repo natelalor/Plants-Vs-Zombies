@@ -208,7 +208,7 @@ class Game(arcade.Window):
         self.defender_list.append(defender3)
         self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5))
         self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5))
-        self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(3, 5, self.bullet_list, 1.5))
         self.num_attackers_to_kill = len(self.waves[0])
 
 
