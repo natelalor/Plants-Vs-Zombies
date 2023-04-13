@@ -15,10 +15,13 @@ class Attacker(arcade.Sprite):
         self.durability = attackers_data[self.type]['durability']
         self.position = [0, 0]
         self.dead = False
+        self.done = False
 
         # Load textures
         self.cur_texture = 0
+        self.dead_texture = 0
         self.walk_textures = []
+        self.death_textures = []
 
         # Load texture based off of attacker type
         if self.name == 'zombie':
@@ -37,11 +40,18 @@ class Attacker(arcade.Sprite):
             texture = arcade.load_texture(f"{main_path}{x}.png")
             self.walk_textures.append(texture)
             x += 1
+        x = 0
+        for i in range(12):
+            texture = arcade.load_texture(f"animations/zombie_death/{x}.png")
+            self.death_textures.append(texture)
+            x += 1
 
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
         return self.dead
+    def is_done(self):
+        return self.done
 
     def kill(self):
         self.dead = True
@@ -128,12 +138,30 @@ class Attacker(arcade.Sprite):
     def get_durability(self):
         return self.durability
 
+
+
     def update_animation(self, delta_time: float = 1 / 60):
 
         # sets texture to the correct one in the list
-        self.cur_texture += 1
-        if self.cur_texture >= self.num_pngs:
-            self.cur_texture = 0
-        frame = self.cur_texture
 
-        self.texture = self.walk_textures[frame]
+        if self.dead:
+            self.texture = self.death_textures[self.dead_texture]
+            self.dead_texture += 1
+            if self.dead_texture >= 11:
+                #self.dead_texture = 0
+                self.done = True
+
+
+
+        else:
+            self.cur_texture += 1
+            if self.cur_texture >= self.num_pngs:
+                self.cur_texture = 0
+            frame = self.cur_texture
+
+            self.texture = self.walk_textures[frame]
+
+
+
+
+

@@ -206,9 +206,12 @@ class Game(arcade.Window):
         self.defender_list.append(defender1)
         defender3 = Defender(2,3,self.bullet_list,1.3)
         self.defender_list.append(defender3)
-        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5))
-        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(1, 1, self.bullet_list, 1.5))
+       # self.defender_list.append(Defender(1, 3, self.bullet_list, 1.5))
         self.defender_list.append(Defender(3, 5, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(2, 4, self.bullet_list, 1.5))
+
         self.num_attackers_to_kill = len(self.waves[0])
 
 
@@ -434,7 +437,8 @@ class Game(arcade.Window):
                 attacker.kill()
             #testing killing attackers
             if attacker.is_dead():
-                self.live_attackers.remove(attacker)
+                if attacker.is_done():
+                    self.live_attackers.remove(attacker)
 
 
         #testing updtaing bullets and such
@@ -447,11 +451,13 @@ class Game(arcade.Window):
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 #different effects for each bullet type
                 if bullet.type == 1:
-                    
+
                     attackerHit.decrement_health(15)
+
+
                 else:
-                    attackerHit.alter_speed(.9) 
-                    attackerHit.decrement_health(8)   
+                    attackerHit.alter_speed(.9)
+                    attackerHit.decrement_health(8)
                 bullet.remove_from_sprite_lists()
 
         self.bullet_list.update()

@@ -13,6 +13,7 @@ class Grid:
 
 
 
+
         # grid_list will be the list of lists that make up the grid
         self.grid_list = []
 
