@@ -11,13 +11,15 @@ class Sun(arcade.Sprite):
         self.location = []
         self.end_location = []
 
+        # sun iteration test
+        self.dead = False
+
         # call to function to set up random spawnpoint
         self.random_spawning()
 
     # a function that returns a boolean.
     # given parameters x, y, it will see if those x and y are within the sprite's borders
     def in_sun(self, x, y):
-        print("x: ", x, "y: ", y)
         if (x <= (self.position[0] + 50) and y <= (self.position[1] + 50)) \
                 and (x > (self.position[0] - 50) and y > (self.position[1] - 50)):
             print("You have clicked the sun!")
@@ -43,8 +45,8 @@ class Sun(arcade.Sprite):
     def move(self):
         self.center_y -= self.speed
 
+    def turn_to_dead(self):
+        self.dead = True
     def is_dead(self):
-
-
-        return False
+        return self.dead
 

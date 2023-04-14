@@ -190,7 +190,7 @@ class Game(arcade.Window):
         # TEMP SUN CREATION
         # self.sun1 = Sun()
         self.sun_list = arcade.SpriteList()
-        for x in range(0, 10):
+        for x in range(0, 2):
             sun = Sun()
             self.sun_list.append(sun)
 
@@ -281,7 +281,11 @@ class Game(arcade.Window):
                     self.currency += c.SUN_ADDITION
 
                 # make sprite disappear
-                self.sun_list.remove(z)
+                # self.sun_list.remove(z)
+
+                # prime it to be removed
+                z.turn_to_dead()
+
 
 
     def on_draw(self):
@@ -447,11 +451,23 @@ class Game(arcade.Window):
 
         self.bullet_list.update()
 
-        #SUN MOVEMENT
-        for x in range(len(self.sun_list)):
-            if (not self.sun_list[x].is_dead()):
-                self.sun_list[x].move()
-                print("moving: ", x)
+
+        # SUN DISTRIBUTION & MOVEMENT
+
+        # to gauge sun spawn frequency
+        if random.randint(0, 1000) > 700:
+            # if sun_list still has sun (error handlind)
+            if len(self.sun_list) != None:
+                # move one sun
+                x = self.sun_list[0]
+                x.move()
+                # if it is clicked, or if it goes offscreen,
+                # delete it and add a new one to sun_list
+                if (x.is_dead()) or (x.center_y < 0):
+                    self.sun_list.remove(x)
+                    sun = Sun()
+                    self.sun_list.append(sun)
+
 
 
 
