@@ -427,6 +427,26 @@ class Game(arcade.Window):
             if attacker.is_dead():
                 self.live_attackers.remove(attacker)
 
+            #attack defender
+            if arcade.check_for_collision_with_list(attacker,self.defender_list):
+                defenderHit = arcade.check_for_collision_with_list(attacker, self.defender_list)[0]
+                #set speed to 0
+                attacker.speed = 0
+                #if time is greater than attack duration attack
+                if attacker.ready_to_attack(delta_time):
+                
+                
+                    defenderHit.decrement_health(attacker.damage)
+                    print(f'Damaged defender: {defenderHit.durability}')
+                #if defender is dead reset speed
+                if defenderHit.is_dead():
+                    self.defender_list.remove(defenderHit)
+                    
+            #reset speed for multiple attackers after defender dies
+            if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
+                attacker.reset_speed()
+
+        self.defender_list.update()
 
         #testing updtaing bullets and such
         self.defender_list.on_update(delta_time)
@@ -451,7 +471,7 @@ class Game(arcade.Window):
         for x in range(len(self.sun_list)):
             if (not self.sun_list[x].is_dead()):
                 self.sun_list[x].move()
-                print("moving: ", x)
+                #print("moving: ", x)
 
 
 
