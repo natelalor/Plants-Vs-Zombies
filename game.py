@@ -274,6 +274,14 @@ class Game(arcade.Window):
         # clicked = 0
         print("Mouse button is pressed")
 
+        #testing getting the square 
+         
+        for row in self.grid.grid_list:
+            for square in row:
+                if square.in_square(x,y):
+                    coords = square.get_position()
+                    print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
+
         # sun click testing
         for z in self.sun_list:
             if z.in_sun(x, y):

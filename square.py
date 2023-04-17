@@ -18,6 +18,7 @@ class Square:
         self.position_list = [x, y]
         self.has_plant = False
 
+        self.abs_coords = [0,0]
 
     def get_position(self):
         return self.position_list
@@ -35,6 +36,21 @@ class Square:
         self.has_plant = False
 
 
+    def set_coords(self,x,y):
+        if self.abs_coords == [0,0]:
+            self.abs_coords = [x,y]
+        else:
+            pass
 
-
-
+    def get_abs_coords(self):
+        return self.abs_coords
+    
+    #checks whether click is in the square
+    def in_square(self,x,y):
+        square_x = self.abs_coords[0] 
+        square_y = self.abs_coords[1]
+        if (square_x-50 <= x <= square_x+50) and (square_y - 50 <= y <= square_y + 50):
+            
+            return True
+            
+        return False
