@@ -11,11 +11,8 @@ class Grid:
         self.size_columns = size_columns
         self.size_rows = size_rows
 
-
-
         # grid_list will be the list of lists that make up the grid
         self.grid_list = []
-
 
         for x in range(0, size_rows):
             temp_list = []

@@ -94,8 +94,6 @@ class Game(arcade.Window):
                 self.plant5_selected = False
                 self.plant4_selected = False
 
-
-
         @shovel_button.event("on_click")
         def on_click_settings(event):
             if (self.shovel_selected):
@@ -137,7 +135,6 @@ class Game(arcade.Window):
                 self.plant5_selected = False
                 self.shovel_selected = False
 
-
         @plant4_button.event("on_click")
         def on_click_settings(event):
             if (self.plant4_selected):
@@ -175,7 +172,6 @@ class Game(arcade.Window):
                 anchor_y="top",
                 child=self.h_box)
         )
-
 
     def setup(self):
         self.total_attacker_weight = 0
@@ -456,7 +452,7 @@ class Game(arcade.Window):
 
         # to gauge sun spawn frequency
         if random.randint(0, 1000) > 700:
-            # if sun_list still has sun (error handlind)
+            # if sun_list still has sun (error handling)
             if len(self.sun_list) != None:
                 # move one sun
                 x = self.sun_list[0]
