@@ -209,6 +209,7 @@ class Game(arcade.View):
         self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5, [1,0]))
         self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [2,0]))
         self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5, [4,0]))
+        self.defender_list.append(Sunflower(4, 2, [3,2]))
         self.num_attackers_to_kill = len(self.waves[0])
 
 
@@ -321,13 +322,11 @@ class Game(arcade.View):
         self.bullet_list.update()
         self.defender_list.update()
 
-        # sun click testing
-        for sun in self.sun_list:
-            if sun.in_sun(x, y):
-                if self.sun_list != None:
-                    self.currency += c.SUN_ADDITION
-                # make sprite disappear
-                self.sun_list.remove(sun)
+        for defender in self.defender_list:
+            if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
+                self.currency += c.SUN_ADDITION
+                self.sun_list.remove(defender.collect_sun())
+
 
 
     def on_draw(self):
