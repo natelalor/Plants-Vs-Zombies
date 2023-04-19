@@ -42,6 +42,7 @@ class Defender(arcade.Sprite):
         vertical = self.position_placement[0]
         horizontal = self.position_placement[1]
 
+        #test this change
         if vertical == 0:
             self.center_y = 50
         elif vertical == 1:

@@ -204,11 +204,11 @@ class Game(arcade.View):
         self.bullet_list = arcade.SpriteList()
         # defender1 = Defender(1,1,self.bullet_list,1.5)
         # self.defender_list.append(defender1)
-        defender3 = Defender(2,3,self.bullet_list,1.3, [0,0])
+        defender3 = Defender(2,1,self.bullet_list,1.3, [0,0])
         self.defender_list.append(defender3)
         self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5, [1,0]))
-        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [2,0]))
-        self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5, [4,0]))
+        self.defender_list.append(Defender(1, 3, self.bullet_list, 1.5, [2,0]))
+        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [3,0]))
         self.defender_list.append(Sunflower(4, 2, [3,2]))
         self.num_attackers_to_kill = len(self.waves[0])
 
@@ -445,7 +445,7 @@ class Game(arcade.View):
             for attacker in self.live_attackers:
                 if attacker.lane == defender.lane:
                     defender.is_active = True
-                    break
+                   
         # Wave 0 is just random spawning
         # to spawn attackers
         if self.current_wave == 0:
