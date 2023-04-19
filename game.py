@@ -206,10 +206,11 @@ class Game(arcade.View):
         # self.defender_list.append(defender1)
         defender3 = Defender(2,1,self.bullet_list,1.3, [0,0])
         self.defender_list.append(defender3)
-        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5, [1,0]))
-        self.defender_list.append(Defender(1, 3, self.bullet_list, 1.5, [2,0]))
-        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [3,0]))
-        self.defender_list.append(Sunflower(4, 2, [3,2]))
+        self.defender_list.append(Defender(2, 2, self.bullet_list, 1.5, [1,0]))
+        self.defender_list.append(Defender(2, 3, self.bullet_list, 1.5, [2,0]))
+        self.defender_list.append(Defender(2, 4, self.bullet_list, 1.5, [3,0]))
+        self.defender_list.append(Defender(5, 5, self.bullet_list, 1.5, [4,0]))
+        self.defender_list.append(Sunflower(1, 2, [3,2]))
         self.num_attackers_to_kill = len(self.waves[0])
 
 
@@ -283,14 +284,14 @@ class Game(arcade.View):
             for square in row:
                 if square.in_square(x,y):
                     print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
-
+                    
                     lane = square.get_position()[0] + 1
                     print(lane)
 
                     if (self.plant1_selected):
                         if self.currency >= 50:
                             defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
-                            self.defender_list.append(defender)
+                            self.defender_list.append(Sunflower(1, lane,square.get_position()))
                             self.currency -= 50
                     elif (self.plant2_selected):
                         if self.currency >= 100:
@@ -508,12 +509,10 @@ class Game(arcade.View):
                 #get the sprite object hit by the bullet
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 #different effects for each bullet type
-                if bullet.type == 1:
-                    
-                    attackerHit.decrement_health(15)
-                else:
-                    attackerHit.alter_speed(.9) 
-                    attackerHit.decrement_health(8)   
+                
+                
+                attackerHit.alter_speed(bullet.speed_change) #only changes for snowball
+                attackerHit.decrement_health(bullet.damage)   
                 bullet.remove_from_sprite_lists()
 
         self.bullet_list.update()
