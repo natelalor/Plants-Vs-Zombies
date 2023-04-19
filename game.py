@@ -13,11 +13,15 @@ from scipy.integrate import quad
 import time
 import multiprocessing
 import arcade.gui
+from sunflower import Sunflower
 
 
-class Game(arcade.Window):
-    def __init__(self, level: int):
-        super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+class Game(arcade.View):
+    def __init__(self, level: int, window):
+        super().__init__(window)
+        # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
+        # arcade.set_background_color(arcade.color.ANDROID_GREEN)
+
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         self.live_attackers = None
@@ -190,10 +194,10 @@ class Game(arcade.Window):
         # TEMP SUN CREATION
         # self.sun1 = Sun()
         self.sun_list = arcade.SpriteList()
-        for x in range(0, 10):
-            sun = Sun()
-            self.sun_list.append(sun)
 
+        for x in range(0, 10):
+            sun = Sun(sunflower_sun=False)
+            self.sun_list.append(sun)
 
         #test bullet and defenders
         self.defender_list = arcade.SpriteList()
@@ -246,9 +250,7 @@ class Game(arcade.Window):
         self.attackers_list.append(self.attackers_list.pop(first_max))  # move it to the end
         for attacker in self.attackers_list:  # set the lanes
             attacker.set_position_lane(random_lane())
-        print("FIXED ATTACKERS_LIST")
-        for i in self.attackers_list:
-            print(i.get_type(), end=", ")
+
 
 
     def create_attackers(self):
@@ -320,13 +322,12 @@ class Game(arcade.Window):
         self.defender_list.update()
 
         # sun click testing
-        for z in self.sun_list:
-            if z.in_sun(x, y):
+        for sun in self.sun_list:
+            if sun.in_sun(x, y):
                 if self.sun_list != None:
                     self.currency += c.SUN_ADDITION
-
                 # make sprite disappear
-                self.sun_list.remove(z)
+                self.sun_list.remove(sun)
 
 
     def on_draw(self):
@@ -342,7 +343,6 @@ class Game(arcade.Window):
 
         self.live_attackers.draw()
 
-        self.sun_list.draw()
         self.defender_list.draw()
         self.bullet_list.draw()
 
@@ -420,13 +420,23 @@ class Game(arcade.Window):
         if (self.shovel_selected):
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
             arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76, border_width=5)
+
+        self.sun_list.draw()
+
         # TEMPORARY SUN DRAWING
         # if self.sun1.sun_list != None:
         #     self.sun1.sun_list.draw()
     def on_update(self, delta_time):
         self.game_time += delta_time
+        if self.game_time%10==0:
+            self.sun_list.append(Sun(False))
         current_total = 0
+        sun = None
         for defender in self.defender_list:
+            sun = defender.on_update(delta_time)
+            if sun:
+                sun.set_position(defender.center_x, defender.center_y)
+                self.sun_list.append(sun)
             defender.is_active = False
             for attacker in self.live_attackers:
                 if attacker.lane == defender.lane:
@@ -437,9 +447,7 @@ class Game(arcade.Window):
         if self.current_wave == 0:
             if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:  # +10 for now because game time atarts at ~10
                 self.wait_to_start_wave = False
-                print(self.game_time, self.wave_0_spawn_times[0])
                 self.wave_0_spawn_times.pop(0)
-                print(self.wave_0_spawn_times)
                 self.live_attackers.append(self.waves[0].pop(0))
             if not self.live_attackers and not self.wait_to_start_wave:
                 self.current_wave += 1
@@ -449,7 +457,6 @@ class Game(arcade.Window):
         # Waves 1 and 2 are released all at once (ish)
         elif self.current_wave == 1 or self.current_wave == 2: # for the actual waves of attackers
             if self.game_time > self.pause_between_waves:  # wait 10 secs between waves
-                print("WAVE", self.current_wave)
                 if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
                     self.live_attackers.append(self.waves[self.current_wave].pop(0))
                     self.wait_to_start_wave = False
@@ -494,7 +501,7 @@ class Game(arcade.Window):
         self.defender_list.update()
 
         #testing updtaing bullets and such
-        self.defender_list.on_update(delta_time)
+        # self.defender_list.on_update(delta_time)
         for bullet in self.bullet_list:
             if bullet.center_x > c.SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
@@ -513,10 +520,12 @@ class Game(arcade.Window):
         self.bullet_list.update()
 
         #SUN MOVEMENT
-        for x in range(len(self.sun_list)):
-            if (not self.sun_list[x].is_dead()):
-                self.sun_list[x].move()
-                #print("moving: ", x)
+        for sun in self.sun_list:
+            if sun.lifespan < 0:
+                self.sun_list.remove(sun)
+            else:
+                sun.move()
+                # print("moving: ", x)
 
 
 

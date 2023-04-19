@@ -5,14 +5,19 @@ import random
 
 class Sun(arcade.Sprite):
 
-    def __init__(self):
+    def __init__(self, sunflower_sun):
+
         super().__init__("images/sun.png", 0.05)
         self.speed = 2
         self.location = []
         self.end_location = []
+        self.lifespan = 10
+
 
         # call to function to set up random spawnpoint
-        self.random_spawning()
+        if not sunflower_sun:
+            self.random_spawning()
+
 
     # a function that returns a boolean.
     # given parameters x, y, it will see if those x and y are within the sprite's borders
@@ -24,27 +29,23 @@ class Sun(arcade.Sprite):
             return True
         else:
             return False
+    def set_position(self, x, y):
+        super().set_position(x,y)
+        self.target_y = y
 
     def random_spawning(self):
-        position = random.randint(1, 4)
-        if position == 1:
-            self.center_x = 250
-            self.center_y = 1000
-        elif position == 2:
-            self.center_x = 500
-            self.center_y = 1000
-        elif position == 3:
-            self.center_x = 750
-            self.center_y = 1000
-        else:
-            self.center_x = 900
-            self.center_y = 1000
+        self.center_x = random.randint(200, 900)
+        self.center_y = 1000
+        self.target_y = random.randint(300, 600)
+
 
     def move(self):
-        self.center_y -= self.speed
+        if self.center_y < self.target_y:
+            self.center_y -= self.speed
 
     def is_dead(self):
-
-
         return False
+
+    def on_update(self, delta_time: float = 1 / 60):
+        self.lifespan -= delta_time
 

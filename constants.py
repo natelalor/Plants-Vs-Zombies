@@ -1,5 +1,6 @@
 SCREEN_TITLE = "Plants vs. Zombies"
-
+TEST_WIDTH = 1200
+TEST_HEIGHT = 800
 # grid dimensions
 SIZE_COLUMNS = 9
 SIZE_ROWS = 5
@@ -87,6 +88,13 @@ defenders_data = {
         'damage': 1,
         'durability': 500,
         'image': "images/toothbrush_ally.png",
+    },
+    4: {
+        'name': 'sunflower',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/sunflower.png",
     }
 }
 
@@ -113,3 +121,5 @@ BULLET_SPEED = 4
 
 GAME_LENGTH = 60
 FIRST_ROUND_PERCENT = .4
+
+SUNFLOWER_WAIT_TIME = 10

@@ -76,7 +76,7 @@ class Defender(arcade.Sprite):
         else:
             print("############### BUG WITH DEFENDER POSITION HORIZONTAL")
 
-    def on_update(self, delta_time: float = 1 / 60):
+    def on_update(self, delta_time: float = 1 / 60) -> None:
 
         self.time_since_last_firing += delta_time
 
@@ -90,3 +90,5 @@ class Defender(arcade.Sprite):
                 else:
                     bullet = Bullet(1, self.center_x, self.center_y, c.BULLET_SPEED)
                 self.bullet_list.append(bullet)
+
+        return None
