@@ -289,7 +289,7 @@ class Game(arcade.View):
 
                     if (self.plant1_selected):
                         if self.currency >= 50:
-                            defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
+                            defender = Sunflower(4, lane, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 50
                     elif (self.plant2_selected):
@@ -326,6 +326,11 @@ class Game(arcade.View):
             if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
                 self.sun_list.remove(defender.collect_sun())
+        for sun in self.sun_list:
+            if sun.in_sun(x, y):
+                self.currency += c.SUN_ADDITION
+                self.sun_list.remove(sun)
+
 
 
 
@@ -491,6 +496,9 @@ class Game(arcade.View):
                     print(f'Damaged defender: {defenderHit.durability}')
                 #if defender is dead reset speed
                 if defenderHit.is_dead():
+                    if isinstance(defenderHit, Sunflower):
+                        if defenderHit.has_sun:
+                            defenderHit.sun
                     self.defender_list.remove(defenderHit)
                     
             #reset speed for multiple attackers after defender dies

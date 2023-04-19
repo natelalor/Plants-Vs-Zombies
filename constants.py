@@ -69,11 +69,12 @@ attackers_data = {
 }
 defenders_data = {
     1: {
-        'name': 'toothbrush',
+        'name': 'pea-shooter',
         'speed': 1,
         'damage': 1,
         'durability': 20,
-        'image': "images/toothbrush_ally.png",
+        'image': "images/peaShooter.png",
+        'cost' : 100
     },
     2: {
         'name': 'toothpaste',
@@ -81,6 +82,7 @@ defenders_data = {
         'damage': 1,
         'durability': 20,
         'image': "images/toothbrush_ally.png",
+        'cost' : 100
     },
     3: {
         'name': 'floss',
@@ -88,6 +90,7 @@ defenders_data = {
         'damage': 1,
         'durability': 500,
         'image': "images/toothbrush_ally.png",
+        'cost' : 100
     },
     4: {
         'name': 'sunflower',
@@ -95,6 +98,7 @@ defenders_data = {
         'damage': 1,
         'durability': 1,
         'image': "images/sunflower.png",
+        'cost' : 50
     }
 }
 
