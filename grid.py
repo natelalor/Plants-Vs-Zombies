@@ -43,6 +43,7 @@ class Grid:
                 # The math to make evenly sized/spaced squares
                 x = (5 + 100) * column + 5 + 100 // 2
                 y = (5+ 100) * row + 5 + 100 // 2
+                self.grid_list[row][column].set_coords(x,y)
 
                 # Draw the box
                 arcade.draw_rectangle_filled(x, y, 100, 100, color)

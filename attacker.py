@@ -8,11 +8,14 @@ class Attacker(arcade.Sprite):
         self.lane = None
         self.type = type
 
+        self.time_since_last_attack = 0
+
         super().__init__(attackers_data[self.type]['image'], 0.05)
         self.name = attackers_data[self.type]['name']
         self.speed = attackers_data[self.type]['speed']
         self.damage = attackers_data[self.type]['damage']
         self.durability = attackers_data[self.type]['durability']
+        self.time_between_attacking = attackers_data[self.type]['attack_speed']
         self.position = [0, 0]
         self.dead = False
 
@@ -105,3 +108,19 @@ class Attacker(arcade.Sprite):
 
     def get_durability(self):
         return self.durability
+
+    def ready_to_attack(self, delta_time: float = 1 / 60):
+
+        self.time_since_last_attack += delta_time
+        
+        attack = False
+        
+        if self.time_since_last_attack >= self.time_between_attacking:
+            self.time_since_last_attack = 0
+            attack = True
+            # create the bullet
+        
+        return attack
+    
+    def reset_speed(self):
+        self.speed = attackers_data[self.type]['speed']

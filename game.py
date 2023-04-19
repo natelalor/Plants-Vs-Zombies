@@ -279,6 +279,15 @@ class Game(arcade.View):
             if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
                 self.sun_list.remove(defender.collect_sun())
+
+        #testing getting the square
+
+        for row in self.grid.grid_list:
+            for square in row:
+                if square.in_square(x,y):
+                    coords = square.get_position()
+                    print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
+
         # sun click testing
         for sun in self.sun_list:
             if sun.in_sun(x, y):
@@ -437,6 +446,26 @@ class Game(arcade.View):
             if attacker.is_dead():
                 self.live_attackers.remove(attacker)
 
+            #attack defender
+            if arcade.check_for_collision_with_list(attacker,self.defender_list):
+                defenderHit = arcade.check_for_collision_with_list(attacker, self.defender_list)[0]
+                #set speed to 0
+                attacker.speed = 0
+                #if time is greater than attack duration attack
+                if attacker.ready_to_attack(delta_time):
+
+
+                    defenderHit.decrement_health(attacker.damage)
+                    print(f'Damaged defender: {defenderHit.durability}')
+                #if defender is dead reset speed
+                if defenderHit.is_dead():
+                    self.defender_list.remove(defenderHit)
+
+            #reset speed for multiple attackers after defender dies
+            if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
+                attacker.reset_speed()
+
+        self.defender_list.update()
 
         #testing updtaing bullets and such
         # self.defender_list.on_update(delta_time)
