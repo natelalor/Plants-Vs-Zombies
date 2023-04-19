@@ -37,6 +37,9 @@ class Defender(arcade.Sprite):
     def decrement_health(self, amount):
         self.durability -= amount
 
+    def get_position(self):
+        return self.position_placement
+
     def set_position(self, position_placement):
 
         vertical = self.position_placement[0]
