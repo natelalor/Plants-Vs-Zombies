@@ -41,6 +41,7 @@ enemiesDict = {1: "easy",
                4: "bucket"}
 attackers_data = {
     1: {
+
         'name': 'conehead_zombie',
         'speed': .7,
         'damage': 1,
@@ -49,6 +50,7 @@ attackers_data = {
     },
     2: {
         'name': 'zombie',
+
         'speed': .7,
         'damage': 1,
         'durability': 100,

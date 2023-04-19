@@ -31,26 +31,35 @@ class Defender(arcade.Sprite):
         # main path is determined by what type of defender it is
         if self.name == 'peashooter':
             main_path = "animations/pea_shooter/"
+            #num_legnth = 800
+            #num_height = 800
             self.num_png = 13
         if self.name == 'snowpea':
             main_path = "animations/snowpea/"
-            self.num_png = 14
+            num_legnth = 800
+            num_height = 800
+            self.num_png = 15
         if self.name == 'repeater':
-            main_path = "animations/Reapeater/"
-            self.num_png = 14
+            main_path = "animations/Repeater/"
+            #num_legnth = 900
+            #num_height = 875
+            self.num_png = 11
         if self.name == 'WallNut':
             main_path = "animations/WallNut/"
-            self.num_png = 14
+            self.num_png = 10
         if self.name == 'sunflower':
             main_path = "animations/sunflower/"
-            self.num_png = 17
+            self.num_png = 9
 
         # Load textures into a list
         self.cur_texture = 0
         self.idle_textures = []
+        self.all_sprites_list = arcade.SpriteList()
+
         x = 0
         for i in range(self.num_png):
-            texture = arcade.load_texture(f"{main_path}{x}.png")
+            #texture = arcade.load_texture(f"animations/{main_path}", x = i*num_legnth,y= 0, width=num_legnth, height= num_height, )
+            texture = arcade.load_texture(f"{main_path}/{x}.png")
             self.idle_textures.append(texture)
             x += 1
 

@@ -17,7 +17,9 @@ import arcade.gui
 
 class Game(arcade.Window):
     def __init__(self, level: int):
+        arcade.cleanup_texture_cache()
         super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+        #arcade.cleanup_texture_cache()
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         self.live_attackers = None
@@ -50,7 +52,7 @@ class Game(arcade.Window):
 
         # Creating the buttons, each button has a loaded texture for hover, and clicked
 
-        plant1_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/sunflower.png'),texture_hovered= arcade.load_texture('GUI/sunflowerHover.png'),texture_pressed=arcade.load_texture('GUI/sunflowerSelected.png'), width=75, height= 75)
+        plant1_button = arcade.gui.UITextureButton( texture=arcade.load_texture('GUI/sunflower.png'),texture_hovered= arcade.load_texture('GUI/sunflowerHover.png'),texture_pressed=arcade.load_texture('GUI/sunflowerSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant1_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
         plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/pea_shooter.png'),texture_hovered= arcade.load_texture('GUI/pea_shooter_hover.png'),texture_pressed=arcade.load_texture('GUI/pea_shooter_selected.png'), width=75, height= 75)
@@ -71,9 +73,7 @@ class Game(arcade.Window):
         sun = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sun.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(sun.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        # THIS MIGHT BE TEMPORARY its just to display the round
-        round = arcade.gui.UITextureButton(texture=arcade.load_texture('images/round.png'), width=100, height= 100)
-        self.h_box.add(round.with_space_around(left=155))
+
 
         # Initially all plant selections are set to false, these are only true if a plant is clicked on
         self.plant1_selected = False
@@ -163,6 +163,7 @@ class Game(arcade.Window):
         def on_click_settings(event):
             if (self.plant5_selected):
                 self.plant5_selected = False
+
             else:
                 self.plant5_selected = True
                 # set others to false
@@ -175,6 +176,7 @@ class Game(arcade.Window):
         # Create a widget to hold the h_box(horizontal box) widget, that will center the buttons along the top
         self.manager.add(
             arcade.gui.UIAnchorWidget(
+
                 anchor_x="left",
                 anchor_y="top",
                 child=self.h_box)
@@ -221,6 +223,7 @@ class Game(arcade.Window):
         # for i in c.SIZE_ROWS:
         #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
 
+        self.background = arcade.load_texture("images/garden.jpg")
 
     def randomize(self):
         def random_lane() -> int:
@@ -294,10 +297,12 @@ class Game(arcade.Window):
     def on_draw(self):
         """Render the screen. """
 
-        # self.clear()
+        self.clear()
 
         arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
         self.grid.grid_draw()
+
         self.scene.draw()
         # self.live_attackers.draw()
 
@@ -309,13 +314,17 @@ class Game(arcade.Window):
         self.bullet_list.draw()
 
         #GUI
+        color = (64, 24, 17)
+        arcade.draw_rectangle_filled(100, 585, 1185, 100,color )
         self.manager.draw()
+
 
 
 
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text(str(self.currency), 623.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+        #arcade.draw_rectangle_filled(center_x=123.5, center_y=535, color=(235, 182, 136), width=20, height=40)
 
         # GUI SLOTS
         # FIFTH GUI SLOT
@@ -324,7 +333,7 @@ class Game(arcade.Window):
             arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant5_selected):
                 arcade.draw_rectangle_filled(center_x=445, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=445, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width= 5)
+                arcade.draw_rectangle_outline(center_x=445, center_y=581, color=(59, 125, 44), width=76, height=76, border_width= 5)
                 arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=445, center_y=581,color=(50, 50, 50, 200), width=75, height=75 )
@@ -336,7 +345,7 @@ class Game(arcade.Window):
             arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant4_selected):
                 arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=346, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=346, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
@@ -348,7 +357,7 @@ class Game(arcade.Window):
             arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant3_selected):
                 arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(245, 206, 66, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
 
         else:
@@ -361,11 +370,12 @@ class Game(arcade.Window):
             arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant2_selected):
                 arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=150, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=150, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
             arcade.draw_text(str(100), 123.5, 535, arcade.color.RED, 20, 40, 'center')
+
             self.plant2_selected = False
 
         # FIRST GUI SLOT
@@ -373,7 +383,7 @@ class Game(arcade.Window):
             arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant1_selected):
                 arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=50, center_y=581, color=(245, 245, 0), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=50, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
@@ -474,7 +484,7 @@ class Game(arcade.Window):
 
             self.update_animation = False
         else:
-            if self.frame_count > 2:
+            if self.frame_count >= 2:
                 self.frame_count = 0
                 self.update_animation = True
             else:
