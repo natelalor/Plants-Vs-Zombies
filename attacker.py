@@ -59,13 +59,13 @@ class Attacker(arcade.Sprite):
         # a 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
         # this will set up that enemy to start moving.
         self.lane = lane
-        if lane == 1:
+        if lane == 5:
             self.center_x = 1000
             self.center_y = 470
 
             self.position = [1000, 470]
 
-        elif lane == 2:
+        elif lane == 4:
             self.center_x = 1000
             self.center_y = 365
 
@@ -77,13 +77,13 @@ class Attacker(arcade.Sprite):
 
             self.position = [1000, 260]
 
-        elif lane == 4:
+        elif lane == 2:
             self.center_x = 1000
             self.center_y = 155
 
             self.position = [1000, 155]
 
-        elif lane == 5:
+        elif lane == 1:
             self.center_x = 1000
             self.center_y = 50
 

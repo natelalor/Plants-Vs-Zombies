@@ -280,29 +280,33 @@ class Game(arcade.Window):
             for square in row:
                 if square.in_square(x,y):
                     print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
+
+                    lane = square.get_position()[0] + 1
+                    print(lane)
+
                     if (self.plant1_selected):
                         if self.currency >= 50:
-                            defender = Defender(1, 1, self.bullet_list, 1.5, square.get_position())
+                            defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 50
                     elif (self.plant2_selected):
                         if self.currency >= 100:
-                            defender = Defender(2, 1, self.bullet_list, 1.5, square.get_position())
+                            defender = Defender(2, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 100
                     elif (self.plant3_selected):
                         if self.currency >= 150:
-                            defender = Defender(3, 1, self.bullet_list, 1.5, square.get_position())
+                            defender = Defender(3, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 150
                     elif (self.plant4_selected):
                         if self.currency >= 200:
-                            defender = Defender(4, 1, self.bullet_list, 1.5, square.get_position())
+                            defender = Defender(4, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 200
                     elif (self.plant5_selected):
                         if self.currency >= 300:
-                            defender = Defender(5, 1, self.bullet_list, 1.5, square.get_position())
+                            defender = Defender(5, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 300
                     elif (self.shovel_selected):
@@ -312,7 +316,8 @@ class Game(arcade.Window):
                             print("shovel square: ", square.get_position())
 
 
-
+        self.bullet_list.update()
+        self.defender_list.update()
 
         # sun click testing
         for z in self.sun_list:
