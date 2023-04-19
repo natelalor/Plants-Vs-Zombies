@@ -6,9 +6,9 @@ from bullet import Bullet
 
 class Defender(arcade.Sprite):
 
-    def __init__(self, type, lane, bullet_list, time_between_firing):
-
+    def __init__(self, type, lane, bullet_list, time_between_firing, position_placement):
         self.lane = lane
+        self.position_placement = position_placement
         self.type = type
         self.dead = False
         self.is_active = False
@@ -25,13 +25,9 @@ class Defender(arcade.Sprite):
         self.damage = defenders_data[self.type]['damage']
         self.durability = defenders_data[self.type]['durability']
 
-        self.position = [0, 0]
+        # self.position = [0, 0]
 
-        # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
-        # sprite creation
-
-        self.set_position(self.lane)
-        print("inside defender sprite creation. sprite created: ", self.type, self.lane)
+        self.set_position(self.position_placement)
 
     def is_dead(self):
         if self.durability <= 0:
@@ -41,60 +37,44 @@ class Defender(arcade.Sprite):
     def decrement_health(self, amount):
         self.durability -= amount
 
-    def draw(self):
-        # placeholder
-        arcade.draw_rectangle_filled(self.position[0], self.position[1], 50, 50, arcade.color.BLUE, 0)
+    def set_position(self, position_placement):
 
-        # this is here so draw() has at least something lol.. a placeholder
-        if self.type == 99999:
-            return
+        vertical = self.position_placement[0]
+        horizontal = self.position_placement[1]
 
-    # a setter for defender's position.
-    # set_position_xy uses 2 parameters (x & y coordinates) to set the position of the defender.
-    def set_position_xy(self, position_x, position_y):
-        self.position = [position_x, position_y]
-
-    def set_position(self, lane):
-        # TODO: do we need this function? this is just c + v from attacker's set_position_lane function.
-        #  but we may just be able to use square to spawn defenders in specific locations instead of this
-
-        # a 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
-        # this will set up that enemy to start moving.
-
-        if lane == 1:
-            self.center_x = 50
-            self.center_y = 470
-
-            self.position = [50, 470]
-
-        elif lane == 2:
-            self.center_x = 50
-            self.center_y = 365
-
-            self.position = [50, 365]
-
-        elif lane == 3:
-            self.center_x = 50
-            self.center_y = 260
-
-            self.position = [50, 260]
-
-        elif lane == 4:
-            self.center_x = 50
-            self.center_y = 155
-
-            self.position = [50, 155]
-
-        elif lane == 5:
-            self.center_x = 50
+        if vertical == 0:
             self.center_y = 50
-
-            self.position = [50, 50]
+        elif vertical == 1:
+            self.center_y = 155
+        elif vertical == 2:
+            self.center_y = 260
+        elif vertical == 3:
+            self.center_y = 365
+        elif vertical == 4:
+            self.center_y = 470
         else:
-            self.center_x = 100
-            self.center_y = 100
+            print("########## BUG WITH DEFENDER POSITION VERTICAL")
 
-            self.position = [100, 100]
+        if horizontal == 0:
+            self.center_x = 50
+        elif horizontal == 1:
+            self.center_x = 155
+        elif horizontal == 2:
+            self.center_x = 260
+        elif horizontal == 3:
+            self.center_x = 365
+        elif horizontal == 4:
+            self.center_x = 470
+        elif horizontal == 5:
+            self.center_x = 575
+        elif horizontal == 6:
+            self.center_x = 680
+        elif horizontal == 7:
+            self.center_x = 785
+        elif horizontal == 8:
+            self.center_x = 890
+        else:
+            print("############### BUG WITH DEFENDER POSITION HORIZONTAL")
 
     def on_update(self, delta_time: float = 1 / 60) -> None:
 

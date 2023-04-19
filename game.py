@@ -202,13 +202,14 @@ class Game(arcade.View):
         #test bullet and defenders
         self.defender_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
-        defender1 = Defender(1,1,self.bullet_list,1.5)
-        self.defender_list.append(defender1)
-        defender3 = Defender(2,3,self.bullet_list,1.3)
+        # defender1 = Defender(1,1,self.bullet_list,1.5)
+        # self.defender_list.append(defender1)
+        defender3 = Defender(2,3,self.bullet_list,1.3, [0,0])
         self.defender_list.append(defender3)
-        self.defender_list.append(Sunflower(4, 2))
-        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5))
-        self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5, [1,0]))
+        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [2,0]))
+        self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5, [4,0]))
+        self.defender_list.append(Sunflower(4, 2, [3,2]))
         self.num_attackers_to_kill = len(self.waves[0])
 
 
@@ -275,26 +276,57 @@ class Game(arcade.View):
     def on_mouse_press(self, x, y, button, modifiers):
         # clicked = 0
         print("Mouse button is pressed")
+
+        #testing getting the square 
+         
+        for row in self.grid.grid_list:
+            for square in row:
+                if square.in_square(x,y):
+                    print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
+
+                    lane = square.get_position()[0] + 1
+                    print(lane)
+
+                    if (self.plant1_selected):
+                        if self.currency >= 50:
+                            defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 50
+                    elif (self.plant2_selected):
+                        if self.currency >= 100:
+                            defender = Defender(2, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 100
+                    elif (self.plant3_selected):
+                        if self.currency >= 150:
+                            defender = Defender(3, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 150
+                    elif (self.plant4_selected):
+                        if self.currency >= 200:
+                            defender = Defender(4, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 200
+                    elif (self.plant5_selected):
+                        if self.currency >= 300:
+                            defender = Defender(5, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 300
+                    elif (self.shovel_selected):
+                        if square.has_plant:
+                            # TODO: make a way to figure out if a square has a defender.
+                            #       if that is true, remove it here
+                            print("shovel square: ", square.get_position())
+
+
+        self.bullet_list.update()
+        self.defender_list.update()
+
         for defender in self.defender_list:
             if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
                 self.sun_list.remove(defender.collect_sun())
 
-        #testing getting the square
-
-        for row in self.grid.grid_list:
-            for square in row:
-                if square.in_square(x,y):
-                    coords = square.get_position()
-                    print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
-
-        # sun click testing
-        for sun in self.sun_list:
-            if sun.in_sun(x, y):
-                if self.sun_list != None:
-                    self.currency += c.SUN_ADDITION
-                # make sprite disappear
-                self.sun_list.remove(sun)
 
 
     def on_draw(self):
@@ -453,14 +485,14 @@ class Game(arcade.View):
                 attacker.speed = 0
                 #if time is greater than attack duration attack
                 if attacker.ready_to_attack(delta_time):
-
-
+                
+                
                     defenderHit.decrement_health(attacker.damage)
                     print(f'Damaged defender: {defenderHit.durability}')
                 #if defender is dead reset speed
                 if defenderHit.is_dead():
                     self.defender_list.remove(defenderHit)
-
+                    
             #reset speed for multiple attackers after defender dies
             if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
                 attacker.reset_speed()

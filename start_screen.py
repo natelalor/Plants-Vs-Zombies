@@ -1,7 +1,7 @@
 import arcade
 import constants as c
 from game import Game
-from loading import LoadingScreen
+
 
 
 class StartScreen(arcade.View):
