@@ -199,7 +199,7 @@ class Game(arcade.View):
             sun = Sun(sunflower_sun=False)
             self.sun_list.append(sun)
 
-        #test bullet and defenders
+        # test bullet and defenders
         self.defender_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         # defender1 = Defender(1,1,self.bullet_list,1.5)
@@ -287,36 +287,42 @@ class Game(arcade.View):
                     lane = square.get_position()[0] + 1
                     print(lane)
 
-                    if (self.plant1_selected):
+                    if (self.plant1_selected) and (not square.has_plant):
                         if self.currency >= 50:
                             defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 50
-                    elif (self.plant2_selected):
+                            square.add_plant()
+                    elif (self.plant2_selected) and (not square.has_plant):
                         if self.currency >= 100:
                             defender = Defender(2, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 100
-                    elif (self.plant3_selected):
+                            square.add_plant()
+                    elif (self.plant3_selected) and (not square.has_plant):
                         if self.currency >= 150:
                             defender = Defender(3, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 150
-                    elif (self.plant4_selected):
+                            square.add_plant()
+                    elif (self.plant4_selected) and (not square.has_plant):
                         if self.currency >= 200:
                             defender = Defender(4, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 200
-                    elif (self.plant5_selected):
+                            square.add_plant()
+                    elif (self.plant5_selected) and (not square.has_plant):
                         if self.currency >= 300:
                             defender = Defender(5, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 300
+                            square.add_plant()
                     elif (self.shovel_selected):
                         if square.has_plant:
-                            # TODO: make a way to figure out if a square has a defender.
-                            #       if that is true, remove it here
-                            print("shovel square: ", square.get_position())
+                            for plant in self.defender_list:
+                                if plant.get_position() == square.get_position():
+                                    self.defender_list.remove(plant)
+                                    square.remove_plant()
 
 
         self.bullet_list.update()
