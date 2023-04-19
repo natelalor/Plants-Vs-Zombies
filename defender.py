@@ -88,11 +88,18 @@ class Defender(arcade.Sprite):
             if self.time_since_last_firing >= self.time_between_firing:
                 self.time_since_last_firing = 0
 
-                # create the bullet
-                if self.type == 2:
-                    bullet = Bullet(2, self.center_x, self.center_y, c.BULLET_SPEED)
-                else:
-                    bullet = Bullet(1, self.center_x, self.center_y, c.BULLET_SPEED)
-                self.bullet_list.append(bullet)
+                #peashooter and snowball
+                if self.type == 2 or self.type == 3:
+                    bullet = Bullet(self.type, self.center_x, self.center_y, c.BULLET_SPEED,self.damage)
+                    self.bullet_list.append(bullet)
+
+                #double bullet
+                if self.type == 5:
+                    bullet = Bullet(self.type, self.center_x, self.center_y, c.BULLET_SPEED,self.damage)
+                    #slight offset for bullet 2
+                    bullet2 = Bullet(self.type, self.center_x+50, self.center_y, c.BULLET_SPEED,self.damage)
+                    self.bullet_list.append(bullet)
+                    self.bullet_list.append(bullet2)
+
 
         return None

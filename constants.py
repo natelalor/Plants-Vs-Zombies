@@ -44,7 +44,7 @@ attackers_data = {
     1: {
         'name': 'lollipop',
         'speed': 1,
-        'damage': 15,
+        'damage': 5,
         'durability': 100,
         'attack_speed': 1.5,
         'image': "images/lolli_enemy.png",
@@ -52,7 +52,7 @@ attackers_data = {
     2: {
         'name': 'chocolate',
         'speed': 1,
-        'damage': 15,
+        'damage': 5,
         'durability': 100,
         'attack_speed': 3,
         'image': "images/chocolate_enemy.png",
@@ -60,7 +60,7 @@ attackers_data = {
     3: {
         'name': 'creampuff',
         'speed': 1,
-        'damage': 15,
+        'damage': 5,
         'durability': 100,
         'attack_speed': 2,
         'image': "images/lolli_enemy.png",
@@ -69,33 +69,41 @@ attackers_data = {
 }
 defenders_data = {
     1: {
-        'name': 'toothbrush',
-        'speed': 1,
-        'damage': 1,
-        'durability': 20,
-        'image': "images/toothbrush_ally.png",
-    },
-    2: {
-        'name': 'toothpaste',
-        'speed': 1,
-        'damage': 1,
-        'durability': 20,
-        'image': "images/toothbrush_ally.png",
-    },
-    3: {
-        'name': 'floss',
-        'speed': 1,
-        'damage': 1,
-        'durability': 500,
-        'image': "images/toothbrush_ally.png",
-    },
-    4: {
         'name': 'sunflower',
         'speed': 1,
         'damage': 1,
         'durability': 1,
         'image': "images/sunflower.png",
+    },
+    2: {
+        'name': 'peashooter',
+        'speed': 1,
+        'damage': 15,
+        'durability': 20,
+        'image': "images/toothbrush_ally.png",
+    },
+    3: {
+        'name': 'iceshooter',
+        'speed': 1,
+        'damage': 8,
+        'durability': 20,
+        'image': "images/toothbrush_ally.png",
+    },
+    4: {
+        'name': 'wall',
+        'speed': 1,
+        'damage': 1,
+        'durability': 500,
+        'image': "images/toothbrush_ally.png",
+    },
+    5: {
+        'name': 'doubleshooter',
+        'speed': 1,
+        'damage': 15,
+        'durability': 20,
+        'image': "images/toothbrush_ally.png",
     }
+    
 }
 
 waves = {
