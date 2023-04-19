@@ -13,11 +13,15 @@ from scipy.integrate import quad
 import time
 import multiprocessing
 import arcade.gui
+from sunflower import Sunflower
 
 
-class Game(arcade.Window):
-    def __init__(self, level: int):
-        super().__init__(c.SCREEN_WIDTH, c.SCREEN_HEIGHT, c.SCREEN_TITLE)
+class Game(arcade.View):
+    def __init__(self, level: int, window):
+        super().__init__(window)
+        # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
+        # arcade.set_background_color(arcade.color.ANDROID_GREEN)
+
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         self.live_attackers = None
@@ -94,6 +98,8 @@ class Game(arcade.Window):
                 self.plant5_selected = False
                 self.plant4_selected = False
 
+
+
         @shovel_button.event("on_click")
         def on_click_settings(event):
             if (self.shovel_selected):
@@ -135,6 +141,7 @@ class Game(arcade.Window):
                 self.plant5_selected = False
                 self.shovel_selected = False
 
+
         @plant4_button.event("on_click")
         def on_click_settings(event):
             if (self.plant4_selected):
@@ -173,6 +180,7 @@ class Game(arcade.Window):
                 child=self.h_box)
         )
 
+
     def setup(self):
         self.total_attacker_weight = 0
         self.scaled_attackers = []
@@ -186,21 +194,22 @@ class Game(arcade.Window):
         # TEMP SUN CREATION
         # self.sun1 = Sun()
         self.sun_list = arcade.SpriteList()
-        for x in range(0, 2):
-            sun = Sun()
-            self.sun_list.append(sun)
 
+        for x in range(0, 10):
+            sun = Sun(sunflower_sun=False)
+            self.sun_list.append(sun)
 
         #test bullet and defenders
         self.defender_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
-        defender1 = Defender(1,1,self.bullet_list,1.5)
-        self.defender_list.append(defender1)
-        defender3 = Defender(2,3,self.bullet_list,1.3)
+        # defender1 = Defender(1,1,self.bullet_list,1.5)
+        # self.defender_list.append(defender1)
+        defender3 = Defender(2,1,self.bullet_list,1.3, [0,0])
         self.defender_list.append(defender3)
-        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5))
-        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5))
-        self.defender_list.append(Defender(1, 5, self.bullet_list, 1.5))
+        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5, [1,0]))
+        self.defender_list.append(Defender(1, 3, self.bullet_list, 1.5, [2,0]))
+        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [3,0]))
+        self.defender_list.append(Sunflower(4, 2, [3,2]))
         self.num_attackers_to_kill = len(self.waves[0])
 
 
@@ -242,9 +251,7 @@ class Game(arcade.Window):
         self.attackers_list.append(self.attackers_list.pop(first_max))  # move it to the end
         for attacker in self.attackers_list:  # set the lanes
             attacker.set_position_lane(random_lane())
-        print("FIXED ATTACKERS_LIST")
-        for i in self.attackers_list:
-            print(i.get_type(), end=", ")
+
 
 
     def create_attackers(self):
@@ -270,17 +277,55 @@ class Game(arcade.Window):
         # clicked = 0
         print("Mouse button is pressed")
 
-        # sun click testing
-        for z in self.sun_list:
-            if z.in_sun(x, y):
-                if self.sun_list != None:
-                    self.currency += c.SUN_ADDITION
+        #testing getting the square 
+         
+        for row in self.grid.grid_list:
+            for square in row:
+                if square.in_square(x,y):
+                    print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
 
-                # make sprite disappear
-                # self.sun_list.remove(z)
+                    lane = square.get_position()[0] + 1
+                    print(lane)
 
-                # prime it to be removed
-                z.turn_to_dead()
+                    if (self.plant1_selected):
+                        if self.currency >= 50:
+                            defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 50
+                    elif (self.plant2_selected):
+                        if self.currency >= 100:
+                            defender = Defender(2, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 100
+                    elif (self.plant3_selected):
+                        if self.currency >= 150:
+                            defender = Defender(3, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 150
+                    elif (self.plant4_selected):
+                        if self.currency >= 200:
+                            defender = Defender(4, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 200
+                    elif (self.plant5_selected):
+                        if self.currency >= 300:
+                            defender = Defender(5, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(defender)
+                            self.currency -= 300
+                    elif (self.shovel_selected):
+                        if square.has_plant:
+                            # TODO: make a way to figure out if a square has a defender.
+                            #       if that is true, remove it here
+                            print("shovel square: ", square.get_position())
+
+
+        self.bullet_list.update()
+        self.defender_list.update()
+
+        for defender in self.defender_list:
+            if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
+                self.currency += c.SUN_ADDITION
+                self.sun_list.remove(defender.collect_sun())
 
 
 
@@ -297,7 +342,6 @@ class Game(arcade.Window):
 
         self.live_attackers.draw()
 
-        self.sun_list.draw()
         self.defender_list.draw()
         self.bullet_list.draw()
 
@@ -375,26 +419,34 @@ class Game(arcade.Window):
         if (self.shovel_selected):
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
             arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76, border_width=5)
+
+        self.sun_list.draw()
+
         # TEMPORARY SUN DRAWING
         # if self.sun1.sun_list != None:
         #     self.sun1.sun_list.draw()
     def on_update(self, delta_time):
         self.game_time += delta_time
+        if self.game_time%10==0:
+            self.sun_list.append(Sun(False))
         current_total = 0
+        sun = None
         for defender in self.defender_list:
+            sun = defender.on_update(delta_time)
+            if sun:
+                sun.set_position(defender.center_x, defender.center_y)
+                self.sun_list.append(sun)
             defender.is_active = False
             for attacker in self.live_attackers:
                 if attacker.lane == defender.lane:
                     defender.is_active = True
-                    break
+                   
         # Wave 0 is just random spawning
         # to spawn attackers
         if self.current_wave == 0:
             if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:  # +10 for now because game time atarts at ~10
                 self.wait_to_start_wave = False
-                print(self.game_time, self.wave_0_spawn_times[0])
                 self.wave_0_spawn_times.pop(0)
-                print(self.wave_0_spawn_times)
                 self.live_attackers.append(self.waves[0].pop(0))
             if not self.live_attackers and not self.wait_to_start_wave:
                 self.current_wave += 1
@@ -404,7 +456,6 @@ class Game(arcade.Window):
         # Waves 1 and 2 are released all at once (ish)
         elif self.current_wave == 1 or self.current_wave == 2: # for the actual waves of attackers
             if self.game_time > self.pause_between_waves:  # wait 10 secs between waves
-                print("WAVE", self.current_wave)
                 if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
                     self.live_attackers.append(self.waves[self.current_wave].pop(0))
                     self.wait_to_start_wave = False
@@ -427,9 +478,29 @@ class Game(arcade.Window):
             if attacker.is_dead():
                 self.live_attackers.remove(attacker)
 
+            #attack defender
+            if arcade.check_for_collision_with_list(attacker,self.defender_list):
+                defenderHit = arcade.check_for_collision_with_list(attacker, self.defender_list)[0]
+                #set speed to 0
+                attacker.speed = 0
+                #if time is greater than attack duration attack
+                if attacker.ready_to_attack(delta_time):
+                
+                
+                    defenderHit.decrement_health(attacker.damage)
+                    print(f'Damaged defender: {defenderHit.durability}')
+                #if defender is dead reset speed
+                if defenderHit.is_dead():
+                    self.defender_list.remove(defenderHit)
+                    
+            #reset speed for multiple attackers after defender dies
+            if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
+                attacker.reset_speed()
+
+        self.defender_list.update()
 
         #testing updtaing bullets and such
-        self.defender_list.on_update(delta_time)
+        # self.defender_list.on_update(delta_time)
         for bullet in self.bullet_list:
             if bullet.center_x > c.SCREEN_WIDTH:
                 bullet.remove_from_sprite_lists()
@@ -447,23 +518,13 @@ class Game(arcade.Window):
 
         self.bullet_list.update()
 
-
-        # SUN DISTRIBUTION & MOVEMENT
-
-        # to gauge sun spawn frequency
-        if random.randint(0, 1000) > 700:
-            # if sun_list still has sun (error handling)
-            if len(self.sun_list) != None:
-                # move one sun
-                x = self.sun_list[0]
-                x.move()
-                # if it is clicked, or if it goes offscreen,
-                # delete it and add a new one to sun_list
-                if (x.is_dead()) or (x.center_y < 0):
-                    self.sun_list.remove(x)
-                    sun = Sun()
-                    self.sun_list.append(sun)
-
+        #SUN MOVEMENT
+        for sun in self.sun_list:
+            if sun.lifespan < 0:
+                self.sun_list.remove(sun)
+            else:
+                sun.move()
+                # print("moving: ", x)
 
 
 

@@ -1,5 +1,6 @@
 SCREEN_TITLE = "Plants vs. Zombies"
-
+TEST_WIDTH = 1200
+TEST_HEIGHT = 800
 # grid dimensions
 SIZE_COLUMNS = 9
 SIZE_ROWS = 5
@@ -43,22 +44,25 @@ attackers_data = {
     1: {
         'name': 'lollipop',
         'speed': 1,
-        'damage': 1,
+        'damage': 15,
         'durability': 100,
+        'attack_speed': 1.5,
         'image': "images/lolli_enemy.png",
     },
     2: {
         'name': 'chocolate',
         'speed': 1,
-        'damage': 1,
+        'damage': 15,
         'durability': 100,
+        'attack_speed': 3,
         'image': "images/chocolate_enemy.png",
     },
     3: {
         'name': 'creampuff',
         'speed': 1,
-        'damage': 1,
+        'damage': 15,
         'durability': 100,
+        'attack_speed': 2,
         'image': "images/lolli_enemy.png",
     },
 
@@ -68,22 +72,29 @@ defenders_data = {
         'name': 'toothbrush',
         'speed': 1,
         'damage': 1,
-        'durability': 1,
+        'durability': 20,
         'image': "images/toothbrush_ally.png",
     },
     2: {
         'name': 'toothpaste',
         'speed': 1,
         'damage': 1,
-        'durability': 1,
+        'durability': 20,
         'image': "images/toothbrush_ally.png",
     },
     3: {
         'name': 'floss',
         'speed': 1,
         'damage': 1,
-        'durability': 1,
+        'durability': 500,
         'image': "images/toothbrush_ally.png",
+    },
+    4: {
+        'name': 'sunflower',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/sunflower.png",
     }
 }
 
@@ -110,3 +121,5 @@ BULLET_SPEED = 4
 
 GAME_LENGTH = 60
 FIRST_ROUND_PERCENT = .4
+
+SUNFLOWER_WAIT_TIME = 10
