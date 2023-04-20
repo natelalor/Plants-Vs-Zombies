@@ -90,7 +90,7 @@ defenders_data = {
         'speed': 1,
         'damage': 8,
         'durability': 20,
-        'image': "images/SnowPea.png",
+        'image': "GUI/SnowPea.png",
         'cost': 100
     },
     4: {
