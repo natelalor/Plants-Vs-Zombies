@@ -27,14 +27,14 @@ class Grid:
             for column in range(self.size_columns):
                 # Messing with lawn-like color patterns for the grid
                 if row % 2 == 0:
-                    color = arcade.color.ANDROID_GREEN
+                    color = (155, 245, 66, 100)
                     if column % 2 != 0:
-                        color = arcade.color.CITRON
+                        color = (197, 245, 66, 100)
 
                 elif column % 2 == 0:
-                    color = arcade.color.BITTER_LEMON
+                    color = (218, 245, 66, 100)
                 else:
-                    color = arcade.color.APPLE_GREEN
+                    color = (56, 161, 3, 100)
 
 
                 # The math to make evenly sized/spaced squares
@@ -43,6 +43,8 @@ class Grid:
                 self.grid_list[row][column].set_coords(x,y)
 
                 # Draw the box
-                arcade.draw_rectangle_filled(x, y, 100, 100, color)
+                arcade.draw_rectangle_outline(x, y, 100, 100, color)
+
+
 
 

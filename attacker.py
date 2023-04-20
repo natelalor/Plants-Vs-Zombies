@@ -18,11 +18,67 @@ class Attacker(arcade.Sprite):
         self.time_between_attacking = attackers_data[self.type]['attack_speed']
         self.position = [0, 0]
         self.dead = False
+        self.done = False
+
+        # Load textures
+        self.cur_texture = 0
+        self.dead_texture = 0
+        self.walk_textures = []
+        self.death_textures = []
+
+        # Load texture based off of attacker type
+        if self.name == 'zombie':
+            main_path = "animations/zombie_walk/"
+            self.num_pngs = 22
+            self.num_row = 4
+        elif self.name == 'conehead_zombie':
+            main_path = "animations/conehead_walk/"
+            self.num_pngs = 21
+            self.num_row = 4
+        elif self.name == 'buckethead_zombie':
+            main_path = "animations/buckethead_walk/"
+            self.num_pngs = 14
+            self.num_row = 3
+
+        # Load all the pngs from the correct path into a list
+        h = 0
+        q = 0
+
+        d = 0
+
+
+
+
+        # Load texture based off of attacker type
+        if self.name == 'zombie':
+            main_path = "animations/zombie_walk/"
+            self.num_pngs = 11
+        elif self.name == 'conehead_zombie':
+            main_path = "animations/conehead_walk/"
+            self.num_pngs = 11
+        elif self.name == 'buckethead_zombie':
+            main_path = "animations/buckethead_walk/"
+            self.num_pngs = 14
+
+        # Load all the pngs from the correct path into a list
+        x = 0
+        for i in range(self.num_pngs):
+            texture = arcade.load_texture(f"{main_path}{x}.png")
+            self.walk_textures.append(texture)
+            x += 1
+        x = 0
+        for i in range(12):
+            texture = arcade.load_texture(f"animations/zombie_death/{x}.png")
+            self.death_textures.append(texture)
+            x += 1
+
 
     def is_dead(self):
         if self.durability <= 0:
             self.dead = True
         return self.dead
+    def is_done(self):
+        return self.done
 
     def kill(self):
         self.dead = True
@@ -112,15 +168,42 @@ class Attacker(arcade.Sprite):
     def ready_to_attack(self, delta_time: float = 1 / 60):
 
         self.time_since_last_attack += delta_time
-        
+
         attack = False
-        
+
         if self.time_since_last_attack >= self.time_between_attacking:
             self.time_since_last_attack = 0
             attack = True
             # create the bullet
-        
+
         return attack
-    
+
     def reset_speed(self):
         self.speed = attackers_data[self.type]['speed']
+
+
+    def update_animation(self, delta_time: float = 1 / 60):
+
+        # sets texture to the correct one in the list
+
+        if self.dead:
+            self.texture = self.death_textures[self.dead_texture]
+            self.dead_texture += 1
+            if self.dead_texture >= 11:
+                #self.dead_texture = 0
+                self.done = True
+
+
+
+        else:
+            self.cur_texture += 1
+            if self.cur_texture >= self.num_pngs:
+                self.cur_texture = 0
+            frame = self.cur_texture
+
+            self.texture = self.walk_textures[frame]
+
+
+
+
+

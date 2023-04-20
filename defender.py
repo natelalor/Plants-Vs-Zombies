@@ -28,6 +28,48 @@ class Defender(arcade.Sprite):
         # self.position = [0, 0]
 
         self.set_position(self.position_placement)
+        # animations
+        self.cur_texture = 0
+        # main path is determined by what type of defender it is
+        if self.name == 'peashooter':
+            main_path = "animations/pea_shooter/"
+            #num_legnth = 800
+            #num_height = 800
+            self.num_png = 13
+        if self.name == 'snowpea':
+            main_path = "animations/snowpea/"
+            num_legnth = 800
+            num_height = 800
+            self.num_png = 15
+        if self.name == 'repeater':
+            main_path = "animations/Repeater/"
+            #num_legnth = 900
+            #num_height = 875
+            self.num_png = 11
+        if self.name == 'WallNut':
+            main_path = "animations/WallNut/"
+            self.num_png = 10
+        if self.name == 'sunflower':
+            main_path = "animations/sunflower/"
+            self.num_png = 9
+
+        # Load textures into a list
+        self.cur_texture = 0
+        self.idle_textures = []
+        self.all_sprites_list = arcade.SpriteList()
+
+        x = 0
+        for i in range(self.num_png):
+            #texture = arcade.load_texture(f"animations/{main_path}", x = i*num_legnth,y= 0, width=num_legnth, height= num_height, )
+            texture = arcade.load_texture(f"{main_path}/{x}.png")
+            self.idle_textures.append(texture)
+            x += 1
+
+        # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
+        # sprite creation
+
+        self.set_position(self.lane)
+        print("inside defender sprite creation. sprite created: ", self.type, self.lane)
 
     def is_dead(self):
         if self.durability <= 0:
@@ -103,3 +145,13 @@ class Defender(arcade.Sprite):
 
 
         return None
+
+    def update_animation(self, delta_time: float = 1 / 60):
+
+        # sets texture to the correct one in the list
+        self.cur_texture += 1
+        if self.cur_texture >= self.num_png:
+            self.cur_texture = 0
+        frame = self.cur_texture
+
+        self.texture = self.idle_textures[frame]

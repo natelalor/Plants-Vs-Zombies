@@ -9,8 +9,8 @@ class Bullet(arcade.Sprite):
         self.speed_change = 1
         self.damage = damage
         
-        self.x = x
-        self.y = y
+        self.x = x + 10
+        self.y = y + 10
 
         if self.type == 2:
             super().__init__("images/baseball.png", 0.08)

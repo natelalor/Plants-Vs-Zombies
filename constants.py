@@ -42,24 +42,26 @@ enemiesDict = {1: "easy",
                4: "bucket"}
 attackers_data = {
     1: {
-        'name': 'lollipop',
-        'speed': 1,
+
+        'name': 'conehead_zombie',
+        'speed': .7,
         'damage': 5,
         'durability': 100,
         'attack_speed': 1.5,
         'image': "images/lolli_enemy.png",
     },
     2: {
-        'name': 'chocolate',
-        'speed': 1,
+        'name': 'zombie',
+
+        'speed': .7,
         'damage': 5,
         'durability': 100,
         'attack_speed': 3,
         'image': "images/chocolate_enemy.png",
     },
     3: {
-        'name': 'creampuff',
-        'speed': 1,
+        'name': 'buckethead_zombie',
+        'speed': .7,
         'damage': 5,
         'durability': 100,
         'attack_speed': 2,
@@ -83,27 +85,26 @@ defenders_data = {
         'image': "images/toothbrush_ally.png",
     },
     3: {
-        'name': 'iceshooter',
+        'name': 'snowpea',
         'speed': 1,
         'damage': 8,
         'durability': 20,
         'image': "images/toothbrush_ally.png",
     },
     4: {
-        'name': 'wall',
+        'name': 'WallNutt',
         'speed': 1,
         'damage': 1,
         'durability': 500,
         'image': "images/toothbrush_ally.png",
     },
     5: {
-        'name': 'doubleshooter',
+        'name': 'repeater',
         'speed': 1,
         'damage': 15,
         'durability': 20,
         'image': "images/toothbrush_ally.png",
     }
-    
 }
 
 waves = {

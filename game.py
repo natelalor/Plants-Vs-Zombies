@@ -41,6 +41,10 @@ class Game(arcade.View):
         # for defender selection/deselection
         self.clicked = 0
 
+        # aniamtion
+        self.update_animation = True
+        self.frame_count = 0
+
         #testing Defenders and Bullets
         self.defender_list = None
         self.bullet_list = None
@@ -50,30 +54,28 @@ class Game(arcade.View):
 
         # Creating the buttons, each button has a loaded texture for hover, and clicked
 
-        plant1_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sunflower.png'),texture_hovered= arcade.load_texture('images/sunflowerHover.png'),texture_pressed=arcade.load_texture('images/sunflowerSelected.png'), width=75, height= 75)
+        plant1_button = arcade.gui.UITextureButton( texture=arcade.load_texture('GUI/sunflower.png'),texture_hovered= arcade.load_texture('GUI/sunflowerHover.png'),texture_pressed=arcade.load_texture('GUI/sunflowerSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant1_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/pea_shooter.png'),texture_hovered= arcade.load_texture('GUI/pea_shooter_hover.png'),texture_pressed=arcade.load_texture('GUI/pea_shooter_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant2_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/Wall-nut.png'),texture_hovered= arcade.load_texture('GUI/Wall-nut_hover.png'),texture_pressed=arcade.load_texture('GUI/Wall-nut_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant3_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/SnowPea.png'),texture_hovered= arcade.load_texture('GUI/SnowPea_Hover.png'),texture_pressed=arcade.load_texture('GUI/SnowPea_Selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant4_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('images/peaShooter.png'),texture_hovered= arcade.load_texture('images/peaShooterHover.png'),texture_pressed=arcade.load_texture('images/peaShooterSelected.png'), width=75, height= 75)
+        plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(plant5_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('images/shovel.png'),texture_hovered= arcade.load_texture('images/shovel.png'),texture_pressed=arcade.load_texture('images/shovel.png'), width=75, height= 75)
+        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/shovel.png'),texture_hovered= arcade.load_texture('GUI/Shovel_hover.png'),texture_pressed=arcade.load_texture('GUI/Shovel_selected.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(shovel_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
         sun = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sun.png'), width=75, height= 75)
         self.h_box.add(arcade.gui.UIBorder(sun.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
 
-        # THIS MIGHT BE TEMPORARY its just to display the round
-        round = arcade.gui.UITextureButton(texture=arcade.load_texture('images/round.png'), width=100, height= 100)
-        self.h_box.add(round.with_space_around(left=155))
+
 
         # Initially all plant selections are set to false, these are only true if a plant is clicked on
         self.plant1_selected = False
@@ -199,6 +201,7 @@ class Game(arcade.View):
             sun = Sun(sunflower_sun=False)
             self.sun_list.append(sun)
 
+
         #test bullet and defenders
         self.defender_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
@@ -220,6 +223,7 @@ class Game(arcade.View):
         # for i in c.SIZE_ROWS:
         #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
 
+        self.background = arcade.load_texture("images/garden.jpg")
 
     def randomize(self):
         def random_lane() -> int:
@@ -278,13 +282,13 @@ class Game(arcade.View):
         # clicked = 0
         print("Mouse button is pressed")
 
-        #testing getting the square 
-         
+        #testing getting the square
+
         for row in self.grid.grid_list:
             for square in row:
                 if square.in_square(x,y):
                     print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
-                    
+
                     lane = square.get_position()[0] + 1
                     print(lane)
 
@@ -342,6 +346,7 @@ class Game(arcade.View):
         # self.clear()
 
         arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
         self.grid.grid_draw()
         self.scene.draw()
         # self.live_attackers.draw()
@@ -349,10 +354,13 @@ class Game(arcade.View):
 
         self.live_attackers.draw()
 
+
         self.defender_list.draw()
         self.bullet_list.draw()
 
         #GUI
+        color = (64, 24, 17)
+        arcade.draw_rectangle_filled(100, 585, 1185, 100,color )
         self.manager.draw()
 
 
@@ -366,7 +374,7 @@ class Game(arcade.View):
             arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant5_selected):
                 arcade.draw_rectangle_filled(center_x=445, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=445, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width= 5)
+                arcade.draw_rectangle_outline(center_x=445, center_y=581, color=(59, 125, 44), width=76, height=76, border_width= 5)
                 arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=445, center_y=581,color=(50, 50, 50, 200), width=75, height=75 )
@@ -378,7 +386,7 @@ class Game(arcade.View):
             arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant4_selected):
                 arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=346, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=346, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
@@ -390,7 +398,7 @@ class Game(arcade.View):
             arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant3_selected):
                 arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
 
         else:
@@ -403,11 +411,12 @@ class Game(arcade.View):
             arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant2_selected):
                 arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=150, center_y=581, color=(154, 205, 50, 255), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=150, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
             arcade.draw_text(str(100), 123.5, 535, arcade.color.RED, 20, 40, 'center')
+
             self.plant2_selected = False
 
         # FIRST GUI SLOT
@@ -415,7 +424,7 @@ class Game(arcade.View):
             arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             if (self.plant1_selected):
                 arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=50, center_y=581, color=(245, 245, 0), width=76, height=76, border_width=5)
+                arcade.draw_rectangle_outline(center_x=50, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
                 arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
         else:
             arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
@@ -447,7 +456,7 @@ class Game(arcade.View):
             for attacker in self.live_attackers:
                 if attacker.lane == defender.lane:
                     defender.is_active = True
-                   
+                    break
         # Wave 0 is just random spawning
         # to spawn attackers
         if self.current_wave == 0:
@@ -483,7 +492,8 @@ class Game(arcade.View):
                 attacker.kill()
             #testing killing attackers
             if attacker.is_dead():
-                self.live_attackers.remove(attacker)
+                if attacker.is_done():
+                    self.live_attackers.remove(attacker)
 
             #attack defender
             if arcade.check_for_collision_with_list(attacker,self.defender_list):
@@ -492,8 +502,8 @@ class Game(arcade.View):
                 attacker.speed = 0
                 #if time is greater than attack duration attack
                 if attacker.ready_to_attack(delta_time):
-                
-                
+
+
                     defenderHit.decrement_health(attacker.damage)
                     print(f'Damaged defender: {defenderHit.durability}')
                 #if defender is dead reset speed
@@ -502,7 +512,7 @@ class Game(arcade.View):
                     self.defender_list.remove(defenderHit)
 
 
-                    
+
             #reset speed for multiple attackers after defender dies
             if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
                 attacker.reset_speed()
@@ -518,10 +528,11 @@ class Game(arcade.View):
                 #get the sprite object hit by the bullet
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 #different effects for each bullet type
-                
-                
+
+
+
                 attackerHit.alter_speed(bullet.speed_change) #only changes for snowball
-                attackerHit.decrement_health(bullet.damage)   
+                attackerHit.decrement_health(bullet.damage)
                 bullet.remove_from_sprite_lists()
 
         self.bullet_list.update()
@@ -533,6 +544,18 @@ class Game(arcade.View):
             else:
                 sun.move()
                 # print("moving: ", x)
+
+        if self.update_animation:
+            self.live_attackers.update_animation()
+            self.defender_list.update_animation()
+
+            self.update_animation = False
+        else:
+            if self.frame_count >= 2:
+                self.frame_count = 0
+                self.update_animation = True
+            else:
+                self.frame_count += 1
 
 
 
