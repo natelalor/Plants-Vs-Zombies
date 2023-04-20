@@ -94,7 +94,7 @@ defenders_data = {
         'cost': 100
     },
     4: {
-        'name': 'WallNutt',
+        'name': 'WallNut',
         'speed': 1,
         'damage': 1,
         'durability': 500,
