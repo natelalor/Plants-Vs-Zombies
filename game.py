@@ -18,8 +18,6 @@ class Game(arcade.View):
         # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
         # arcade.set_background_color(arcade.color.ANDROID_GREEN)
 
-        self.scaled_attackers = None
-        self.total_attacker_weight = None
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         self.live_attackers = None
@@ -108,7 +106,6 @@ class Game(arcade.View):
         self.plant4_selected = False
         self.plant5_selected = False
         self.shovel_selected = False
-        self.selected_item = None
 
         # each of these controls an individual button
         # when clicked it sets the buttons selected variable to true and all the other buttons to false
@@ -205,8 +202,6 @@ class Game(arcade.View):
         )
 
     def setup(self):
-        self.total_attacker_weight = 0
-        self.scaled_attackers = []
         self.attackers_list = arcade.SpriteList()
         self.live_attackers = arcade.SpriteList()
         self.create_attackers()
@@ -218,8 +213,9 @@ class Game(arcade.View):
         # self.sun1 = Sun()
         self.sun_list = arcade.SpriteList()
 
-        # sun = Sun(sunflower_sun=False)
-        # self.sun_list.append(sun)
+        for x in range(0, 10):
+            sun = Sun(sunflower_sun=False)
+            self.sun_list.append(sun)
 
         # test bullet and defenders
         self.defender_list = arcade.SpriteList()
@@ -228,10 +224,10 @@ class Game(arcade.View):
         # self.defender_list.append(defender1)
         defender3 = Defender(2, 1, self.bullet_list, 1.3, [0, 0])
         self.defender_list.append(defender3)
-        self.defender_list.append(Defender(1, 2, self.bullet_list, 1.5, [1, 0]))
-        self.defender_list.append(Defender(1, 3, self.bullet_list, 1.5, [2, 0]))
-        self.defender_list.append(Defender(1, 4, self.bullet_list, 1.5, [3, 0]))
-        self.defender_list.append(Sunflower(4, 2, [3, 2]))
+        self.defender_list.append(Defender(2, 2, self.bullet_list, 1.5, [1, 0]))
+        self.defender_list.append(Defender(2, 3, self.bullet_list, 1.5, [2, 0]))
+        self.defender_list.append(Defender(2, 4, self.bullet_list, 1.5, [3, 0]))
+        self.defender_list.append(Sunflower(1, 2, [3, 2]))
         self.num_attackers_to_kill = len(self.waves[0])
 
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
@@ -293,7 +289,7 @@ class Game(arcade.View):
         # clicked = 0
         print("Mouse button is pressed")
 
-        # testing getting the square 
+        # testing getting the square
 
         for row in self.grid.grid_list:
             for square in row:
@@ -303,36 +299,42 @@ class Game(arcade.View):
                     lane = square.get_position()[0] + 1
                     print(lane)
 
-                    if (self.plant1_selected):
+                    if (self.plant1_selected) and (not square.has_plant):
                         if self.currency >= 50:
-                            defender = Sunflower(4, lane, square.get_position())
-                            self.defender_list.append(defender)
+                            defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
+                            self.defender_list.append(Sunflower(1, lane,square.get_position()))
                             self.currency -= 50
-                    elif (self.plant2_selected):
+                            square.add_plant()
+                    elif (self.plant2_selected) and (not square.has_plant):
                         if self.currency >= 100:
                             defender = Defender(2, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 100
-                    elif (self.plant3_selected):
+                            square.add_plant()
+                    elif (self.plant3_selected) and (not square.has_plant):
                         if self.currency >= 150:
                             defender = Defender(3, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 150
-                    elif (self.plant4_selected):
+                            square.add_plant()
+                    elif (self.plant4_selected) and (not square.has_plant):
                         if self.currency >= 200:
                             defender = Defender(4, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 200
-                    elif (self.plant5_selected):
+                            square.add_plant()
+                    elif (self.plant5_selected) and (not square.has_plant):
                         if self.currency >= 300:
                             defender = Defender(5, lane, self.bullet_list, 1.5, square.get_position())
                             self.defender_list.append(defender)
                             self.currency -= 300
+                            square.add_plant()
                     elif (self.shovel_selected):
                         if square.has_plant:
-                            # TODO: make a way to figure out if a square has a defender.
-                            #       if that is true, remove it here
-                            print("shovel square: ", square.get_position())
+                            for plant in self.defender_list:
+                                if plant.get_position() == square.get_position():
+                                    self.defender_list.remove(plant)
+                                    square.remove_plant()
 
         self.bullet_list.update()
         self.defender_list.update()
@@ -512,10 +514,16 @@ class Game(arcade.View):
                     if isinstance(defenderHit, Sunflower):
                         if defenderHit.has_sun:
                             defenderHit.sun
+                    # TODO: add remove_plant() on its square so it can be used again to place a new defender
                     self.defender_list.remove(defenderHit)
 
             # reset speed for multiple attackers after defender dies
             if not arcade.check_for_collision_with_list(attacker, self.defender_list) and attacker.speed == 0:
+
+
+
+            #reset speed for multiple attackers after defender dies
+            if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
                 attacker.reset_speed()
 
         self.defender_list.update()
@@ -535,6 +543,11 @@ class Game(arcade.View):
                 else:
                     attackerHit.alter_speed(.9)
                     attackerHit.decrement_health(8)
+                #different effects for each bullet type
+
+
+                attackerHit.alter_speed(bullet.speed_change) #only changes for snowball
+                attackerHit.decrement_health(bullet.damage)
                 bullet.remove_from_sprite_lists()
 
         self.bullet_list.update()
