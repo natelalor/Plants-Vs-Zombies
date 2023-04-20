@@ -511,6 +511,7 @@ class Game(arcade.View):
 
             # reset speed for multiple attackers after defender dies
             if not arcade.check_for_collision_with_list(attacker, self.defender_list) and attacker.speed == 0:
+                pass
 
 
 
