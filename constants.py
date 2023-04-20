@@ -69,15 +69,15 @@ attackers_data = {
 }
 defenders_data = {
     1: {
-        'name': 'pea-shooter',
+        'name': 'peaShooter',
         'speed': 1,
         'damage': 1,
         'durability': 20,
         'image': "images/peaShooter.png",
-        'cost' : 100
+        'cost': 100
     },
     2: {
-        'name': 'toothpaste',
+        'name': 'peaShooter',
         'speed': 1,
         'damage': 1,
         'durability': 20,
@@ -93,6 +93,22 @@ defenders_data = {
         'cost' : 100
     },
     4: {
+        'name': 'sunflower',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/sunflower.png",
+        'cost' : 50
+    },
+5: {
+        'name': 'sunflower',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/sunflower.png",
+        'cost' : 50
+    },
+6: {
         'name': 'sunflower',
         'speed': 1,
         'damage': 1,
@@ -127,3 +143,5 @@ GAME_LENGTH = 60
 FIRST_ROUND_PERCENT = .4
 
 SUNFLOWER_WAIT_TIME = 10
+
+NUMBER_OF_DEFENDERS = 5

@@ -6,7 +6,6 @@ import random
 class Sun(arcade.Sprite):
 
     def __init__(self, sunflower_sun):
-
         super().__init__("images/sun.png", 0.05)
         self.speed = 2
         self.location = []
