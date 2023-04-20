@@ -498,7 +498,10 @@ class Game(arcade.View):
                     print(f'Damaged defender: {defenderHit.durability}')
                 #if defender is dead reset speed
                 if defenderHit.is_dead():
+                    # TODO: add remove_plant() on its square so it can be used again to place a new defender
                     self.defender_list.remove(defenderHit)
+
+
                     
             #reset speed for multiple attackers after defender dies
             if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
