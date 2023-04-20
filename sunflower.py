@@ -7,7 +7,7 @@ from sun import Sun
 
 
 class Sunflower(Defender):
-    def __init__(self, type, lane,position_placement):
+    def __init__(self, type, lane, position_placement):
         super().__init__(type, lane, None, 0,position_placement)
         self.wait_time = c.SUNFLOWER_WAIT_TIME
         self.has_sun = False

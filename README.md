@@ -1,11 +1,11 @@
-# CS205 Final Project (Team 2)
-## ____ vs. _____
+# Plants vs. Zombies
+#### CS205 Final Project (Team 2)
 
 
 ### Game Overview
 We set out to create a game similar to the popular game back in the day, Plants Vs. Zombies. 
-Using your different types of ____, you set up your defenses and stop the army of ________ coming
-at you. 
+Using your different types of plants, you set up your defenses and stop the army of zombies coming
+at you. If they get passed your defenses, you lose!
 
 
 ### System Overview
@@ -13,7 +13,7 @@ We created this game from the ground up using Python and the Python Arcade libra
 
 
 ### Running Instructions
-Navigate yourself to our main.py and run that file. Everything else will be taken care of. Good luck against the hordes!
+Navigate yourself to our main.py and run that file. Everything else will be taken care of. Good luck against the zombie hordes!
 
 
 ### Conclusion
@@ -30,4 +30,4 @@ we didn't have time to add ** any errors we have at the end ** etc
 - Simon Garen
 
 
-_Project Timeline: February 22nd, 2023 - May ?, 2023_
+_Project Timeline: February 22nd, 2023 - May 5, 2023_

@@ -76,13 +76,15 @@ defenders_data = {
         'damage': 1,
         'durability': 1,
         'image': "images/sunflower.png",
+        'cost':50
     },
     2: {
         'name': 'peashooter',
         'speed': 1,
         'damage': 15,
         'durability': 20,
-        'image': "images/toothbrush_ally.png",
+        'image': "images/peaShooter.png",
+        'cost': 100
     },
     3: {
         'name': 'snowpea',
@@ -90,6 +92,7 @@ defenders_data = {
         'damage': 8,
         'durability': 20,
         'image': "images/toothbrush_ally.png",
+        'cost': 100
     },
     4: {
         'name': 'WallNutt',
@@ -97,14 +100,28 @@ defenders_data = {
         'damage': 1,
         'durability': 500,
         'image': "images/toothbrush_ally.png",
+        'cost': 100
     },
     5: {
         'name': 'repeater',
         'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/sunflower.png",
+        'cost' : 50
+    },
+6: {
+        'name': 'sunflower',
+        'speed': 1,
+        'damage': 1,
+        'durability': 1,
+        'image': "images/sunflower.png",
+        'cost' : 50,
         'damage': 15,
         'durability': 20,
         'image': "images/toothbrush_ally.png",
     }
+    
 }
 
 waves = {
@@ -132,3 +149,5 @@ GAME_LENGTH = 60
 FIRST_ROUND_PERCENT = .4
 
 SUNFLOWER_WAIT_TIME = 10
+
+NUMBER_OF_DEFENDERS = 5
