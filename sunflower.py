@@ -13,6 +13,15 @@ class Sunflower(Defender):
         self.has_sun = False
         self.time_without_sun = 0
         self.sun = None
+        self.cur_texture = 0
+        self.num_png = 18
+
+        x = 0
+        for i in range(self.num_png):
+            # texture = arcade.load_texture(f"animations/{main_path}", x = i*num_legnth,y= 0, width=num_legnth, height= num_height, )
+            texture = arcade.load_texture(f"animations/sunflower/{x}.png")
+            self.idle_textures.append(texture)
+            x += 1
 
     def collect_sun(self) -> Sun:
         if self.has_sun:
@@ -37,3 +46,13 @@ class Sunflower(Defender):
             self.sun.on_update(delta_time)
             if self.sun.lifespan <= 0:
                 self.collect_sun()
+
+    def update_animation(self, delta_time: float = 1 / 60):
+
+        # sets texture to the correct one in the list
+        self.cur_texture += 1
+        if self.cur_texture >= self.num_png:
+            self.cur_texture = 0
+        frame = self.cur_texture
+
+        self.texture = self.idle_textures[frame]
