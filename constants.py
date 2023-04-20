@@ -90,15 +90,15 @@ defenders_data = {
         'speed': 1,
         'damage': 8,
         'durability': 20,
-        'image': "images/toothbrush_ally.png",
+        'image': "GUI/SnowPea.png",
         'cost': 100
     },
     4: {
-        'name': 'WallNutt',
+        'name': 'WallNut',
         'speed': 1,
         'damage': 1,
         'durability': 500,
-        'image': "images/toothbrush_ally.png",
+        'image': "GUI/Wall-nut.png",
         'cost': 100
     },
     5: {
@@ -106,7 +106,7 @@ defenders_data = {
         'speed': 1,
         'damage': 1,
         'durability': 1,
-        'image': "GUI/sunflower.png",
+        'image': "GUI/pea_shooter.png",
         'cost' : 50
     },
 6: {
