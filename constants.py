@@ -52,7 +52,6 @@ attackers_data = {
     },
     2: {
         'name': 'zombie',
-
         'speed': .7,
         'damage': 5,
         'durability': 100,
@@ -75,7 +74,7 @@ defenders_data = {
         'speed': 1,
         'damage': 1,
         'durability': 1,
-        'image': "images/sunflower.png",
+        'image': "animations/sunflower/0.png",
         'cost':50
     },
     2: {
@@ -83,7 +82,7 @@ defenders_data = {
         'speed': 1,
         'damage': 15,
         'durability': 20,
-        'image': "images/peaShooter.png",
+        'image': "GUI/peaShooter.png",
         'cost': 100
     },
     3: {
@@ -107,7 +106,7 @@ defenders_data = {
         'speed': 1,
         'damage': 1,
         'durability': 1,
-        'image': "images/sunflower.png",
+        'image': "GUI/sunflower.png",
         'cost' : 50
     },
 6: {
@@ -115,7 +114,7 @@ defenders_data = {
         'speed': 1,
         'damage': 1,
         'durability': 1,
-        'image': "images/sunflower.png",
+        'image': "GUI/sunflower.png",
         'cost' : 50,
         'damage': 15,
         'durability': 20,
