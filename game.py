@@ -363,6 +363,9 @@ class Game(arcade.View):
                     #         self.sun_list.remove(defenderHit.sun)
                     #         self.sun_list.append(defenderHit.sun)
                     # TODO: add remove_plant() on its square so it can be used again to place a new defender
+                    position = defenderHit.get_position()
+                    square = self.grid.grid_list[position[0]][position[1]]
+                    square.remove_plant()
                     self.defender_list.remove(defenderHit)
 
             # reset speed for multiple attackers after defender dies
