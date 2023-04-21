@@ -18,6 +18,8 @@ class Game(arcade.View):
         # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
         # arcade.set_background_color(arcade.color.ANDROID_GREEN)
 
+        self.grid = None
+        self.background = None
         self.currency = None
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
@@ -42,7 +44,7 @@ class Game(arcade.View):
         # for defender selection/deselection
         self.clicked = 0
 
-        # aniamtion
+        # animation
         self.update_animation = True
         self.frame_count = 0
 
@@ -217,7 +219,7 @@ class Game(arcade.View):
                                     Defender(selected_id, lane, self.bullet_list, 1.5, square.get_position()))
                             self.currency -= button.cost
                             square.add_plant()
-                    elif (selected_id == 0):
+                    elif selected_id == 0:
                         if square.has_plant:
                             for plant in self.defender_list:
                                 if plant.get_position() == square.get_position():
@@ -266,8 +268,9 @@ class Game(arcade.View):
                 if button.id != 0:
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40,
                                      'center')  # draw the price in blue
-                if (self.gui_buttons[i].selected):  # if it is selected
-                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                if self.gui_buttons[i].selected:  # if it is selected
+                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), 
+                    # width=75, height=75)
                     arcade.draw_rectangle_outline(center_x=45 + i * 100, center_y=581, color=(154, 205, 50, 255),
                                                   width=76,
                                                   height=76, border_width=5)
@@ -309,9 +312,8 @@ class Game(arcade.View):
         # Wave 0 is just random spawning
         # to spawn attackers
         if self.current_wave == 0:
-            self.win_screen()
-            if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[
-                0] + 10:  # +10 for now because game time starts at ~10
+            if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:
+                # +10 for now because game time starts at ~10
                 self.wait_to_start_wave = False
                 self.wave_0_spawn_times.pop(0)
                 self.live_attackers.append(self.waves[0].pop(0))
@@ -416,4 +418,4 @@ class Game(arcade.View):
         self.manager.add(message_box)
 
     def go_to_next_level(self, level):
-        exit()
+        self.window.hide_view()

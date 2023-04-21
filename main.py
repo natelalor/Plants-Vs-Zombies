@@ -2,7 +2,6 @@ import tests
 from game import Game
 import arcade
 import constants as c
-import multiprocessing
 import entrance
 
 from start_screen import StartScreen

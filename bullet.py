@@ -13,13 +13,13 @@ class Bullet(arcade.Sprite):
         self.y = y + 10
 
         if self.type == 2:
-            super().__init__("images/baseball.png", 0.08)
+            super().__init__("images/utilities/baseball.png", 0.08)
         elif self.type == 3:
-            super().__init__("images/snowball.png", 0.13)
+            super().__init__("images/utilities/snowball.png", 0.13)
             self.speed_change = .95
             
         else:
-            super().__init__("images/baseball.png", 0.08)
+            super().__init__("images/utilities/baseball.png", 0.08)
 
         
         #important to set the center coords here
