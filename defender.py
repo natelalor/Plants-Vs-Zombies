@@ -2,6 +2,7 @@ import constants as c
 from constants import defenders_data
 import arcade
 from bullet import Bullet
+import os
 
 
 class Defender(arcade.Sprite):
@@ -19,7 +20,7 @@ class Defender(arcade.Sprite):
         self.bullet_list = bullet_list
 
         # depending on which "type" of defender you create, they will have differing preset stats to initialize
-        super().__init__(defenders_data[self.type]['image'], 0.05)
+        super().__init__(defenders_data[self.type]['image'], 0.075)
         self.name = defenders_data[self.type]['name']
         self.shoot_speed = defenders_data[self.type]['speed']
         self.damage = defenders_data[self.type]['damage']
@@ -27,43 +28,39 @@ class Defender(arcade.Sprite):
 
         # self.position = [0, 0]
 
+        self.num_png = len(os.listdir('animations/'+self.name))-1
+
         self.set_position(self.position_placement)
         # animations
         self.cur_texture = 0
         # main path is determined by what type of defender it is
-        if self.name == 'peashooter':
-            main_path = "animations/pea_shooter/"
-            #num_legnth = 800
-            #num_height = 800
-            self.num_png = 13
-        if self.name == 'snowpea':
-            main_path = "animations/snowpea/"
-            num_legnth = 800
-            num_height = 800
-            self.num_png = 15
-        if self.name == 'repeater':
-            main_path = "animations/Repeater/"
-            #num_legnth = 900
-            #num_height = 875
-            self.num_png = 11
-        if self.name == 'WallNut':
-            main_path = "animations/WallNut/"
-            self.num_png = 10
-        if self.name == 'sunflower':
-            main_path = "animations/sunflower/"
-            self.num_png = 9
+        # if self.name == 'peashooter':
+        #     main_path = "animations/Pea_Shooter/"
+        #     self.num_png = 13
+        # if self.name == 'Snow_Pea':
+        #     main_path = "animations/Snow_Pea/"
+        #     self.num_png = 15
+        # if self.name == 'repeater':
+        #     main_path = "animations/Repeater/"
+        #     #num_legnth = 900
+        #     #num_height = 875
+        #     self.num_png = 11
+        # if self.name == 'WallNut':
+        #     main_path = "animations/WallNut/"
+        #     self.num_png = 10
+        # if self.name == 'Sunflower':
+        #     main_path = "animations/Sunflower/"
+        #     self.num_png = 9
 
         # Load textures into a list
         self.cur_texture = 0
         self.idle_textures = []
         self.all_sprites_list = arcade.SpriteList()
 
-        x = 0
         for i in range(self.num_png):
             #texture = arcade.load_texture(f"animations/{main_path}", x = i*num_legnth,y= 0, width=num_legnth, height= num_height, )
-            texture = arcade.load_texture(f"{main_path}/{x}.png")
+            texture = arcade.load_texture("animations/"+self.name+"/"+str(i)+".png")
             self.idle_textures.append(texture)
-            x += 1
 
         # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
         # sprite creation

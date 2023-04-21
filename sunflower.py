@@ -19,7 +19,7 @@ class Sunflower(Defender):
         x = 0
         for i in range(self.num_png):
             # texture = arcade.load_texture(f"animations/{main_path}", x = i*num_legnth,y= 0, width=num_legnth, height= num_height, )
-            texture = arcade.load_texture(f"animations/sunflower/{x}.png")
+            texture = arcade.load_texture(f"animations/Sunflower/{x}.png")
             self.idle_textures.append(texture)
             x += 1
 

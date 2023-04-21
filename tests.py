@@ -12,3 +12,4 @@ def test_game():
     arcade.run()
 
 # test_game()
+

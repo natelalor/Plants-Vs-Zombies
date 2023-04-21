@@ -29,7 +29,7 @@ LEVEL_TIME = 120
 
 levelsDict = {
     # level: [[enemyType, number of that type]]
-    1: [[2, 15], [3, 6]],
+    1: [[1, 15], [2, 6]],
     2: [[2, 8], [3, 2], [4, 2]],
     3: [[2, 8], [3, 4], [4, 3]],
     4: [[2, 4], [3, 0]]
@@ -42,85 +42,81 @@ enemiesDict = {1: "easy",
                4: "bucket"}
 attackers_data = {
     1: {
-
-        'name': 'conehead_zombie',
-        'speed': .7,
-        'damage': 5,
-        'durability': 100,
+        'name': 'Zombie',
+        'speed': 1,
+        'damage': 100,
+        'durability': 175,
         'attack_speed': 1.5,
-        'image': "images/lolli_enemy.png",
+        'image': "images/attackers/lolli_enemy.png",
     },
     2: {
-        'name': 'zombie',
-        'speed': .7,
-        'damage': 5,
-        'durability': 100,
+        'name': 'Conehead_Zombie',
+        'speed': 1,
+        'damage': 100,
+        'durability': 550,
         'attack_speed': 3,
-        'image': "images/chocolate_enemy.png",
+        'image': "images/attackers/chocolate_enemy.png",
     },
     3: {
-        'name': 'buckethead_zombie',
+        'name': 'Buckethead_Zombie',
         'speed': .7,
-        'damage': 5,
-        'durability': 100,
+        'damage': 100,
+        'durability': 1250,
         'attack_speed': 2,
-        'image': "images/lolli_enemy.png",
+        'image': "images/attackers/lolli_enemy.png",
     },
 
 }
 defenders_data = {
     1: {
-        'name': 'sunflower',
+        'name': 'Sunflower',
         'speed': 1,
-        'damage': 1,
-        'durability': 1,
-        'image': "animations/sunflower/0.png",
+        'damage': 0,
+        'durability': 300,
+        'image': "animations/Sunflower/0.png",
         'cost':50
     },
     2: {
-        'name': 'peashooter',
+        'name': 'Pea_Shooter',
         'speed': 1,
-        'damage': 15,
-        'durability': 20,
-        'image': "GUI/peaShooter.png",
+        'damage': 20,
+        'durability': 300,
+        'image': "GUI/Repeater.png",
         'cost': 100
     },
     3: {
-        'name': 'snowpea',
+        'name': 'Snow_Pea',
         'speed': 1,
-        'damage': 8,
-        'durability': 20,
-        'image': "GUI/SnowPea.png",
-        'cost': 100
+        'damage': 20,
+        'durability': 300,
+        'image': "GUI/Snow_Pea.png",
+        'cost': 150
     },
     4: {
         'name': 'WallNut',
         'speed': 1,
-        'damage': 1,
-        'durability': 500,
-        'image': "GUI/Wall-nut.png",
-        'cost': 100
+        'damage': 0,
+        'durability': 4000,
+        'image': "GUI/WallNut.png",
+        'cost': 50
     },
     5: {
-        'name': 'repeater',
+        'name': 'Repeater',
         'speed': 1,
-        'damage': 1,
-        'durability': 1,
-        'image': "GUI/pea_shooter.png",
-        'cost' : 50
+        'damage': 20,
+        'durability': 300,
+        'image': "GUI/Repeater.png",
+        'cost' : 200
     },
 6: {
-        'name': 'sunflower',
+        'name': 'toothbrush_ally',
         'speed': 1,
         'damage': 1,
         'durability': 1,
-        'image': "GUI/sunflower.png",
-        'cost' : 50,
-        'damage': 15,
-        'durability': 20,
-        'image': "images/toothbrush_ally.png",
+        'image': "GUI/toothbrush_ally",
+        'cost' : 50
     }
-    
+
 }
 
 waves = {
@@ -147,6 +143,15 @@ BULLET_SPEED = 4
 GAME_LENGTH = 60
 FIRST_ROUND_PERCENT = .4
 
-SUNFLOWER_WAIT_TIME = 10
+SUNFLOWER_WAIT_TIME = 25
 
 NUMBER_OF_DEFENDERS = 5
+
+STARTING_SUNS = 1000
+
+SLOW_ATTACKERS = 3
+
+WIN_MESSAGES = {
+    1: "Congratulations! You defended your house from the zombies...""It's not over yet though...",
+    2: ["We're glad you passed that easy level...now for a real challenge..."]
+}

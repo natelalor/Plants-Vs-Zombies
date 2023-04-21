@@ -24,10 +24,11 @@ class ChooseDefenders(arcade.View):
             for column in range(5):
                 if len(self.defenders_list) != 0:
                     defender = c.defenders_data[self.defenders_list[0]]
-                    button = arcade.gui.UITextureButton(texture=arcade.load_texture(defender['image']),
-                                                        texture_hovered=arcade.load_texture("GUI/Shovel.png"),
+                    button = arcade.gui.UITextureButton(texture=arcade.load_texture("GUI/"+defender['name']+".png"),
+                                                        texture_hovered=arcade.load_texture(
+                                                            "GUI/"+defender['name']+"-hover.png"),
                                                         texture_pressed=arcade.load_texture(
-                                                            "images/toothbrush_ally.png"),
+                                                            "GUI/"+defender['name']+"-selected.png"),
                                                         width=75, height=75)
                     button.defenderId = self.defenders_list[0]
                     tmp.add(button.with_space_around(bottom=20))

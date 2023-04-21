@@ -1,4 +1,3 @@
-import math
 import random
 import constants as c
 import arcade
@@ -19,6 +18,7 @@ class Game(arcade.View):
         # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
         # arcade.set_background_color(arcade.color.ANDROID_GREEN)
 
+        self.currency = None
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         self.live_attackers = None
@@ -36,7 +36,8 @@ class Game(arcade.View):
         self.lanes = [1, 2, 3, 4, 5]
         self.chosen_defenders = defenders_ids
         self.sun_list = None
-
+        self.gui_buttons = []
+        self.num_levels = len(c.levelsDict)
 
         # for defender selection/deselection
         self.clicked = 0
@@ -45,7 +46,7 @@ class Game(arcade.View):
         self.update_animation = True
         self.frame_count = 0
 
-        #testing Defenders and Bullets
+        # testing Defenders and Bullets
         self.defender_list = None
         self.bullet_list = None
 
@@ -53,126 +54,38 @@ class Game(arcade.View):
         self.h_box = arcade.gui.UIBoxLayout(vertical=False, )
 
         # Creating the buttons, each button has a loaded texture for hover, and clicked
+        for defender_id in defenders_ids:
+            plant_button = arcade.gui.UITextureButton(
+                texture=arcade.load_texture("GUI/" + c.defenders_data[defender_id]['name'] + ".png"),
+                texture_hovered=arcade.load_texture("GUI/" + c.defenders_data[defender_id]['name'] + "-hover.png"),
+                texture_pressed=arcade.load_texture("GUI/" + c.defenders_data[defender_id]['name'] + "-selected.png"),
+                width=75, height=75)
+            plant_button.cost = c.defenders_data[defender_id]['cost']
+            plant_button.id = defender_id
+            plant_button.selected = False
+            plant_button.on_click = self.choose_button
+            self.gui_buttons.append(plant_button)
+            self.h_box.add(arcade.gui.UIBorder(plant_button.with_border(color=(117, 35, 19, 255)), border_width=10,
+                                               border_color=(117, 35, 19, 255)))
+        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/Shovel.png'),
+                                                   texture_hovered=arcade.load_texture('GUI/Shovel-hover.png'),
+                                                   texture_pressed=arcade.load_texture('GUI/Shovel-selected.png'),
+                                                   width=75, height=75)
+        shovel_button.selected = False
+        shovel_button.id = 0
+        shovel_button.cost = 0
+        shovel_button.on_click = self.choose_button
 
-        plant1_button = arcade.gui.UITextureButton( texture=arcade.load_texture('GUI/sunflower.png'),texture_hovered= arcade.load_texture('GUI/sunflowerHover.png'),texture_pressed=arcade.load_texture('GUI/sunflowerSelected.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(plant1_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
+        self.h_box.add(arcade.gui.UIBorder(shovel_button.with_border(color=(117, 35, 19, 255)), border_width=10,
+                                           border_color=(117, 35, 19, 255)))
+        self.gui_buttons.append(shovel_button)
 
-        plant2_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/pea_shooter.png'),texture_hovered= arcade.load_texture('GUI/pea_shooter_hover.png'),texture_pressed=arcade.load_texture('GUI/pea_shooter_selected.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(plant2_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
-
-        plant3_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/Wall-nut.png'),texture_hovered= arcade.load_texture('GUI/Wall-nut_hover.png'),texture_pressed=arcade.load_texture('GUI/Wall-nut_selected.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(plant3_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
-
-        plant4_button =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/SnowPea.png'),texture_hovered= arcade.load_texture('GUI/SnowPea_Hover.png'),texture_pressed=arcade.load_texture('GUI/SnowPea_Selected.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(plant4_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
-
-        plant5_button  =arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/peaShooter.png'),texture_hovered= arcade.load_texture('GUI/peaShooterHover.png'),texture_pressed=arcade.load_texture('GUI/peaShooterSelected.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(plant5_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
-
-        shovel_button = arcade.gui.UITextureButton(texture=arcade.load_texture('GUI/shovel.png'),texture_hovered= arcade.load_texture('GUI/Shovel_hover.png'),texture_pressed=arcade.load_texture('GUI/Shovel_selected.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(shovel_button.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
-
-        sun = arcade.gui.UITextureButton(texture=arcade.load_texture('images/sun.png'), width=75, height= 75)
-        self.h_box.add(arcade.gui.UIBorder(sun.with_border(color=(117, 35, 19, 255)), border_width=10,border_color=(117, 35, 19, 255)))
-
-
-
-        # Initially all plant selections are set to false, these are only true if a plant is clicked on
-        self.plant1_selected = False
-        self.plant2_selected = False
-        self.plant3_selected = False
-        self.plant4_selected = False
-        self.plant5_selected = False
-        self.shovel_selected = False
+        sun = arcade.gui.UITextureButton(texture=arcade.load_texture('images/utilities/sun.png'), width=75, height=75)
+        self.h_box.add(arcade.gui.UIBorder(sun.with_border(color=(117, 35, 19, 255)), border_width=10,
+                                           border_color=(117, 35, 19, 255)))
 
         # each of these controls an individual button
         # when clicked it sets the buttons selected variable to true and all the other buttons to false
-        @plant1_button.event("on_click")
-        def on_click_settings(event):
-            if (self.plant1_selected):
-                self.plant1_selected = False
-            else:
-                self.plant1_selected = True
-                # set others to false
-                self.shovel_selected = False
-                self.plant2_selected = False
-                self.plant3_selected = False
-                self.plant5_selected = False
-                self.plant4_selected = False
-
-
-
-        @shovel_button.event("on_click")
-        def on_click_settings(event):
-            if (self.shovel_selected):
-                self.shovel_selected = False
-            else:
-                # set clicked to true
-                self.shovel_selected = True
-                # set others to false
-                self.plant1_selected = False
-                self.plant2_selected = False
-                self.plant3_selected = False
-                self.plant5_selected = False
-                self.plant4_selected = False
-
-        @plant2_button.event("on_click")
-        def on_click_settings(event):
-            if (self.plant2_selected):
-                self.plant2_selected = False
-            else:
-                # set clicked to true
-                self.plant2_selected = True
-                # set others to false
-                self.plant1_selected = False
-                self.plant4_selected = False
-                self.plant3_selected = False
-                self.plant5_selected = False
-                self.shovel_selected = False
-        @plant3_button.event("on_click")
-        def on_click_settings(event):
-            if (self.plant3_selected):
-                self.plant3_selected = False
-            else:
-                # set clicked to true
-                self.plant3_selected = True
-                # set others to false
-                self.plant1_selected = False
-                self.plant2_selected = False
-                self.plant4_selected = False
-                self.plant5_selected = False
-                self.shovel_selected = False
-
-
-        @plant4_button.event("on_click")
-        def on_click_settings(event):
-            if (self.plant4_selected):
-                self.plant4_selected = False
-            else:
-                # set clicked to true
-                self.plant4_selected = True
-                # set others to false
-                self.plant1_selected = False
-                self.plant2_selected = False
-                self.plant3_selected = False
-                self.plant5_selected = False
-                self.shovel_selected = False
-            #check plant object to see if you have enough currency to buy
-            #if not enough set clicked to false
-
-
-        @plant5_button.event("on_click")
-        def on_click_settings(event):
-            if (self.plant5_selected):
-                self.plant5_selected = False
-            else:
-                self.plant5_selected = True
-                # set others to false
-                self.plant1_selected = False
-                self.plant2_selected = False
-                self.plant3_selected = False
-                self.plant4_selected = False
-                self.shovel_selected = False
 
         # Create a widget to hold the h_box(horizontal box) widget, that will center the buttons along the top
         self.manager.add(
@@ -182,13 +95,25 @@ class Game(arcade.View):
                 child=self.h_box)
         )
 
+    def choose_button(self, event):
+        if event.source.selected:
+            for button in self.gui_buttons:
+                button.selected = False
+        else:
+            for button in self.gui_buttons:
+                button.selected = False
+            event.source.selected = True
+
+    def reset_buttons(self):
+        for button in self.gui_buttons:
+            button.selected = False
 
     def setup(self):
         self.attackers_list = arcade.SpriteList()
         self.live_attackers = arcade.SpriteList()
         self.create_attackers()
-        self.currency = 100
-                # SCENE FOR ALL SPRITES TO RENDER ON
+        self.currency = c.STARTING_SUNS
+        # SCENE FOR ALL SPRITES TO RENDER ON
         self.scene = arcade.Scene()
 
         # TEMP SUN CREATION
@@ -199,20 +124,12 @@ class Game(arcade.View):
             sun = Sun(sunflower_sun=False)
             self.sun_list.append(sun)
 
-        #test bullet and defenders
+        # test bullet and defenders
         self.defender_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList(use_spatial_hash=True)
         # defender1 = Defender(1,1,self.bullet_list,1.5)
         # self.defender_list.append(defender1)
-        defender3 = Defender(2, 1, self.bullet_list, 1.3, [0, 0])
-        self.defender_list.append(defender3)
-        self.defender_list.append(Defender(2, 2, self.bullet_list, 1.5, [1, 0]))
-        self.defender_list.append(Defender(2, 3, self.bullet_list, 1.5, [2, 0]))
-        self.defender_list.append(Defender(2, 4, self.bullet_list, 1.5, [3, 0]))
-        self.defender_list.append(Sunflower(1, 2, [3, 2]))
         self.num_attackers_to_kill = len(self.waves[0])
-
-
 
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
         self.game_time = 0
@@ -253,8 +170,6 @@ class Game(arcade.View):
         for attacker in self.attackers_list:  # set the lanes
             attacker.set_position_lane(random_lane())
 
-
-
     def create_attackers(self):
         for enemyType in c.levelsDict[self.level]:
             for i in range(enemyType[1]):
@@ -269,7 +184,6 @@ class Game(arcade.View):
             self.wave_0_spawn_times.append(random.randint(0, c.GAME_LENGTH * c.FIRST_ROUND_PERCENT))
         self.wave_0_spawn_times.sort()
 
-
     def run_game(self):
         pass
 
@@ -278,54 +192,38 @@ class Game(arcade.View):
         # clicked = 0
         print("Mouse button is pressed")
 
-        #testing getting the square 
-         
+        # testing getting the square
+
         for row in self.grid.grid_list:
             for square in row:
                 if square.in_square(x, y):
                     print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
-                    
-                    lane = square.get_position()[0] + 1
-                    print(lane)
 
-                    if (self.plant1_selected) and (not square.has_plant):
-                        if self.currency >= 50:
-                            defender = Defender(1, lane, self.bullet_list, 1.5, square.get_position())
-                            self.defender_list.append(Sunflower(1, lane,square.get_position()))
-                            self.currency -= 50
+                    lane = square.get_position()[0] + 1
+                    # print(lane)
+                    selected_id = -1
+                    for button in self.gui_buttons:
+                        # print(button)
+                        if button.selected:
+                            selected_id = button.id
+                            print("SELECTED", selected_id)
+                            break
+                    if not square.has_plant:
+                        if self.currency >= button.cost:
+                            if selected_id == 1:
+                                self.defender_list.append(Sunflower(1, lane, square.get_position()))
+                            else:
+                                self.defender_list.append(
+                                    Defender(selected_id, lane, self.bullet_list, 1.5, square.get_position()))
+                            self.currency -= button.cost
                             square.add_plant()
-                    elif (self.plant2_selected) and (not square.has_plant):
-                        if self.currency >= 100:
-                            defender = Defender(2, lane, self.bullet_list, 1.5, square.get_position())
-                            self.defender_list.append(defender)
-                            self.currency -= 100
-                            square.add_plant()
-                    elif (self.plant3_selected) and (not square.has_plant):
-                        if self.currency >= 150:
-                            defender = Defender(3, lane, self.bullet_list, 1.5, square.get_position())
-                            self.defender_list.append(defender)
-                            self.currency -= 150
-                            square.add_plant()
-                    elif (self.plant4_selected) and (not square.has_plant):
-                        if self.currency >= 200:
-                            defender = Defender(4, lane, self.bullet_list, 1.5, square.get_position())
-                            self.defender_list.append(defender)
-                            self.currency -= 200
-                            square.add_plant()
-                    elif (self.plant5_selected) and (not square.has_plant):
-                        if self.currency >= 300:
-                            defender = Defender(5, lane, self.bullet_list, 1.5, square.get_position())
-                            self.defender_list.append(defender)
-                            self.currency -= 300
-                            square.add_plant()
-                    elif (self.shovel_selected):
+                    elif (selected_id == 0):
                         if square.has_plant:
                             for plant in self.defender_list:
                                 if plant.get_position() == square.get_position():
                                     self.defender_list.remove(plant)
                                     square.remove_plant()
-
-
+        self.reset_buttons()
         self.bullet_list.update()
         self.defender_list.update()
 
@@ -349,97 +247,52 @@ class Game(arcade.View):
         self.scene.draw()
         # self.live_attackers.draw()
 
-
         self.live_attackers.draw()
 
         self.defender_list.draw()
         self.bullet_list.draw()
 
-        #GUI
+        # GUI
         color = (64, 24, 17)
-        arcade.draw_rectangle_filled(100, 585, 1185, 100,color )
+        arcade.draw_rectangle_filled(100, 585, 1185, 100, color)
         self.manager.draw()
-
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text(str(self.currency), 623.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
 
         # GUI SLOTS
-        # FIFTH GUI SLOT
-        if (self.currency >= 300):
-            # currency text
-            arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-            if (self.plant5_selected):
-                arcade.draw_rectangle_filled(center_x=445, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=445, center_y=581, color=(59, 125, 44), width=76, height=76, border_width= 5)
-                arcade.draw_text(str(300), 423.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-        else:
-            arcade.draw_rectangle_filled(center_x=445, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
-            arcade.draw_text(str(300), 423.5, 535, arcade.color.RED, 20, 40, 'center')
-            self.plant5_selected = False
+        for i, button in enumerate(self.gui_buttons):
+            if self.currency >= button.cost:  # if player has enough sun to buy plant
+                if button.id != 0:
+                    arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40,
+                                     'center')  # draw the price in blue
+                if (self.gui_buttons[i].selected):  # if it is selected
+                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
+                    arcade.draw_rectangle_outline(center_x=45 + i * 100, center_y=581, color=(154, 205, 50, 255),
+                                                  width=76,
+                                                  height=76, border_width=5)
+                    if button.id != 0:
+                        arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
+            else:
+                arcade.draw_rectangle_filled(center_x=50 + i * 100, center_y=581, color=(50, 50, 50, 200), width=75,
+                                             height=75)
+                if button.id != 0:
+                    arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.RED, 20, 40, 'center')
+                # self.gui_buttons[i].selected = False
 
-        # FOURTH GUI SLOT
-        if (self.currency >= 200):
-            arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-            if (self.plant4_selected):
-                arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=346, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
-                arcade.draw_text(str(200), 323.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-        else:
-            arcade.draw_rectangle_filled(center_x=346, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
-            arcade.draw_text(str(200), 323.5, 535, arcade.color.RED, 20, 40, 'center')
-            self.plant4_selected = False
-
-        # THIRD GUI SLOT
-        if (self.currency >= 150):
-            arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-            if (self.plant3_selected):
-                arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=247, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
-                arcade.draw_text(str(150), 223.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-
-        else:
-            arcade.draw_rectangle_filled(center_x=247, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
-            arcade.draw_text(str(150), 223.5, 535, arcade.color.RED, 20, 40, 'center')
-            self.plant3_selected = False
-
-        # SECOND GUI SLOT
-        if (self.currency >= 100):
-            arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-            if (self.plant2_selected):
-                arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=150, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
-                arcade.draw_text(str(100), 123.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-        else:
-            arcade.draw_rectangle_filled(center_x=150, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
-            arcade.draw_text(str(100), 123.5, 535, arcade.color.RED, 20, 40, 'center')
-            self.plant2_selected = False
-
-        # FIRST GUI SLOT
-        if (self.currency >= 50):
-            arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-            if (self.plant1_selected):
-                arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-                arcade.draw_rectangle_outline(center_x=50, center_y=581, color=(59, 125, 44), width=76, height=76, border_width=5)
-                arcade.draw_text(str(50), 23.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-        else:
-            arcade.draw_rectangle_filled(center_x=50, center_y=581, color=(50, 50, 50, 200), width=75, height=75)
-            arcade.draw_text(str(50), 23.5, 535, arcade.color.RED, 20, 40, 'center')
-            self.plant1_selected = False
-
-
-        if (self.shovel_selected):
+        if self.gui_buttons[5].selected:
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
-            arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76, border_width=5)
-
+            arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76,
+                                          border_width=5)
         self.sun_list.draw()
 
         # TEMPORARY SUN DRAWING
         # if self.sun1.sun_list != None:
         #     self.sun1.sun_list.draw()
+
     def on_update(self, delta_time):
         self.game_time += delta_time
-        if self.game_time % 10 == 0:
+        if round(self.game_time, 0) % 10 == 0:
             self.sun_list.append(Sun(False))
         current_total = 0
         sun = None
@@ -456,8 +309,9 @@ class Game(arcade.View):
         # Wave 0 is just random spawning
         # to spawn attackers
         if self.current_wave == 0:
+            self.win_screen()
             if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[
-                0] + 10:  # +10 for now because game time atarts at ~10
+                0] + 10:  # +10 for now because game time starts at ~10
                 self.wait_to_start_wave = False
                 self.wave_0_spawn_times.pop(0)
                 self.live_attackers.append(self.waves[0].pop(0))
@@ -469,7 +323,8 @@ class Game(arcade.View):
         # Waves 1 and 2 are released all at once (ish)
         elif self.current_wave == 1 or self.current_wave == 2:  # for the actual waves of attackers
             if self.game_time > self.pause_between_waves:  # wait 10 secs between waves
-                if self.waves[self.current_wave] and random.randint(0, 100) > 98:  # prevent all from spawning at once
+                should_spawn = random.randint(0, 100) > 98
+                if should_spawn and self.waves[self.current_wave]:
                     self.live_attackers.append(self.waves[self.current_wave].pop(0))
                     self.wait_to_start_wave = False
             if not self.wait_to_start_wave and not self.live_attackers:
@@ -477,14 +332,12 @@ class Game(arcade.View):
                 self.pause_between_waves = self.game_time + 10
                 self.wait_to_start_wave = True
         elif self.current_wave >= 3:
-            print("GAME OVER")
-            exit()
-
-
+            if self.level < self.num_levels:
+                self.go_to_next_level(self.level)
 
         for attacker in self.live_attackers:
             # change speed (for snowballs)
-            attacker.center_x -= attacker.speed
+            attacker.center_x -= attacker.speed / c.SLOW_ATTACKERS
             if attacker.center_x <= 0:
                 attacker.kill()
             # testing killing attackers
@@ -503,20 +356,15 @@ class Game(arcade.View):
                     print(f'Damaged defender: {defenderHit.durability}')
                 # if defender is dead reset speed
                 if defenderHit.is_dead():
-                    if isinstance(defenderHit, Sunflower):
-                        if defenderHit.has_sun:
-                            defenderHit.sun
+                    # if isinstance(defenderHit, Sunflower):
+                    #     if defenderHit.has_sun:
+                    #         self.sun_list.remove(defenderHit.sun)
+                    #         self.sun_list.append(defenderHit.sun)
                     # TODO: add remove_plant() on its square so it can be used again to place a new defender
                     self.defender_list.remove(defenderHit)
 
             # reset speed for multiple attackers after defender dies
             if not arcade.check_for_collision_with_list(attacker, self.defender_list) and attacker.speed == 0:
-                pass
-
-
-
-            #reset speed for multiple attackers after defender dies
-            if not arcade.check_for_collision_with_list(attacker,self.defender_list) and attacker.speed == 0:
                 attacker.reset_speed()
 
         self.defender_list.update()
@@ -531,10 +379,9 @@ class Game(arcade.View):
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 # for snowball alter speed
                 if bullet.type == 3:
+                    attackerHit.alter_speed(bullet.speed_change)  # only changes for snowball
 
-                    attackerHit.alter_speed(bullet.speed_change) #only changes for snowball
-            
-                #damage is based upon bullet type
+                # damage is based upon bullet type
                 attackerHit.decrement_health(bullet.damage)
                 bullet.remove_from_sprite_lists()
 
@@ -548,19 +395,25 @@ class Game(arcade.View):
                 sun.move()
                 # print("moving: ", x)
 
-        if self.update_animation:
-            self.live_attackers.update_animation()
+        if self.frame_count % 4 == 0:
             self.defender_list.update_animation()
+        elif self.frame_count % 7 == 0:
+            self.live_attackers.update_animation()
+        self.frame_count += 1
 
-            self.update_animation = False
-        else:
-            if self.frame_count >= 2:
-                self.frame_count = 0
-                self.update_animation = True
-            else:
-                self.frame_count += 1
+    def win_screen(self):
+        # The code in this function is run when we click the ok button.
+        # The code below opens the message box and auto-dismisses it when done.
+        message_box = arcade.gui.UIMessageBox(
+            width=300,
+            height=200,
+            message_text=(c.WIN_MESSAGES[self.level]
+            ),
+            callback=None,
+            buttons=["Continue"]
+        )
 
+        self.manager.add(message_box)
 
-
-
-
+    def go_to_next_level(self, level):
+        exit()

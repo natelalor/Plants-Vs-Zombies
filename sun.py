@@ -6,7 +6,7 @@ import random
 class Sun(arcade.Sprite):
 
     def __init__(self, sunflower_sun):
-        super().__init__("images/sun.png", 0.05)
+        super().__init__("images/utilities/sun.png", 0.05)
         self.speed = 2
         self.location = []
         self.end_location = []
@@ -21,10 +21,8 @@ class Sun(arcade.Sprite):
     # a function that returns a boolean.
     # given parameters x, y, it will see if those x and y are within the sprite's borders
     def in_sun(self, x, y):
-        print("x: ", x, "y: ", y)
         if (x <= (self.position[0] + 50) and y <= (self.position[1] + 50)) \
                 and (x > (self.position[0] - 50) and y > (self.position[1] - 50)):
-            print("You have clicked the sun!")
             return True
         else:
             return False

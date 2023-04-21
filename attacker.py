@@ -26,37 +26,38 @@ class Attacker(arcade.Sprite):
         self.walk_textures = []
         self.death_textures = []
 
+        #
+        # # Load texture based off of attacker type
+        # if self.name == 'Zombie':
+        #     main_path = "animations/zombie_walk/"
+        #     self.num_pngs = 22
+        #     self.num_row = 4
+        # elif self.name == 'Conehead_Zombie':
+        #     main_path = "animations/conehead_walk/"
+        #     self.num_pngs = 21
+        #     self.num_row = 4
+        # elif self.name == 'Buckethead_Zombie':
+        #     main_path = "animations/buckethead_walk/"
+        #     self.num_pngs = 14
+        #     self.num_row = 3
+        #
+        # # Load all the pngs from the correct path into a list
+        # h = 0
+        # q = 0
+        #
+        # d = 0
+
+
+
+
         # Load texture based off of attacker type
-        if self.name == 'zombie':
-            main_path = "animations/zombie_walk/"
-            self.num_pngs = 22
-            self.num_row = 4
-        elif self.name == 'conehead_zombie':
-            main_path = "animations/conehead_walk/"
-            self.num_pngs = 21
-            self.num_row = 4
-        elif self.name == 'buckethead_zombie':
-            main_path = "animations/buckethead_walk/"
-            self.num_pngs = 14
-            self.num_row = 3
-
-        # Load all the pngs from the correct path into a list
-        h = 0
-        q = 0
-
-        d = 0
-
-
-
-
-        # Load texture based off of attacker type
-        if self.name == 'zombie':
+        if self.name == 'Zombie':
             main_path = "animations/zombie_walk/"
             self.num_pngs = 11
-        elif self.name == 'conehead_zombie':
+        elif self.name == 'Conehead_Zombie':
             main_path = "animations/conehead_walk/"
             self.num_pngs = 11
-        elif self.name == 'buckethead_zombie':
+        elif self.name == 'Buckethead_Zombie':
             main_path = "animations/buckethead_walk/"
             self.num_pngs = 14
 
