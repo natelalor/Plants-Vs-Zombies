@@ -12,6 +12,7 @@ class StartScreen(arcade.View):
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         arcade.set_background_color(arcade.color.ARMY_GREEN)
+        self.background = arcade.load_texture("images/menu.jpg")
 
         self.h_box = arcade.gui.UIBoxLayout()
 
@@ -31,6 +32,7 @@ class StartScreen(arcade.View):
 
     def on_draw(self):
         self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
         self.manager.draw()
 
     def on_click_game(self, event):
