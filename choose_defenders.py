@@ -21,7 +21,7 @@ class ChooseDefenders(arcade.View):
         while self.defenders_list:
             i = 0
             tmp = arcade.gui.UIBoxLayout(vertical=False)
-            for column in range(5):
+            for column in range(4):
                 if len(self.defenders_list) != 0:
                     defender = c.defenders_data[self.defenders_list[0]]
                     button = arcade.gui.UITextureButton(texture=arcade.load_texture("GUI/"+defender['name']+".png"),
@@ -31,7 +31,10 @@ class ChooseDefenders(arcade.View):
                                                             "GUI/"+defender['name']+"-selected.png"),
                                                         width=75, height=75)
                     button.defenderId = self.defenders_list[0]
-                    tmp.add(button.with_space_around(bottom=20))
+
+                    tmp.add(
+                        arcade.gui.UIBorder(button.with_border(color=(117, 35, 19, 255)), border_width=10,
+                                            border_color=(117, 35, 19, 255)))
                     button.on_click = self.on_choose
                     self.defenders_list.pop(0)
 
