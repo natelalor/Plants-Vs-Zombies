@@ -32,7 +32,7 @@ levelsDict = {
     1: [[1, 15], [2, 6]],
     2: [[2, 8], [3, 2], [4, 2]],
     3: [[2, 8], [3, 4], [4, 3]],
-    4: [[2, 4], [3, 0]]
+    4: [[2, 4], [3, 0], [4,2]]
 }
 
 # TODO: eventually add characteristics to this dict as a list in value
@@ -65,6 +65,14 @@ attackers_data = {
         'attack_speed': 2,
         'image': "images/attackers/lolli_enemy.png",
     },
+    4: {
+        'name': 'Tank_Zombie',
+        'speed': .5,
+        'damage': 200,
+        'durability': 2500,
+        'attack_speed': 2,
+        'image': "images/attackers/lolli_enemy.png",
+    }
 
 }
 defenders_data = {

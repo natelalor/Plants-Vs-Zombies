@@ -254,7 +254,7 @@ class Game(arcade.View):
         self.scene.draw()
         # self.live_attackers.draw()
 
-        self.live_attackers.draw()
+        
 
         self.defender_list.draw()
         self.bullet_list.draw()
@@ -293,6 +293,8 @@ class Game(arcade.View):
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
             arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76,
                                           border_width=5)
+        
+        self.live_attackers.draw()
         self.sun_list.draw()
 
     def on_update(self, delta_time):
