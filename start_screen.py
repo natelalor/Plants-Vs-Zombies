@@ -15,12 +15,10 @@ class StartScreen(arcade.View):
         self.background = arcade.load_texture("images/menu.jpg")
 
         self.h_box = arcade.gui.UIBoxLayout()
+        button = arcade.gui.UIFlatButton(text="Start Game", width=200)
+        self.h_box.add(button.with_space_around(top=250))
+        button.on_click = self.on_click_game
 
-        for level_name in c.levelsDict.keys():
-            button = arcade.gui.UIFlatButton(text="Level " + str(level_name), width=200)
-            button.level = level_name
-            self.h_box.add(button.with_space_around(bottom=20))
-            button.on_click = self.on_click_game
         self.manager.add(
             arcade.gui.UIAnchorWidget(
                 anchor_x="center_x",
@@ -36,8 +34,7 @@ class StartScreen(arcade.View):
         self.manager.draw()
 
     def on_click_game(self, event):
-        print(event.source.level)
-        choose_defenders = ChooseDefenders(self.window, event.source.level)
+        choose_defenders = ChooseDefenders(self.window, 1)
         self.window.show_view(choose_defenders)
         # game = Game(1, self.window, [1, 2, 3, 4, 5])
         # game.setup()
