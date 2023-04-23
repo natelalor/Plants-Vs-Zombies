@@ -73,7 +73,7 @@ defenders_data = {
         'speed': 1,
         'damage': 0,
         'durability': 300,
-        'image': "animations/Sunflower/0.png",
+        'image': "GUI/Sunflower.png",
         'cost':50
     },
     2: {
@@ -81,7 +81,7 @@ defenders_data = {
         'speed': 1,
         'damage': 20,
         'durability': 300,
-        'image': "GUI/Repeater.png",
+        'image': "GUI/Pea_Shooter.png",
         'cost': 100
     },
     3: {
