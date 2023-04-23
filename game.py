@@ -106,6 +106,7 @@ class Game(arcade.View):
                 button.selected = False
             event.source.selected = True
 
+
     def reset_buttons(self):
         for button in self.gui_buttons:
             button.selected = False
@@ -220,13 +221,15 @@ class Game(arcade.View):
                                     Defender(selected_id, lane, self.bullet_list, 1.5, square.get_position()))
                             self.currency -= button.cost
                             square.add_plant()
+                            self.reset_buttons()
                     elif selected_id == 0:
                         if square.has_plant:
                             for plant in self.defender_list:
                                 if plant.get_position() == square.get_position():
                                     self.defender_list.remove(plant)
                                     square.remove_plant()
-        self.reset_buttons()
+                        self.reset_buttons()
+
         self.bullet_list.update()
         self.defender_list.update()
 
