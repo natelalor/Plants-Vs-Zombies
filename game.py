@@ -386,7 +386,7 @@ class Game(arcade.View):
                 # get the sprite object hit by the bullet
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 # for snowball alter speed
-                if bullet.type == 3:
+                if bullet.type == 3 or bullet.type == 6:
                     attackerHit.alter_speed(bullet.speed_change)  # only changes for snowball
 
                 # damage is based upon bullet type
