@@ -108,13 +108,13 @@ defenders_data = {
         'image': "GUI/Repeater.png",
         'cost' : 200
     },
-6: {
-        'name': 'toothbrush_ally',
+    6: {
+        'name': 'Shiny_Pea',
         'speed': 1,
-        'damage': 1,
+        'damage': 30,
         'durability': 1,
-        'image': "GUI/toothbrush_ally",
-        'cost' : 50
+        'image': "GUI/Shiny_Pea.png",
+        'cost' : 450
     }
 
 }

@@ -128,7 +128,7 @@ class Defender(arcade.Sprite):
                 self.time_since_last_firing = 0
 
                 #peashooter and snowball
-                if self.type == 2 or self.type == 3:
+                if self.type == 2 or self.type == 3 or self.type == 6:
                     bullet = Bullet(self.type, self.center_x, self.center_y, c.BULLET_SPEED,self.damage)
                     self.bullet_list.append(bullet)
 
