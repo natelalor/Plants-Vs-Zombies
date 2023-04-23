@@ -256,6 +256,7 @@ class Game(arcade.View):
 
         # GUI
         color = (64, 24, 17)
+
         arcade.draw_rectangle_filled(100, 585, 1185, 100, color)
         self.manager.draw()
 
@@ -271,7 +272,7 @@ class Game(arcade.View):
                 if self.gui_buttons[i].selected:  # if it is selected
                     # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), 
                     # width=75, height=75)
-                    arcade.draw_rectangle_outline(center_x=45 + i * 100, center_y=581, color=(154, 205, 50, 255),
+                    arcade.draw_rectangle_outline(center_x=50 + i * 100 - i, center_y=581, color=(77, 123, 48, 255),
                                                   width=76,
                                                   height=76, border_width=5)
                     if button.id != 0:
