@@ -285,7 +285,7 @@ class Game(arcade.View):
                     if button.id != 0:
                         arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             else:
-                arcade.draw_rectangle_filled(center_x=50 + i * 100, center_y=581, color=(50, 50, 50, 200), width=75,
+                arcade.draw_rectangle_filled(center_x=50 + i * 100 - i, center_y=581, color=(50, 50, 50, 200), width=75,
                                              height=75)
                 if button.id != 0:
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.RED, 20, 40, 'center')
