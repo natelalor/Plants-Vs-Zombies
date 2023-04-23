@@ -118,11 +118,8 @@ class Game(arcade.View):
         # SCENE FOR ALL SPRITES TO RENDER ON
         self.scene = arcade.Scene()
 
-        # TEMP SUN CREATION
-        # self.sun1 = Sun()
         self.sun_list = arcade.SpriteList()
-
-        for x in range(0, 10):
+        for x in range(0, 2):
             sun = Sun(sunflower_sun=False)
             self.sun_list.append(sun)
 
@@ -237,11 +234,12 @@ class Game(arcade.View):
         for sun in self.sun_list:
             if sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
-                self.sun_list.remove(sun)
+                sun.set_can_die(True)
 
         # except Exception as err:
         #     print(f"Unexpected {err=}, {type(err)=}")
         #     raise
+
     def on_draw(self):
         """Render the screen. """
 
@@ -293,14 +291,12 @@ class Game(arcade.View):
                                           border_width=5)
         self.sun_list.draw()
 
-        # TEMPORARY SUN DRAWING
-        # if self.sun1.sun_list != None:
-        #     self.sun1.sun_list.draw()
-
     def on_update(self, delta_time):
         self.game_time += delta_time
+
         if round(self.game_time, 0) % 10 == 0:
             self.sun_list.append(Sun(False))
+
         current_total = 0
         sun = None
         for defender in self.defender_list:
@@ -395,13 +391,31 @@ class Game(arcade.View):
 
         self.bullet_list.update()
 
+        x = None
+
+        # to find next sun to move,
+        # iterate through sun_list and find next sun that isn't sunflower_sun
+        for sun in self.sun_list:
+            if not sun.get_sunflower_sun():
+                x = sun
+
+        if int(self.game_time) % 20 == 0 and int(self.game_time) != 0:
+            x.now_can_move()
+            # print("GAME_TIME IS ", int(self.game_time), "AND X NOW CAN MOVE!!!!!!!!!!!!!!")
+
         # SUN MOVEMENT
         for sun in self.sun_list:
+            if sun == x:
+                print("X's LIFETIME: ", x.lifespan)
+                if x.can_move:
+                    sun.move()
+            if sun.get_can_die():
+                print("DEATH TO ALL SUNS")
+                self.sun_list.remove(sun)
+                new_sun = Sun(sunflower_sun=False)
+                self.sun_list.append(new_sun)
             if sun.lifespan < 0:
                 self.sun_list.remove(sun)
-            else:
-                sun.move()
-                # print("moving: ", x)
 
         if self.frame_count % 4 == 0:
             self.defender_list.update_animation()
