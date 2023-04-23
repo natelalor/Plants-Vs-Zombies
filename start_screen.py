@@ -26,16 +26,16 @@ class StartScreen(arcade.View):
                 child=self.h_box)
         )
 
-
-
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
         self.manager.draw()
 
     def on_click_game(self, event):
+        self.manager.disable()
         choose_defenders = ChooseDefenders(self.window, 1)
         self.window.show_view(choose_defenders)
+
         # game = Game(1, self.window, [1, 2, 3, 4, 5])
         # game.setup()
         # self.window.show_view(game)

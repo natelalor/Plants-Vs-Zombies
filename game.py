@@ -192,6 +192,7 @@ class Game(arcade.View):
     # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
         # clicked = 0
+        # try:
         print("Mouse button is pressed")
 
         # testing getting the square
@@ -210,7 +211,7 @@ class Game(arcade.View):
                             selected_id = button.id
                             print("SELECTED", selected_id)
                             break
-                    if not square.has_plant:
+                    if not square.has_plant and selected_id != -1:
                         if self.currency >= button.cost:
                             if selected_id == 1:
                                 self.defender_list.append(Sunflower(1, lane, square.get_position()))
@@ -238,6 +239,9 @@ class Game(arcade.View):
                 self.currency += c.SUN_ADDITION
                 self.sun_list.remove(sun)
 
+        # except Exception as err:
+        #     print(f"Unexpected {err=}, {type(err)=}")
+        #     raise
     def on_draw(self):
         """Render the screen. """
 
@@ -358,11 +362,10 @@ class Game(arcade.View):
                     print(f'Damaged defender: {defenderHit.durability}')
                 # if defender is dead reset speed
                 if defenderHit.is_dead():
-                    # if isinstance(defenderHit, Sunflower):
-                    #     if defenderHit.has_sun:
-                    #         self.sun_list.remove(defenderHit.sun)
-                    #         self.sun_list.append(defenderHit.sun)
-                    # TODO: add remove_plant() on its square so it can be used again to place a new defender
+                    if isinstance(defenderHit, Sunflower):
+                        if defenderHit.has_sun:
+                            sun = defenderHit.collect_sun()
+
                     position = defenderHit.get_position()
                     square = self.grid.grid_list[position[0]][position[1]]
                     square.remove_plant()
