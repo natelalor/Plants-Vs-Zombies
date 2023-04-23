@@ -14,10 +14,9 @@ class Bullet(arcade.Sprite):
 
         if self.type == 2:
             super().__init__("images/utilities/baseball.png", 0.08)
-        elif self.type == 3:
+        elif self.type == 3 or self.type == 6:
             super().__init__("images/utilities/snowball.png", 0.13)
             self.speed_change = .95
-            
         else:
             super().__init__("images/utilities/baseball.png", 0.08)
 
