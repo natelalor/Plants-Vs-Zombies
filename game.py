@@ -106,6 +106,7 @@ class Game(arcade.View):
                 button.selected = False
             event.source.selected = True
 
+
     def reset_buttons(self):
         for button in self.gui_buttons:
             button.selected = False
@@ -217,13 +218,15 @@ class Game(arcade.View):
                                     Defender(selected_id, lane, self.bullet_list, 1.5, square.get_position()))
                             self.currency -= button.cost
                             square.add_plant()
+                            self.reset_buttons()
                     elif selected_id == 0:
                         if square.has_plant:
                             for plant in self.defender_list:
                                 if plant.get_position() == square.get_position():
                                     self.defender_list.remove(plant)
                                     square.remove_plant()
-        self.reset_buttons()
+                        self.reset_buttons()
+
         self.bullet_list.update()
         self.defender_list.update()
 
@@ -258,6 +261,7 @@ class Game(arcade.View):
 
         # GUI
         color = (64, 24, 17)
+
         arcade.draw_rectangle_filled(100, 585, 1185, 100, color)
         self.manager.draw()
 
@@ -273,13 +277,13 @@ class Game(arcade.View):
                 if self.gui_buttons[i].selected:  # if it is selected
                     # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), 
                     # width=75, height=75)
-                    arcade.draw_rectangle_outline(center_x=45 + i * 100, center_y=581, color=(154, 205, 50, 255),
+                    arcade.draw_rectangle_outline(center_x=50 + i * 100 - i, center_y=581, color=(77, 123, 48, 255),
                                                   width=76,
                                                   height=76, border_width=5)
                     if button.id != 0:
                         arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             else:
-                arcade.draw_rectangle_filled(center_x=50 + i * 100, center_y=581, color=(50, 50, 50, 200), width=75,
+                arcade.draw_rectangle_filled(center_x=50 + i * 100 - i, center_y=581, color=(50, 50, 50, 200), width=75,
                                              height=75)
                 if button.id != 0:
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.RED, 20, 40, 'center')

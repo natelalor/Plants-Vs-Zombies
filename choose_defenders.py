@@ -46,16 +46,13 @@ class ChooseDefenders(arcade.View):
                 child=self.v_box)
         )
 
-        texture = arcade.load_texture(":resources:onscreen_controls/flat_dark/start.png")
-        self.start_button = arcade.gui.UITextureButton(texture=texture)
+        texture_hovered = arcade.load_texture("GUI/StartButton_hover.png")
+        texture_selected = arcade.load_texture("GUI/StartButton_selected.png")
+        texture_unselected = arcade.load_texture("GUI/StartButton.png")
+        self.start_button = arcade.gui.UITextureButton(texture=texture_unselected, texture_hovered=texture_hovered, texture_selected=texture_selected)
         self.start_button.on_click = self.start_game
 
-        self.manager.add(
-            arcade.gui.UIAnchorWidget(
-                anchor_x="right",
-                anchor_y="bottom",
-                child=self.start_button)
-        )
+
 
     def on_draw(self):
         self.clear()
@@ -75,6 +72,12 @@ class ChooseDefenders(arcade.View):
         if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
             # self.start_button.texture.image = ":resources:onscreen_controls/shaded_light/start.png"
             print("ready")
+            self.manager.add(
+                arcade.gui.UIAnchorWidget(
+                    anchor_x="right",
+                    anchor_y="bottom",
+                    child=self.start_button)
+            )
 
     def start_game(self, event):
         if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
