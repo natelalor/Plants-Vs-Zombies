@@ -70,7 +70,7 @@ class ChooseDefenders(arcade.View):
         else:
             self.chosen_defenders.remove(event.source.defenderId)
         for i in self.chosen_defenders:
-            print(i, end=', ')
+            print("CHOOSE DEFENDERS:", i, end=', ')
         print()
         if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
             # self.start_button.texture.image = ":resources:onscreen_controls/shaded_light/start.png"
@@ -79,8 +79,11 @@ class ChooseDefenders(arcade.View):
     def start_game(self, event):
         if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
             # game = Game(1, self.window, [1,2,3,4,5])
+            self.manager.disable()
+            print("CHOOSE_DEFENDER MANAGER DISABLED")
             game = Game(self.level, self.window, self.chosen_defenders)
             game.setup()
-
             self.window.show_view(game)
 
+    def on_show_view(self):
+        print("#####IN ONSHOWVIEW CHOOSE_DEFENDERS")
