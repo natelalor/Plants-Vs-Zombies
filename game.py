@@ -15,8 +15,6 @@ from sunflower import Sunflower
 class Game(arcade.View):
     def __init__(self, level: int, window, defenders_ids):
         super().__init__(window)
-        # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
-        # arcade.set_background_color(arcade.color.ANDROID_GREEN)
         self.lost = None
         self.attackers_through = [0, 0, 0, 0, 0]
         self.grid = None
@@ -33,7 +31,6 @@ class Game(arcade.View):
         self.current_wave = 0
         self.wave_0_spawn_times = []
         self.num_dead_attackers = 0
-        self.num_attackers_to_kill = 0
         self.pause_between_waves = 0
         self.wait_to_start_wave = True
         self.lanes = [1, 2, 3, 4, 5]
@@ -113,13 +110,15 @@ class Game(arcade.View):
         for button in self.gui_buttons:
             button.selected = False
 
+    """
+    If moving onto the next level, reset all variables
+    """
     def reset_game(self):
         self.is_setup = False
         self.waves = []
         self.current_wave = 0
         self.wave_0_spawn_times = []
         self.num_dead_attackers = 0
-        self.num_attackers_to_kill = 0
         self.pause_between_waves = 0
         self.wait_to_start_wave = True
         self.sun_list = None
@@ -129,6 +128,9 @@ class Game(arcade.View):
         self.bullet_list = None
         self.currency = c.STARTING_SUNS
 
+    """
+    setup the round
+    """
     def setup(self):
         self.time_since_spawning_sun = 0
         self.lost = False
@@ -141,25 +143,18 @@ class Game(arcade.View):
         self.scene = arcade.Scene()
 
         self.sun_list = arcade.SpriteList()
-        # for x in range(0, 2):
-        #     sun = Sun(sunflower_sun=False)
-        #     self.sun_list.append(sun)
 
         # test bullet and defenders
         self.defender_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList(use_spatial_hash=True)
-        # defender1 = Defender(1,1,self.bullet_list,1.5)
-        # self.defender_list.append(defender1)
-        self.num_attackers_to_kill = len(self.waves[0])
-
         self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
         self.game_time = 0
-        # for i in c.SIZE_ROWS:
-        #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
-
         self.background = arcade.load_texture("images/garden.jpg")
         self.is_setup = True
 
+    """
+    randomize the attackers into lanes
+    """
     def randomize(self):
         def random_lane() -> int:
             if not self.lanes:
@@ -192,57 +187,47 @@ class Game(arcade.View):
         for attacker in self.attackers_list:  # set the lanes
             attacker.set_position_lane(random_lane())
 
+    """
+    Using the data in levelsDict, fill up the sprite list with the appropriate attackers for that round
+    """
     def create_attackers(self):
         for enemyType in c.levelsDict[self.level]:
             for i in range(enemyType[1]):
-                self.attackers_list.append(Attacker(enemyType[0]))
-        self.randomize()
+                self.attackers_list.append(Attacker(enemyType[0])) # populate attackers_list
+        self.randomize()  # randomize it
         wave_1_end = round(len(self.attackers_list) * .25)
         self.waves.append(self.attackers_list[0:wave_1_end])  # first wave includes 25% of attackers
         wave_2_end = round(len(self.attackers_list) * .3 + wave_1_end)
         self.waves.append(self.attackers_list[wave_1_end:wave_2_end])  # second wave is 30% of attackers
         self.waves.append(self.attackers_list[wave_2_end:])  # final wave is 45% of the attackers
+        # determine what time to spawn the attackers
         for attacker in self.waves[0]:
             self.wave_0_spawn_times.append(random.randint(0, c.GAME_LENGTH * c.FIRST_ROUND_PERCENT))
         self.wave_0_spawn_times.sort()
-        self.wave_0_spawn_times = [x + 15 for x in self.wave_0_spawn_times]
+        self.wave_0_spawn_times = [x + 15 for x in self.wave_0_spawn_times] # give the player 15 seconds at the beginning to set up
 
-    def run_game(self):
-        pass
-
-    # MOUSE INPUT TESTING HERE
     def on_mouse_press(self, x, y, button, modifiers):
-        # clicked = 0
-        # try:
-        print("Mouse button is pressed")
-
-        # testing getting the square
-
+        selected_id = -1
+        for button in self.gui_buttons:
+            if button.selected:  # if a plant/the shovel is selected
+                selected_id = button.id
+                break
+        # for each square in the grid
         for row in self.grid.grid_list:
             for square in row:
                 if square.in_square(x, y):
-                    print(f'SQUARE FOUND Pressed [{x} {y}]{square.get_position()} {square.get_abs_coords()}')
-
                     lane = square.get_position()[0] + 1
-                    # print(lane)
-                    selected_id = -1
-                    for button in self.gui_buttons:
-                        # print(button)
-                        if button.selected:
-                            selected_id = button.id
-                            print("SELECTED", selected_id)
-                            break
-                    if not square.has_plant and selected_id != -1:
-                        if self.currency >= button.cost:
-                            if selected_id == 1:
+                    if not square.has_plant and selected_id != -1: # if a button is selected
+                        if self.currency >= button.cost:  # and you have enough sun
+                            if selected_id == 1: # add a sunflower
                                 self.defender_list.append(Sunflower(1, lane, square.get_position()))
-                            else:
+                            else: # add a normal defender
                                 self.defender_list.append(
                                     Defender(selected_id, lane, self.bullet_list, 1.5, square.get_position()))
                             self.currency -= button.cost
                             square.add_plant()
                             self.reset_buttons()
-                    elif selected_id == 0:
+                    elif selected_id == 0: # if the shovel is selected
                         if square.has_plant:
                             for plant in self.defender_list:
                                 if plant.get_position() == square.get_position():
@@ -250,17 +235,13 @@ class Game(arcade.View):
                                     square.remove_plant()
 
         for defender in self.defender_list:
-            if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
+            if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):# if you select a sunflower
                 self.currency += c.SUN_ADDITION
-                self.sun_list.remove(defender.collect_sun())
-        for sun in self.sun_list:
+                self.sun_list.remove(defender.collect_sun()) # and it has sun then collect the sun
+        for sun in self.sun_list: # if you select sun then collect it
             if sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
                 self.sun_list.remove(sun)
-
-        # except Exception as err:
-        #     print(f"Unexpected {err=}, {type(err)=}")
-        #     raise
 
     def on_draw(self):
         """Render the screen. """
@@ -292,8 +273,6 @@ class Game(arcade.View):
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40,
                                      'center')  # draw the price in blue
                 if self.gui_buttons[i].selected:  # if it is selected
-                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), 
-                    # width=75, height=75)
                     arcade.draw_rectangle_outline(center_x=50 + i * 100 - i, center_y=581, color=(77, 123, 48, 255),
                                                   width=76,
                                                   height=76, border_width=5)
@@ -320,17 +299,16 @@ class Game(arcade.View):
             self.bullet_list.update()
             self.defender_list.update()
             for i in self.attackers_through:
-                if i > 1:
+                if i > 1: # if 2 attackers get through in any lane, the player loses
                     self.lose_screen()
                     break
 
-            current_total = 0
             sun = None
             for defender in self.defender_list:
-                sun = defender.on_update(delta_time)
+                sun = defender.on_update(delta_time)  # if a sunflower spawns a sun
                 if sun:
                     sun.set_position(defender.center_x, defender.center_y)
-                    self.sun_list.append(sun)
+                    self.sun_list.append(sun) # add it to the sun list
                 defender.is_active = False
                 for attacker in self.live_attackers:
                     if attacker.lane == defender.lane:
@@ -339,13 +317,13 @@ class Game(arcade.View):
             # Wave 0 is just random spawning
             # to spawn attackers
             if self.current_wave == 0:
-                if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:
+                if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0]:
                     self.wait_to_start_wave = False
                     self.wave_0_spawn_times.pop(0)
                     self.live_attackers.append(self.waves[0].pop(0))
-                if not self.live_attackers and not self.wait_to_start_wave:
+                if not self.live_attackers and not self.wait_to_start_wave: # if all attackers in the fist wave have been spawned
                     self.current_wave += 1
-                    self.pause_between_waves = self.game_time + 10
+                    self.pause_between_waves = self.game_time + 10 # wait 10 seconds before the next wave
                     self.wait_to_start_wave = True
 
             # Waves 1 and 2 are released all at once (ish)
@@ -382,7 +360,6 @@ class Game(arcade.View):
                     # if time is greater than attack duration attack
                     if attacker.ready_to_attack(delta_time):
                         defenderHit.decrement_health(attacker.damage)
-                        print(f'Damaged defender: {defenderHit.durability}')
                     # if defender is dead reset speed
                     if defenderHit.is_dead():
                         if isinstance(defenderHit, Sunflower):
@@ -420,17 +397,11 @@ class Game(arcade.View):
 
             x = None
 
-            # to find next sun to move,
-            # iterate through sun_list and find next sun that isn't sunflower_sun
-            # for sun in self.sun_list:
-            #     if not sun.get_sunflower_sun():
-            #         x = sun
+
             self.time_since_spawning_sun += delta_time
             if self.time_since_spawning_sun > c.SUN_INTERVAL:
                 self.time_since_spawning_sun = 0
                 self.sun_list.append(Sun(False))
-                print(self.time_since_spawning_sun)
-                # print("GAME_TIME IS ", int(self.game_time), "AND X NOW CAN MOVE!!!!!!!!!!!!!!")
 
             # SUN MOVEMENT
             for sun in self.sun_list:
@@ -438,7 +409,6 @@ class Game(arcade.View):
                 if not sun.sunflower_sun:
                     sun.move()
 
-                    # print("DEATH TO ALL SUNS")
                 if sun.lifespan < 0:
                     self.sun_list.remove(sun)
 
@@ -452,8 +422,6 @@ class Game(arcade.View):
         self.sun_list = None
         self.bullet_list = None
         self.reset_buttons()
-        # The code in this function is run when we click the ok button.
-        # The code below opens the message box and auto-dismisses it when done.
         message_box = arcade.gui.UIMessageBox(
             width=300,
             height=200,
@@ -466,13 +434,11 @@ class Game(arcade.View):
         self.manager.add(message_box)
 
     def lose_screen(self):
-        print(self.attackers_through)
         self.lost = True
         self.sun_list = None
         self.bullet_list = None
+        self.live_attackers = None
         self.reset_buttons()
-        # The code in this function is run when we click the ok button.
-        # The code below opens the message box and auto-dismisses it when done.
         message_box = arcade.gui.UIMessageBox(
             width=300,
             height=200,
