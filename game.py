@@ -114,7 +114,6 @@ class Game(arcade.View):
             button.selected = False
 
     def reset_game(self):
-        self.te
         self.is_setup = False
         self.waves = []
         self.current_wave = 0
@@ -248,9 +247,6 @@ class Game(arcade.View):
                                     self.defender_list.remove(plant)
                                     square.remove_plant()
 
-        self.bullet_list.update()
-        self.defender_list.update()
-
         for defender in self.defender_list:
             if isinstance(defender, Sunflower) and defender.has_sun and defender.sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
@@ -319,6 +315,8 @@ class Game(arcade.View):
     def on_update(self, delta_time):
         if not self.lost and self.is_setup:
             self.game_time += delta_time
+            self.bullet_list.update()
+            self.defender_list.update()
             for i in self.attackers_through:
                 if i > 1:
                     self.lose_screen()

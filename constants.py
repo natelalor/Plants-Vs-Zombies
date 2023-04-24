@@ -163,5 +163,7 @@ SUN_INTERVAL = 15
 
 WIN_MESSAGES = {
     1: "Congratulations! You defended your house from the zombies...""It's not over yet though...",
-    2: ["We're glad you passed that easy level...now for a real challenge..."]
+    2: ["We're glad you passed that easy level...now for a real challenge..."],
+    3: ["Now for the hardest level..."],
+    4: ["CONGRATS! YOU WON"]
 }
