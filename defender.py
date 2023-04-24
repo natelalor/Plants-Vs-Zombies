@@ -61,6 +61,7 @@ class Defender(arcade.Sprite):
             #texture = arcade.load_texture(f"animations/{main_path}", x = i*num_legnth,y= 0, width=num_legnth, height= num_height, )
             texture = arcade.load_texture("animations/"+self.name+"/"+str(i)+".png")
             self.idle_textures.append(texture)
+        self.atlas = arcade.TextureAtlas.create_from_texture_sequence(self.idle_textures)
 
         # 3/25/23 - TESTING WHETHER THIS CAN BE MOVED OR NOT
         # sprite creation

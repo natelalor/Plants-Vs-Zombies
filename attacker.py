@@ -72,10 +72,13 @@ class Attacker(arcade.Sprite):
             self.walk_textures.append(texture)
             x += 1
         x = 0
+        self.atlas = arcade.TextureAtlas.create_from_texture_sequence(self.walk_textures)
         for i in range(12):
             texture = arcade.load_texture(f"animations/zombie_death/{x}.png")
             self.death_textures.append(texture)
             x += 1
+        self.atlas2 = arcade.TextureAtlas.create_from_texture_sequence( self.death_textures)
+
 
 
     def is_dead(self):
