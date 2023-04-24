@@ -41,6 +41,12 @@ class Game(arcade.View):
         self.is_setup = False
         self.time_since_spawning_sun = 0
 
+        # music
+        self.music_list = ["sound/theme_song.wav"]
+        self.current_song_index = 0
+        self.current_player = None
+        self.music = None
+
         # for defender selection/deselection
         self.clicked = 0
 
@@ -152,6 +158,10 @@ class Game(arcade.View):
         self.game_time = 0
         self.background = arcade.load_texture("images/garden.jpg")
         self.is_setup = True
+
+        # music
+        self.music = arcade.Sound(self.music_list[self.current_song_index], streaming=False)
+        self.current_player = self.music.play(100)
 
     """
     randomize the attackers into lanes
