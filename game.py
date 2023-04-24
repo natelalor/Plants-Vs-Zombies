@@ -114,7 +114,7 @@ class Game(arcade.View):
     If moving onto the next level, reset all variables
     """
     def reset_game(self):
-        self.is_setup = False
+        setup = False
         self.waves = []
         self.current_wave = 0
         self.wave_0_spawn_times = []
@@ -127,6 +127,7 @@ class Game(arcade.View):
         self.defender_list = None
         self.bullet_list = None
         self.currency = c.STARTING_SUNS
+        arcade.cleanup_texture_cache()
 
     """
     setup the round
@@ -425,8 +426,8 @@ class Game(arcade.View):
         message_box = arcade.gui.UIMessageBox(
             width=300,
             height=200,
-            message_text=(c.WIN_MESSAGES[self.level]
-            ),
+            message_text=(str(c.WIN_MESSAGES[self.level]
+                              )),
             callback=self.go_to_next_level(self.level),
             buttons=["Continue"]
         )
