@@ -10,7 +10,11 @@ class Attacker(arcade.Sprite):
 
         self.time_since_last_attack = 0
 
-        super().__init__(attackers_data[self.type]['image'], 0.05)
+        #change image size for tank
+        if self.type == 4:
+            super().__init__(attackers_data[self.type]['image'], 0.1)
+        else:
+            super().__init__(attackers_data[self.type]['image'], 0.05)
         self.name = attackers_data[self.type]['name']
         self.speed = attackers_data[self.type]['speed']
         self.damage = attackers_data[self.type]['damage']
@@ -51,7 +55,7 @@ class Attacker(arcade.Sprite):
 
 
         # Load texture based off of attacker type
-        if self.name == 'Zombie':
+        if self.name == 'Zombie' or self.name == 'Tank_Zombie':
             main_path = "animations/zombie_walk/"
             self.num_pngs = 11
         elif self.name == 'Conehead_Zombie':
@@ -116,40 +120,45 @@ class Attacker(arcade.Sprite):
         # a 'lane' is just a value from the constructor. Depending on lane this enemy spawns in,
         # this will set up that enemy to start moving.
         self.lane = lane
+
+        #offset for tank zombie
+        offset = 0
+        if self.type == 4:
+            offset = 40
         if lane == 5:
             self.center_x = 1000
-            self.center_y = 470
+            self.center_y = 470 + offset
 
-            self.position = [1000, 470]
+            self.position = [1000, self.center_y]
 
         elif lane == 4:
             self.center_x = 1000
-            self.center_y = 365
+            self.center_y = 365 + offset
 
-            self.position = [1000, 365]
+            self.position = [1000, self.center_y]
 
         elif lane == 3:
             self.center_x = 1000
-            self.center_y = 260
+            self.center_y = 260 + offset
 
-            self.position = [1000, 260]
+            self.position = [1000, self.center_y]
 
         elif lane == 2:
             self.center_x = 1000
-            self.center_y = 155
+            self.center_y = 155 + offset
 
-            self.position = [1000, 155]
+            self.position = [1000, self.center_y]
 
         elif lane == 1:
             self.center_x = 1000
-            self.center_y = 50
+            self.center_y = 50 + offset
 
-            self.position = [1000, 50]
+            self.position = [1000, self.center_y]
         else:
             self.center_x = 100
-            self.center_y = 100
+            self.center_y = 100 + offset
 
-            self.position = [100, 100]
+            self.position = [100, self.center_y]
 
     # similar setter for position but with different parameters, actual x & y for heightened flexibility when needed.
     def set_position_xy(self, position_x, position_y):

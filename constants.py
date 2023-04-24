@@ -30,9 +30,9 @@ LEVEL_TIME = 120
 levelsDict = {
     # level: [[enemyType, number of that type]]
     1: [[1, 15], [2, 6]],
-    2: [[2, 8], [3, 2], [1, 2]],
-    3: [[2, 8], [3, 4], [1, 3]],
-    4: [[2, 4], [3, 0]]
+    2: [[2, 8], [3, 2], [4, 2]],
+    3: [[2, 8], [3, 4], [4, 3]],
+    4: [[2, 4], [3, 0], [4,2]]
 }
 
 # TODO: eventually add characteristics to this dict as a list in value
@@ -65,6 +65,14 @@ attackers_data = {
         'attack_speed': 2,
         'image': "images/attackers/lolli_enemy.png",
     },
+    4: {
+        'name': 'Tank_Zombie',
+        'speed': .5,
+        'damage': 200,
+        'durability': 2500,
+        'attack_speed': 2,
+        'image': "images/attackers/lolli_enemy.png",
+    }
 
 }
 defenders_data = {
@@ -73,7 +81,7 @@ defenders_data = {
         'speed': 1,
         'damage': 0,
         'durability': 300,
-        'image': "animations/Sunflower/0.png",
+        'image': "GUI/Sunflower.png",
         'cost':50
     },
     2: {
@@ -81,7 +89,7 @@ defenders_data = {
         'speed': 1,
         'damage': 20,
         'durability': 300,
-        'image': "GUI/Repeater.png",
+        'image': "GUI/Pea_Shooter.png",
         'cost': 100
     },
     3: {
@@ -108,13 +116,13 @@ defenders_data = {
         'image': "GUI/Repeater.png",
         'cost' : 200
     },
-6: {
-        'name': 'toothbrush_ally',
+    6: {
+        'name': 'Shiny_Pea',
         'speed': 1,
-        'damage': 1,
+        'damage': 30,
         'durability': 1,
-        'image': "GUI/toothbrush_ally",
-        'cost' : 50
+        'image': "GUI/Shiny_Pea.png",
+        'cost' : 450
     }
 
 }

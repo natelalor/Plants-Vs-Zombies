@@ -10,18 +10,14 @@ import numpy as np
 import time
 import arcade.gui
 from sunflower import Sunflower
-from choose_defenders import ChooseDefenders
-
 
 
 class Game(arcade.View):
-    def __init__(self, level: int, window):
+    def __init__(self, level: int, window, defenders_ids):
         super().__init__(window)
-        self.window = window
         # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
         # arcade.set_background_color(arcade.color.ANDROID_GREEN)
 
-        self.chosen_defenders = []
         self.grid = None
         self.background = None
         self.currency = None
@@ -40,10 +36,10 @@ class Game(arcade.View):
         self.pause_between_waves = 0
         self.wait_to_start_wave = True
         self.lanes = [1, 2, 3, 4, 5]
+        self.chosen_defenders = defenders_ids
         self.sun_list = None
         self.gui_buttons = []
         self.num_levels = len(c.levelsDict)
-        self.setup = False
 
         # for defender selection/deselection
         self.clicked = 0
@@ -58,61 +54,8 @@ class Game(arcade.View):
 
         # Create a horizontal BoxGroup to align buttons
         self.h_box = arcade.gui.UIBoxLayout(vertical=False, )
-        self.start_setup()
-        self.game_time = 0
 
         # Creating the buttons, each button has a loaded texture for hover, and clicked
-
-
-    def choose_button(self, event):
-        if event.source.selected:
-            for button in self.gui_buttons:
-                button.selected = False
-        else:
-            for button in self.gui_buttons:
-                button.selected = False
-            event.source.selected = True
-
-    def reset_buttons(self):
-        for button in self.gui_buttons:
-            button.selected = False
-
-    def start_setup(self):
-        self.attackers_list = arcade.SpriteList()
-        self.live_attackers = arcade.SpriteList()
-        self.create_attackers()
-        self.currency = c.STARTING_SUNS
-        # SCENE FOR ALL SPRITES TO RENDER ON
-        self.scene = arcade.Scene()
-
-        # TEMP SUN CREATION
-        # self.sun1 = Sun()
-        self.sun_list = arcade.SpriteList()
-
-        for x in range(0, 10):
-            sun = Sun(sunflower_sun=False)
-            self.sun_list.append(sun)
-
-        # test bullet and defenders
-        self.defender_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList(use_spatial_hash=True)
-        # defender1 = Defender(1,1,self.bullet_list,1.5)
-        # self.defender_list.append(defender1)
-        self.num_attackers_to_kill = len(self.waves[0])
-
-        self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
-        self.game_time = 0
-        # for i in c.SIZE_ROWS:
-        #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
-
-        self.background = arcade.load_texture("images/garden.jpg")
-
-
-    def choose_defenders(self):
-        choose = ChooseDefenders(self.window, self.manager, self)
-        self.window.show_view(choose)
-
-    def finish_setup(self, defenders_ids):
         for defender_id in defenders_ids:
             plant_button = arcade.gui.UITextureButton(
                 texture=arcade.load_texture("GUI/" + c.defenders_data[defender_id]['name'] + ".png"),
@@ -153,6 +96,47 @@ class Game(arcade.View):
                 anchor_y="top",
                 child=self.h_box)
         )
+
+    def choose_button(self, event):
+        if event.source.selected:
+            for button in self.gui_buttons:
+                button.selected = False
+        else:
+            for button in self.gui_buttons:
+                button.selected = False
+            event.source.selected = True
+
+
+    def reset_buttons(self):
+        for button in self.gui_buttons:
+            button.selected = False
+
+    def setup(self):
+        self.attackers_list = arcade.SpriteList()
+        self.live_attackers = arcade.SpriteList()
+        self.create_attackers()
+        self.currency = c.STARTING_SUNS
+        # SCENE FOR ALL SPRITES TO RENDER ON
+        self.scene = arcade.Scene()
+
+        self.sun_list = arcade.SpriteList()
+        for x in range(0, 2):
+            sun = Sun(sunflower_sun=False)
+            self.sun_list.append(sun)
+
+        # test bullet and defenders
+        self.defender_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList(use_spatial_hash=True)
+        # defender1 = Defender(1,1,self.bullet_list,1.5)
+        # self.defender_list.append(defender1)
+        self.num_attackers_to_kill = len(self.waves[0])
+
+        self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
+        self.game_time = 0
+        # for i in c.SIZE_ROWS:
+        #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
+
+        self.background = arcade.load_texture("images/garden.jpg")
 
     def randomize(self):
         def random_lane() -> int:
@@ -234,13 +218,14 @@ class Game(arcade.View):
                                     Defender(selected_id, lane, self.bullet_list, 1.5, square.get_position()))
                             self.currency -= button.cost
                             square.add_plant()
+                            self.reset_buttons()
                     elif selected_id == 0:
                         if square.has_plant:
                             for plant in self.defender_list:
                                 if plant.get_position() == square.get_position():
                                     self.defender_list.remove(plant)
                                     square.remove_plant()
-        self.reset_buttons()
+
         self.bullet_list.update()
         self.defender_list.update()
 
@@ -251,16 +236,16 @@ class Game(arcade.View):
         for sun in self.sun_list:
             if sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
-                self.sun_list.remove(sun)
+                sun.set_can_die(True)
 
         # except Exception as err:
         #     print(f"Unexpected {err=}, {type(err)=}")
         #     raise
+
     def on_draw(self):
         """Render the screen. """
 
         # self.clear()
-
 
         arcade.start_render()
         arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
@@ -268,34 +253,36 @@ class Game(arcade.View):
         self.scene.draw()
         # self.live_attackers.draw()
 
-        self.live_attackers.draw()
+
 
         self.defender_list.draw()
         self.bullet_list.draw()
 
         # GUI
         color = (64, 24, 17)
+
         arcade.draw_rectangle_filled(100, 585, 1185, 100, color)
         self.manager.draw()
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text(str(self.currency), 623.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-    # GUI SLOTS
+
+        # GUI SLOTS
         for i, button in enumerate(self.gui_buttons):
             if self.currency >= button.cost:  # if player has enough sun to buy plant
                 if button.id != 0:
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40,
                                      'center')  # draw the price in blue
                 if self.gui_buttons[i].selected:  # if it is selected
-                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75),
+                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), 
                     # width=75, height=75)
-                    arcade.draw_rectangle_outline(center_x=45 + i * 100, center_y=581, color=(154, 205, 50, 255),
+                    arcade.draw_rectangle_outline(center_x=50 + i * 100 - i, center_y=581, color=(77, 123, 48, 255),
                                                   width=76,
                                                   height=76, border_width=5)
                     if button.id != 0:
                         arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
             else:
-                arcade.draw_rectangle_filled(center_x=50 + i * 100, center_y=581, color=(50, 50, 50, 200), width=75,
+                arcade.draw_rectangle_filled(center_x=50 + i * 100 - i, center_y=581, color=(50, 50, 50, 200), width=75,
                                              height=75)
                 if button.id != 0:
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.RED, 20, 40, 'center')
@@ -305,16 +292,16 @@ class Game(arcade.View):
             arcade.draw_rectangle_filled(center_x=545, center_y=581, color=(255, 255, 255, 75), width=75, height=75)
             arcade.draw_rectangle_outline(center_x=545, center_y=581, color=(200, 0, 0), width=76, height=76,
                                           border_width=5)
-        self.sun_list.draw()
 
-        # TEMPORARY SUN DRAWING
-        # if self.sun1.sun_list != None:
-        #     self.sun1.sun_list.draw()
+        self.live_attackers.draw()
+        self.sun_list.draw()
 
     def on_update(self, delta_time):
         self.game_time += delta_time
+
         if round(self.game_time, 0) % 10 == 0:
             self.sun_list.append(Sun(False))
+
         current_total = 0
         sun = None
         for defender in self.defender_list:
@@ -400,7 +387,7 @@ class Game(arcade.View):
                 # get the sprite object hit by the bullet
                 attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
                 # for snowball alter speed
-                if bullet.type == 3:
+                if bullet.type == 3 or bullet.type == 6:
                     attackerHit.alter_speed(bullet.speed_change)  # only changes for snowball
 
                 # damage is based upon bullet type
@@ -409,13 +396,31 @@ class Game(arcade.View):
 
         self.bullet_list.update()
 
+        x = None
+
+        # to find next sun to move,
+        # iterate through sun_list and find next sun that isn't sunflower_sun
+        for sun in self.sun_list:
+            if not sun.get_sunflower_sun():
+                x = sun
+
+        if int(self.game_time) % 20 == 0 and int(self.game_time) != 0:
+            x.now_can_move()
+            # print("GAME_TIME IS ", int(self.game_time), "AND X NOW CAN MOVE!!!!!!!!!!!!!!")
+
         # SUN MOVEMENT
         for sun in self.sun_list:
+            if sun == x:
+                print("X's LIFETIME: ", x.lifespan)
+                if x.can_move:
+                    sun.move()
+            if sun.get_can_die():
+                print("DEATH TO ALL SUNS")
+                self.sun_list.remove(sun)
+                new_sun = Sun(sunflower_sun=False)
+                self.sun_list.append(new_sun)
             if sun.lifespan < 0:
                 self.sun_list.remove(sun)
-            else:
-                sun.move()
-                # print("moving: ", x)
 
         if self.frame_count % 4 == 0:
             self.defender_list.update_animation()
