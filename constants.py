@@ -13,7 +13,7 @@ MARGIN = 5
 GUI_HEIGHT = 100
 
 # for sun clicking, the currency it gives you
-SUN_ADDITION = 25
+SUN_ADDITION = 50
 
 # Do the math to figure out our screen dimensions
 SCREEN_WIDTH = (100 + MARGIN) * SIZE_COLUMNS + MARGIN
@@ -148,14 +148,14 @@ waves = {
 
 BULLET_SPEED = 4
 
-GAME_LENGTH = 60
+GAME_LENGTH = 120
 FIRST_ROUND_PERCENT = .4
 
 SUNFLOWER_WAIT_TIME = 25
 
 NUMBER_OF_DEFENDERS = 5
 
-STARTING_SUNS = 4000
+STARTING_SUNS = 75
 
 SLOW_ATTACKERS = 3
 

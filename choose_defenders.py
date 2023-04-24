@@ -1,23 +1,17 @@
-import time
-
 import arcade
 import constants as c
+from game import Game
 
 
 class ChooseDefenders(arcade.View):
-    def __init__(self, window, manager, parent: arcade.View):
+    def __init__(self, window, level):
         super().__init__(window=window)
-        self.window = window
+        self.level = level
         self.manager = arcade.gui.UIManager()
         self.manager.enable()
         self.chosen_defenders = []
         self.defenders_list = []
         self.v_box = arcade.gui.UIBoxLayout()
-        self.parent = parent
-        arcade.set_background_color(arcade.color.ARMY_GREEN)
-        self.background = arcade.load_texture("images/garden.jpg")
-
-
 
         for defender in c.defenders_data.keys():
             self.defenders_list.append(defender)
@@ -61,30 +55,22 @@ class ChooseDefenders(arcade.View):
 
 
 
-    def on_update(self, delta_time: float):
-        if len(self.parent.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
-            self.parent.setup = True
-        self.parent.game_time = 0
-
-
     def on_draw(self):
-        arcade.clear()
-        arcade.start_render()
-        arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
+        self.clear()
         self.manager.draw()
 
     def on_choose(self, event):
 
         # loading_screen = LoadingScreen(self.window)
         # self.window.show_view(loading_screen)
-        if event.source.defenderId not in self.parent.chosen_defenders:
-            self.parent.chosen_defenders.append(event.source.defenderId)
+        if event.source.defenderId not in self.chosen_defenders:
+            self.chosen_defenders.append(event.source.defenderId)
         else:
-            self.parent.chosen_defenders.remove(event.source.defenderId)
-        for i in self.parent.chosen_defenders:
+            self.chosen_defenders.remove(event.source.defenderId)
+        for i in self.chosen_defenders:
             print("CHOOSE DEFENDERS:", i, end=', ')
         print()
-        if len(self.parent.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
+        if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
             # self.start_button.texture.image = ":resources:onscreen_controls/shaded_light/start.png"
             print("ready")
             self.manager.add(
@@ -96,9 +82,12 @@ class ChooseDefenders(arcade.View):
 
     def start_game(self, event):
         if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
+            # game = Game(1, self.window, [1,2,3,4,5])
+            self.manager.disable()
             print("CHOOSE_DEFENDER MANAGER DISABLED")
-            self.window.show_view(self.parent)
+            game = Game(self.level, self.window, self.chosen_defenders)
+            game.setup()
+            self.window.show_view(game)
+
     def on_show_view(self):
         print("#####IN ONSHOWVIEW CHOOSE_DEFENDERS")
-
-

@@ -111,7 +111,18 @@ class Game(arcade.View):
         for button in self.gui_buttons:
             button.selected = False
 
+    def reset_game(self):
+        self.waves = []
+        self.current_wave = 0
+        self.wave_0_spawn_times = []
+        self.num_dead_attackers = 0
+        self.num_attackers_to_kill = 0
+        self.pause_between_waves = 0
+        self.wait_to_start_wave = True
+        self.sun_list = None
+
     def setup(self):
+
         self.attackers_list = arcade.SpriteList()
         self.live_attackers = arcade.SpriteList()
         self.create_attackers()
@@ -183,6 +194,8 @@ class Game(arcade.View):
         for attacker in self.waves[0]:
             self.wave_0_spawn_times.append(random.randint(0, c.GAME_LENGTH * c.FIRST_ROUND_PERCENT))
         self.wave_0_spawn_times.sort()
+        self.wave_0_spawn_times= [x + 15 for x in self.wave_0_spawn_times]
+        print(self.wave_0_spawn_times)
 
     def run_game(self):
         pass
@@ -318,7 +331,6 @@ class Game(arcade.View):
         # to spawn attackers
         if self.current_wave == 0:
             if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:
-                # +10 for now because game time starts at ~10
                 self.wait_to_start_wave = False
                 self.wave_0_spawn_times.pop(0)
                 self.live_attackers.append(self.waves[0].pop(0))
@@ -340,7 +352,7 @@ class Game(arcade.View):
                 self.wait_to_start_wave = True
         elif self.current_wave >= 3:
             if self.level < self.num_levels:
-                self.go_to_next_level(self.level)
+                self.win_screen()
 
         for attacker in self.live_attackers:
             # change speed (for snowballs)
@@ -404,18 +416,17 @@ class Game(arcade.View):
             if not sun.get_sunflower_sun():
                 x = sun
 
-        if int(self.game_time) % 20 == 0 and int(self.game_time) != 0:
+        if int(self.game_time) % 10 == 0 and int(self.game_time) != 0:
             x.now_can_move()
             # print("GAME_TIME IS ", int(self.game_time), "AND X NOW CAN MOVE!!!!!!!!!!!!!!")
 
         # SUN MOVEMENT
         for sun in self.sun_list:
             if sun == x:
-                print("X's LIFETIME: ", x.lifespan)
                 if x.can_move:
                     sun.move()
             if sun.get_can_die():
-                print("DEATH TO ALL SUNS")
+                # print("DEATH TO ALL SUNS")
                 self.sun_list.remove(sun)
                 new_sun = Sun(sunflower_sun=False)
                 self.sun_list.append(new_sun)
@@ -429,6 +440,9 @@ class Game(arcade.View):
         self.frame_count += 1
 
     def win_screen(self):
+        self.sun_list = None
+        self.bullet_list = None
+        self.reset_buttons()
         # The code in this function is run when we click the ok button.
         # The code below opens the message box and auto-dismisses it when done.
         message_box = arcade.gui.UIMessageBox(
@@ -444,4 +458,5 @@ class Game(arcade.View):
 
     def go_to_next_level(self, level):
         self.level+=1
-        self.start_setup()
+        self.reset_game()
+        self.setup()
