@@ -64,9 +64,12 @@ class ChooseDefenders(arcade.View):
         texture_unselected = arcade.load_texture("GUI/StartButton.png")
         self.start_button = arcade.gui.UITextureButton(texture=texture_unselected, texture_hovered=texture_hovered, texture_pressed=texture_selected )
         self.start_button.on_click = self.start_game
-
-
-
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="right",
+                anchor_y="bottom",
+                child=self.start_button)
+        )
 
     def on_draw(self):
         self.clear()
@@ -93,6 +96,13 @@ class ChooseDefenders(arcade.View):
         arcade.draw_text('Select ' + str(self.num_defenders) + ' more defenders to start the game!', 230,300.0,
                          arcade.color.WHITE,20,50,'left', font_name="Kenny Mini Square")
 
+        # blocks out start button if not enough defenders
+        if len(self.chosen_defenders) != c.NUMBER_OF_DEFENDERS:
+            arcade.draw_rectangle_filled(center_x=900, center_y=0, color=(0, 0, 0, 200), width=210, height=75)
+
+
+
+
 
 
 
@@ -117,12 +127,7 @@ class ChooseDefenders(arcade.View):
         if len(self.chosen_defenders) == c.NUMBER_OF_DEFENDERS:
             # self.start_button.texture.image = ":resources:onscreen_controls/shaded_light/start.png"
             print("ready")
-            self.manager.add(
-                arcade.gui.UIAnchorWidget(
-                    anchor_x="right",
-                    anchor_y="bottom",
-                    child=self.start_button)
-            )
+
 
 
     def start_game(self, event):
