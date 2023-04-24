@@ -17,7 +17,8 @@ class Game(arcade.View):
         super().__init__(window)
         # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
         # arcade.set_background_color(arcade.color.ANDROID_GREEN)
-
+        self.lost = None
+        self.attackers_through = [0, 0, 0, 0, 0]
         self.grid = None
         self.background = None
         self.currency = None
@@ -40,6 +41,8 @@ class Game(arcade.View):
         self.sun_list = None
         self.gui_buttons = []
         self.num_levels = len(c.levelsDict)
+        self.is_setup = False
+        self.time_since_spawning_sun = 0
 
         # for defender selection/deselection
         self.clicked = 0
@@ -106,12 +109,13 @@ class Game(arcade.View):
                 button.selected = False
             event.source.selected = True
 
-
     def reset_buttons(self):
         for button in self.gui_buttons:
             button.selected = False
 
     def reset_game(self):
+        self.te
+        self.is_setup = False
         self.waves = []
         self.current_wave = 0
         self.wave_0_spawn_times = []
@@ -120,9 +124,14 @@ class Game(arcade.View):
         self.pause_between_waves = 0
         self.wait_to_start_wave = True
         self.sun_list = None
+        self.live_attackers = None
+        self.attackers_list = None
+        self.currency = c.STARTING_SUNS
 
     def setup(self):
-
+        self.time_since_spawning_sun = 0
+        self.lost = False
+        self.attackers_through = [0, 0, 0, 0, 0]
         self.attackers_list = arcade.SpriteList()
         self.live_attackers = arcade.SpriteList()
         self.create_attackers()
@@ -148,6 +157,7 @@ class Game(arcade.View):
         #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
 
         self.background = arcade.load_texture("images/garden.jpg")
+        self.is_setup = True
 
     def randomize(self):
         def random_lane() -> int:
@@ -194,8 +204,7 @@ class Game(arcade.View):
         for attacker in self.waves[0]:
             self.wave_0_spawn_times.append(random.randint(0, c.GAME_LENGTH * c.FIRST_ROUND_PERCENT))
         self.wave_0_spawn_times.sort()
-        self.wave_0_spawn_times= [x + 15 for x in self.wave_0_spawn_times]
-        print(self.wave_0_spawn_times)
+        self.wave_0_spawn_times = [x + 15 for x in self.wave_0_spawn_times]
 
     def run_game(self):
         pass
@@ -249,7 +258,7 @@ class Game(arcade.View):
         for sun in self.sun_list:
             if sun.in_sun(x, y):
                 self.currency += c.SUN_ADDITION
-                sun.set_can_die(True)
+                self.sun_list.remove(sun)
 
         # except Exception as err:
         #     print(f"Unexpected {err=}, {type(err)=}")
@@ -265,8 +274,6 @@ class Game(arcade.View):
         self.grid.grid_draw()
         self.scene.draw()
         # self.live_attackers.draw()
-
-
 
         self.defender_list.draw()
         self.bullet_list.draw()
@@ -310,134 +317,136 @@ class Game(arcade.View):
         self.sun_list.draw()
 
     def on_update(self, delta_time):
-        self.game_time += delta_time
+        if not self.lost and self.is_setup:
+            self.game_time += delta_time
+            for i in self.attackers_through:
+                if i > 1:
+                    self.lose_screen()
+                    break
 
-        if round(self.game_time, 0) % 10 == 0:
-            self.sun_list.append(Sun(False))
+            current_total = 0
+            sun = None
+            for defender in self.defender_list:
+                sun = defender.on_update(delta_time)
+                if sun:
+                    sun.set_position(defender.center_x, defender.center_y)
+                    self.sun_list.append(sun)
+                defender.is_active = False
+                for attacker in self.live_attackers:
+                    if attacker.lane == defender.lane:
+                        defender.is_active = True
 
-        current_total = 0
-        sun = None
-        for defender in self.defender_list:
-            sun = defender.on_update(delta_time)
-            if sun:
-                sun.set_position(defender.center_x, defender.center_y)
-                self.sun_list.append(sun)
-            defender.is_active = False
-            for attacker in self.live_attackers:
-                if attacker.lane == defender.lane:
-                    defender.is_active = True
-
-        # Wave 0 is just random spawning
-        # to spawn attackers
-        if self.current_wave == 0:
-            if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:
-                self.wait_to_start_wave = False
-                self.wave_0_spawn_times.pop(0)
-                self.live_attackers.append(self.waves[0].pop(0))
-            if not self.live_attackers and not self.wait_to_start_wave:
-                self.current_wave += 1
-                self.pause_between_waves = self.game_time + 10
-                self.wait_to_start_wave = True
-
-        # Waves 1 and 2 are released all at once (ish)
-        elif self.current_wave == 1 or self.current_wave == 2:  # for the actual waves of attackers
-            if self.game_time > self.pause_between_waves:  # wait 10 secs between waves
-                should_spawn = random.randint(0, 100) > 98
-                if should_spawn and self.waves[self.current_wave]:
-                    self.live_attackers.append(self.waves[self.current_wave].pop(0))
+            # Wave 0 is just random spawning
+            # to spawn attackers
+            if self.current_wave == 0:
+                if self.wave_0_spawn_times and self.game_time > self.wave_0_spawn_times[0] + 10:
                     self.wait_to_start_wave = False
-            if not self.wait_to_start_wave and not self.live_attackers:
-                self.current_wave += 1
-                self.pause_between_waves = self.game_time + 10
-                self.wait_to_start_wave = True
-        elif self.current_wave >= 3:
-            if self.level < self.num_levels:
-                self.win_screen()
+                    self.wave_0_spawn_times.pop(0)
+                    self.live_attackers.append(self.waves[0].pop(0))
+                if not self.live_attackers and not self.wait_to_start_wave:
+                    self.current_wave += 1
+                    self.pause_between_waves = self.game_time + 10
+                    self.wait_to_start_wave = True
 
-        for attacker in self.live_attackers:
-            # change speed (for snowballs)
-            attacker.center_x -= attacker.speed / c.SLOW_ATTACKERS
-            if attacker.center_x <= 0:
-                attacker.kill()
-            # testing killing attackers
-            if attacker.is_dead():
-                if attacker.is_done():
-                    self.live_attackers.remove(attacker)
+            # Waves 1 and 2 are released all at once (ish)
+            elif self.current_wave == 1 or self.current_wave == 2:  # for the actual waves of attackers
+                if self.game_time > self.pause_between_waves:  # wait 10 secs between waves
+                    should_spawn = random.randint(0, 100) > 98
+                    if should_spawn and self.waves[self.current_wave]:
+                        self.live_attackers.append(self.waves[self.current_wave].pop(0))
+                        self.wait_to_start_wave = False
+                if not self.wait_to_start_wave and not self.live_attackers:
+                    self.current_wave += 1
+                    self.pause_between_waves = self.game_time + 10
+                    self.wait_to_start_wave = True
+            elif self.current_wave >= 3:
+                if self.level < self.num_levels:
+                    self.win_screen()
 
-            # attack defender
-            if arcade.check_for_collision_with_list(attacker, self.defender_list):
-                defenderHit = arcade.check_for_collision_with_list(attacker, self.defender_list)[0]
-                # set speed to 0
-                attacker.speed = 0
-                # if time is greater than attack duration attack
-                if attacker.ready_to_attack(delta_time):
-                    defenderHit.decrement_health(attacker.damage)
-                    print(f'Damaged defender: {defenderHit.durability}')
-                # if defender is dead reset speed
-                if defenderHit.is_dead():
-                    if isinstance(defenderHit, Sunflower):
-                        if defenderHit.has_sun:
-                            sun = defenderHit.collect_sun()
+            for attacker in self.live_attackers:
+                # change speed (for snowballs)
+                attacker.center_x -= attacker.speed / c.SLOW_ATTACKERS
+                if attacker.center_x <= 0:
+                    self.attackers_through[attacker.lane] += 1
+                    attacker.kill()
+                # testing killing attackers
+                if attacker.is_dead():
+                    if attacker.is_done():
+                        self.live_attackers.remove(attacker)
 
-                    position = defenderHit.get_position()
-                    square = self.grid.grid_list[position[0]][position[1]]
-                    square.remove_plant()
-                    self.defender_list.remove(defenderHit)
+                # attack defender
+                if arcade.check_for_collision_with_list(attacker, self.defender_list):
+                    defenderHit = arcade.check_for_collision_with_list(attacker, self.defender_list)[0]
+                    # set speed to 0
+                    attacker.speed = 0
+                    # if time is greater than attack duration attack
+                    if attacker.ready_to_attack(delta_time):
+                        defenderHit.decrement_health(attacker.damage)
+                        print(f'Damaged defender: {defenderHit.durability}')
+                    # if defender is dead reset speed
+                    if defenderHit.is_dead():
+                        if isinstance(defenderHit, Sunflower):
+                            if defenderHit.has_sun:
+                                sun = defenderHit.collect_sun()
 
-            # reset speed for multiple attackers after defender dies
-            if not arcade.check_for_collision_with_list(attacker, self.defender_list) and attacker.speed == 0:
-                attacker.reset_speed()
+                        position = defenderHit.get_position()
+                        square = self.grid.grid_list[position[0]][position[1]]
+                        square.remove_plant()
+                        self.defender_list.remove(defenderHit)
 
-        self.defender_list.update()
+                # reset speed for multiple attackers after defender dies
+                if not arcade.check_for_collision_with_list(attacker, self.defender_list) and attacker.speed == 0:
+                    attacker.reset_speed()
 
-        # testing updtaing bullets and such
-        # self.defender_list.on_update(delta_time)
-        for bullet in self.bullet_list:
-            if bullet.center_x > c.SCREEN_WIDTH:
-                bullet.remove_from_sprite_lists()
-            if arcade.check_for_collision_with_list(bullet, self.live_attackers):
-                # get the sprite object hit by the bullet
-                attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
-                # for snowball alter speed
-                if bullet.type == 3 or bullet.type == 6:
-                    attackerHit.alter_speed(bullet.speed_change)  # only changes for snowball
+            self.defender_list.update()
 
-                # damage is based upon bullet type
-                attackerHit.decrement_health(bullet.damage)
-                bullet.remove_from_sprite_lists()
+            # testing updtaing bullets and such
+            # self.defender_list.on_update(delta_time)
+            for bullet in self.bullet_list:
+                if bullet.center_x > c.SCREEN_WIDTH:
+                    bullet.remove_from_sprite_lists()
+                if arcade.check_for_collision_with_list(bullet, self.live_attackers):
+                    # get the sprite object hit by the bullet
+                    attackerHit = arcade.check_for_collision_with_list(bullet, self.live_attackers)[0]
+                    # for snowball alter speed
+                    if bullet.type == 3 or bullet.type == 6:
+                        attackerHit.alter_speed(bullet.speed_change)  # only changes for snowball
 
-        self.bullet_list.update()
+                    # damage is based upon bullet type
+                    attackerHit.decrement_health(bullet.damage)
+                    bullet.remove_from_sprite_lists()
 
-        x = None
+            self.bullet_list.update()
 
-        # to find next sun to move,
-        # iterate through sun_list and find next sun that isn't sunflower_sun
-        for sun in self.sun_list:
-            if not sun.get_sunflower_sun():
-                x = sun
+            x = None
 
-        if int(self.game_time) % 10 == 0 and int(self.game_time) != 0:
-            x.now_can_move()
-            # print("GAME_TIME IS ", int(self.game_time), "AND X NOW CAN MOVE!!!!!!!!!!!!!!")
+            # to find next sun to move,
+            # iterate through sun_list and find next sun that isn't sunflower_sun
+            # for sun in self.sun_list:
+            #     if not sun.get_sunflower_sun():
+            #         x = sun
+            self.time_since_spawning_sun += delta_time
+            if self.time_since_spawning_sun > c.SUN_INTERVAL:
+                self.time_since_spawning_sun = 0
+                self.sun_list.append(Sun(False))
+                print(self.time_since_spawning_sun)
+                # print("GAME_TIME IS ", int(self.game_time), "AND X NOW CAN MOVE!!!!!!!!!!!!!!")
 
-        # SUN MOVEMENT
-        for sun in self.sun_list:
-            if sun == x:
-                if x.can_move:
+            # SUN MOVEMENT
+            for sun in self.sun_list:
+                sun.on_update(delta_time)
+                if not sun.sunflower_sun:
                     sun.move()
-            if sun.get_can_die():
-                # print("DEATH TO ALL SUNS")
-                self.sun_list.remove(sun)
-                new_sun = Sun(sunflower_sun=False)
-                self.sun_list.append(new_sun)
-            if sun.lifespan < 0:
-                self.sun_list.remove(sun)
 
-        if self.frame_count % 4 == 0:
-            self.defender_list.update_animation()
-        elif self.frame_count % 7 == 0:
-            self.live_attackers.update_animation()
-        self.frame_count += 1
+                    # print("DEATH TO ALL SUNS")
+                if sun.lifespan < 0:
+                    self.sun_list.remove(sun)
+
+            if self.frame_count % 4 == 0:
+                self.defender_list.update_animation()
+            elif self.frame_count % 7 == 0:
+                self.live_attackers.update_animation()
+            self.frame_count += 1
 
     def win_screen(self):
         self.sun_list = None
@@ -456,7 +465,29 @@ class Game(arcade.View):
 
         self.manager.add(message_box)
 
+    def lose_screen(self):
+        self.lost = True
+        self.sun_list = None
+        self.bullet_list = None
+        self.reset_buttons()
+        # The code in this function is run when we click the ok button.
+        # The code below opens the message box and auto-dismisses it when done.
+        message_box = arcade.gui.UIMessageBox(
+            width=300,
+            height=200,
+            message_text=("THE ZOMBIES ATE YOUR BRAINS"),
+            callback=self.restart_game(),
+            buttons=["Restart"]
+        )
+
+        self.manager.add(message_box)
+
     def go_to_next_level(self, level):
-        self.level+=1
+        self.level += 1
+        self.reset_game()
+        self.setup()
+
+    def restart_game(self):
+        self.level = 1
         self.reset_game()
         self.setup()

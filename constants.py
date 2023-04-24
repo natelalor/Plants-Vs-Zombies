@@ -30,9 +30,9 @@ LEVEL_TIME = 120
 levelsDict = {
     # level: [[enemyType, number of that type]]
     1: [[1, 15], [2, 6]],
-    2: [[2, 8], [3, 2], [4, 2]],
-    3: [[2, 8], [3, 4], [4, 3]],
-    4: [[2, 4], [3, 0], [4,2]]
+    2: [[1, 8], [2, 8], [3, 5], [4, 2]],
+    3: [[1, 6], [2, 10], [3, 4], [4, 3]],
+    4: [[1, 4], [2, 10], [3, 10], [4,5]]
 }
 
 # TODO: eventually add characteristics to this dict as a list in value
@@ -158,6 +158,8 @@ NUMBER_OF_DEFENDERS = 5
 STARTING_SUNS = 75
 
 SLOW_ATTACKERS = 3
+
+SUN_INTERVAL = 15
 
 WIN_MESSAGES = {
     1: "Congratulations! You defended your house from the zombies...""It's not over yet though...",

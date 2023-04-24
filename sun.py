@@ -57,5 +57,6 @@ class Sun(arcade.Sprite):
         return False
 
     def on_update(self, delta_time: float = 1 / 60):
-        self.lifespan -= delta_time
+        if self.center_y == self.target_y:
+            self.lifespan -= delta_time
 

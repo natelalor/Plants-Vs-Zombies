@@ -11,5 +11,6 @@ def test_game():
     window.show_view(game)
     arcade.run()
 
-# test_game()
+test_game()
+
 
