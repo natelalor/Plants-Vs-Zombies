@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="988d6133-030e-4e8c-932b-968c5db3c74e" name="Changes" comment="Multiple levels">
+    <list default="true" id="988d6133-030e-4e8c-932b-968c5db3c74e" name="Changes" comment="updated messages, improved performance">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sun.py" beforeDir="false" afterPath="$PROJECT_DIR$/sun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +150,28 @@
       <option name="project" value="LOCAL" />
       <updated>1682298548904</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixed suns lifetime, modified levels, added ability to lose">
+      <created>1682303144842</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1682303144842</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Turned off test_game()">
+      <created>1682303315748</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1682303315748</updated>
+    </task>
+    <task id="LOCAL-00009" summary="updated messages, improved performance">
+      <created>1682304132174</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1682304132174</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -166,11 +184,14 @@
     <MESSAGE value="defender can now be placed on square others have died on." />
     <MESSAGE value="possible button restart fix." />
     <MESSAGE value="Multiple levels" />
-    <option name="LAST_COMMIT_MESSAGE" value="Multiple levels" />
+    <MESSAGE value="Fixed suns lifetime, modified levels, added ability to lose" />
+    <MESSAGE value="Turned off test_game()" />
+    <MESSAGE value="updated messages, improved performance" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated messages, improved performance" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/cs205_team_2_final_project3$start_screen.coverage" NAME="start_screen Coverage Results" MODIFIED="1681928526453" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/cs205_team_2_final_project2$Run_PvZ.coverage" NAME="Run PvZ Coverage Results" MODIFIED="1682302900961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/cs205_team_2_final_project2$Run_PvZ.coverage" NAME="Run PvZ Coverage Results" MODIFIED="1682304419785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cs205_team_2_final_project$choose_defenders.coverage" NAME="choose_defenders Coverage Results" MODIFIED="1682261355182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cs205_team_2_final_project$game.coverage" NAME="game Coverage Results" MODIFIED="1681489938641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cs205_team_2_final_project3$tests.coverage" NAME="tests Coverage Results" MODIFIED="1681964077948" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

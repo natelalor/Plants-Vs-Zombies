@@ -365,7 +365,7 @@ class Game(arcade.View):
                 # change speed (for snowballs)
                 attacker.center_x -= attacker.speed / c.SLOW_ATTACKERS
                 if attacker.center_x <= 0:
-                    self.attackers_through[attacker.lane] += 1
+                    self.attackers_through[attacker.lane-1] += 1
                     attacker.kill()
                 # testing killing attackers
                 if attacker.is_dead():
@@ -464,6 +464,7 @@ class Game(arcade.View):
         self.manager.add(message_box)
 
     def lose_screen(self):
+        print(self.attackers_through)
         self.lost = True
         self.sun_list = None
         self.bullet_list = None
