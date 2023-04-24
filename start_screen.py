@@ -32,9 +32,12 @@ class StartScreen(arcade.View):
         self.manager.draw()
 
     def on_click_game(self, event):
+        game = Game(1, self.window)
         self.manager.disable()
-        choose_defenders = ChooseDefenders(self.window, 1)
-        self.window.show_view(choose_defenders)
+        game.choose_defenders()
+        game.start_setup()
+        game.finish_setup(game.chosen_defenders)
+        self.window.show_view(game)
 
         # game = Game(1, self.window, [1, 2, 3, 4, 5])
         # game.setup()

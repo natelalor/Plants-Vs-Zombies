@@ -10,14 +10,18 @@ import numpy as np
 import time
 import arcade.gui
 from sunflower import Sunflower
+from choose_defenders import ChooseDefenders
+
 
 
 class Game(arcade.View):
-    def __init__(self, level: int, window, defenders_ids):
+    def __init__(self, level: int, window):
         super().__init__(window)
+        self.window = window
         # arcade.set_viewport(0, c.SCREEN_WIDTH,0,c.SCREEN_HEIGHT)
         # arcade.set_background_color(arcade.color.ANDROID_GREEN)
 
+        self.chosen_defenders = []
         self.grid = None
         self.background = None
         self.currency = None
@@ -36,10 +40,10 @@ class Game(arcade.View):
         self.pause_between_waves = 0
         self.wait_to_start_wave = True
         self.lanes = [1, 2, 3, 4, 5]
-        self.chosen_defenders = defenders_ids
         self.sun_list = None
         self.gui_buttons = []
         self.num_levels = len(c.levelsDict)
+        self.setup = False
 
         # for defender selection/deselection
         self.clicked = 0
@@ -54,8 +58,61 @@ class Game(arcade.View):
 
         # Create a horizontal BoxGroup to align buttons
         self.h_box = arcade.gui.UIBoxLayout(vertical=False, )
+        self.start_setup()
+        self.game_time = 0
 
         # Creating the buttons, each button has a loaded texture for hover, and clicked
+
+
+    def choose_button(self, event):
+        if event.source.selected:
+            for button in self.gui_buttons:
+                button.selected = False
+        else:
+            for button in self.gui_buttons:
+                button.selected = False
+            event.source.selected = True
+
+    def reset_buttons(self):
+        for button in self.gui_buttons:
+            button.selected = False
+
+    def start_setup(self):
+        self.attackers_list = arcade.SpriteList()
+        self.live_attackers = arcade.SpriteList()
+        self.create_attackers()
+        self.currency = c.STARTING_SUNS
+        # SCENE FOR ALL SPRITES TO RENDER ON
+        self.scene = arcade.Scene()
+
+        # TEMP SUN CREATION
+        # self.sun1 = Sun()
+        self.sun_list = arcade.SpriteList()
+
+        for x in range(0, 10):
+            sun = Sun(sunflower_sun=False)
+            self.sun_list.append(sun)
+
+        # test bullet and defenders
+        self.defender_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList(use_spatial_hash=True)
+        # defender1 = Defender(1,1,self.bullet_list,1.5)
+        # self.defender_list.append(defender1)
+        self.num_attackers_to_kill = len(self.waves[0])
+
+        self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
+        self.game_time = 0
+        # for i in c.SIZE_ROWS:
+        #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
+
+        self.background = arcade.load_texture("images/garden.jpg")
+
+
+    def choose_defenders(self):
+        choose = ChooseDefenders(self.window, self.manager, self)
+        self.window.show_view(choose)
+
+    def finish_setup(self, defenders_ids):
         for defender_id in defenders_ids:
             plant_button = arcade.gui.UITextureButton(
                 texture=arcade.load_texture("GUI/" + c.defenders_data[defender_id]['name'] + ".png"),
@@ -96,49 +153,6 @@ class Game(arcade.View):
                 anchor_y="top",
                 child=self.h_box)
         )
-
-    def choose_button(self, event):
-        if event.source.selected:
-            for button in self.gui_buttons:
-                button.selected = False
-        else:
-            for button in self.gui_buttons:
-                button.selected = False
-            event.source.selected = True
-
-    def reset_buttons(self):
-        for button in self.gui_buttons:
-            button.selected = False
-
-    def setup(self):
-        self.attackers_list = arcade.SpriteList()
-        self.live_attackers = arcade.SpriteList()
-        self.create_attackers()
-        self.currency = c.STARTING_SUNS
-        # SCENE FOR ALL SPRITES TO RENDER ON
-        self.scene = arcade.Scene()
-
-        # TEMP SUN CREATION
-        # self.sun1 = Sun()
-        self.sun_list = arcade.SpriteList()
-
-        for x in range(0, 10):
-            sun = Sun(sunflower_sun=False)
-            self.sun_list.append(sun)
-
-        # test bullet and defenders
-        self.defender_list = arcade.SpriteList()
-        self.bullet_list = arcade.SpriteList(use_spatial_hash=True)
-        # defender1 = Defender(1,1,self.bullet_list,1.5)
-        # self.defender_list.append(defender1)
-        self.num_attackers_to_kill = len(self.waves[0])
-
-        self.grid = Grid(c.SIZE_COLUMNS, c.SIZE_ROWS)
-        self.game_time = 0
-        # for i in c.SIZE_ROWS:
-        #     self.scene.add_sprite("Defenders", Defender(1, i, 1))
-
-        self.background = arcade.load_texture("images/garden.jpg")
 
     def randomize(self):
         def random_lane() -> int:
@@ -247,6 +261,7 @@ class Game(arcade.View):
 
         # self.clear()
 
+
         arcade.start_render()
         arcade.draw_lrwh_rectangle_textured(0, 0, c.SCREEN_WIDTH, c.SCREEN_HEIGHT, self.background)
         self.grid.grid_draw()
@@ -265,15 +280,14 @@ class Game(arcade.View):
 
         # currency text (for positioning: 700 is x, 550 is y)
         arcade.draw_text(str(self.currency), 623.5, 535, arcade.color.ALICE_BLUE, 20, 40, 'center')
-
-        # GUI SLOTS
+    # GUI SLOTS
         for i, button in enumerate(self.gui_buttons):
             if self.currency >= button.cost:  # if player has enough sun to buy plant
                 if button.id != 0:
                     arcade.draw_text(button.cost, 23.5 + i * 100, 535, arcade.color.ALICE_BLUE, 20, 40,
                                      'center')  # draw the price in blue
                 if self.gui_buttons[i].selected:  # if it is selected
-                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75), 
+                    # arcade.draw_rectangle_filled(center_x=45+i*100, center_y=581, color=(255, 255, 255, 75),
                     # width=75, height=75)
                     arcade.draw_rectangle_outline(center_x=45 + i * 100, center_y=581, color=(154, 205, 50, 255),
                                                   width=76,
@@ -417,11 +431,12 @@ class Game(arcade.View):
             height=200,
             message_text=(c.WIN_MESSAGES[self.level]
             ),
-            callback=None,
+            callback=self.go_to_next_level(self.level),
             buttons=["Continue"]
         )
 
         self.manager.add(message_box)
 
     def go_to_next_level(self, level):
-        self.window.hide_view()
+        self.level+=1
+        self.start_setup()
