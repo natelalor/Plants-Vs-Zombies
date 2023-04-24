@@ -125,6 +125,8 @@ class Game(arcade.View):
         self.sun_list = None
         self.live_attackers = None
         self.attackers_list = None
+        self.defender_list = None
+        self.bullet_list = None
         self.currency = c.STARTING_SUNS
 
     def setup(self):
@@ -139,9 +141,9 @@ class Game(arcade.View):
         self.scene = arcade.Scene()
 
         self.sun_list = arcade.SpriteList()
-        for x in range(0, 2):
-            sun = Sun(sunflower_sun=False)
-            self.sun_list.append(sun)
+        # for x in range(0, 2):
+        #     sun = Sun(sunflower_sun=False)
+        #     self.sun_list.append(sun)
 
         # test bullet and defenders
         self.defender_list = arcade.SpriteList()
