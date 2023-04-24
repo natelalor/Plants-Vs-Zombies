@@ -114,7 +114,7 @@ class Game(arcade.View):
             button.selected = False
 
     def reset_game(self):
-        self.te
+        
         self.is_setup = False
         self.waves = []
         self.current_wave = 0
