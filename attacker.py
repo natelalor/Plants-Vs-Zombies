@@ -12,9 +12,9 @@ class Attacker(arcade.Sprite):
 
         #change image size for tank
         if self.type == 4:
-            super().__init__(attackers_data[self.type]['image'], 0.1)
+            super().__init__(attackers_data[self.type]['image'], 2)
         else:
-            super().__init__(attackers_data[self.type]['image'], 0.05)
+            super().__init__(attackers_data[self.type]['image'], 1.2)
         self.name = attackers_data[self.type]['name']
         self.speed = attackers_data[self.type]['speed']
         self.damage = attackers_data[self.type]['damage']
@@ -125,9 +125,9 @@ class Attacker(arcade.Sprite):
         self.lane = lane
 
         #offset for tank zombie
-        offset = 0
+        offset = 10
         if self.type == 4:
-            offset = 40
+            offset = 50
         if lane == 5:
             self.center_x = 1000
             self.center_y = 470 + offset
