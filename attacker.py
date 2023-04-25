@@ -124,7 +124,7 @@ class Attacker(arcade.Sprite):
         # this will set up that enemy to start moving.
         self.lane = lane
 
-        #offset for tank zombie
+        # offset for tank zombie
         offset = 10
         if self.type == 4:
             offset = 50
