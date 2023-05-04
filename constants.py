@@ -47,7 +47,7 @@ attackers_data = {
         'damage': 100,
         'durability': 175,
         'attack_speed': 1.5,
-        'image': "images/attackers/lolli_enemy.png",
+        'image':"animations/zombie_walk/0.png",
     },
     2: {
         'name': 'Conehead_Zombie',
@@ -55,7 +55,7 @@ attackers_data = {
         'damage': 100,
         'durability': 550,
         'attack_speed': 3,
-        'image': "images/attackers/chocolate_enemy.png",
+        'image': "animations/zombie_walk/0.png",
     },
     3: {
         'name': 'Buckethead_Zombie',
@@ -63,7 +63,7 @@ attackers_data = {
         'damage': 100,
         'durability': 1250,
         'attack_speed': 2,
-        'image': "images/attackers/lolli_enemy.png",
+        'image': "animations/zombie_walk/0.png",
     },
     4: {
         'name': 'Tank_Zombie',
@@ -71,7 +71,7 @@ attackers_data = {
         'damage': 200,
         'durability': 2500,
         'attack_speed': 2,
-        'image': "images/attackers/lolli_enemy.png",
+        'image': "animations/zombie_walk/0.png",
     }
 
 }
@@ -119,7 +119,7 @@ defenders_data = {
     6: {
         'name': 'Shiny_Pea',
         'speed': 1,
-        'damage': 30,
+        'damage': 40,
         'durability': 1,
         'image': "GUI/Shiny_Pea.png",
         'cost' : 450
@@ -155,7 +155,7 @@ SUNFLOWER_WAIT_TIME = 25
 
 NUMBER_OF_DEFENDERS = 5
 
-STARTING_SUNS = 75
+STARTING_SUNS = 125
 
 SLOW_ATTACKERS = 3
 
